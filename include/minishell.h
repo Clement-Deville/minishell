@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:09:27 by cdeville          #+#    #+#             */
-/*   Updated: 2024/04/05 15:10:38 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/04/08 11:40:20 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,5 +14,9 @@
 # define MINISHELL_H
 
 # include <libft.h>
+
+// BUILT-IN COMMANDS
+
+int	do_echo(char *str, t_bool nonewline);
 
 #endif

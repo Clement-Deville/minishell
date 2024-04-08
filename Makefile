@@ -9,6 +9,7 @@ FLAGS = -Wall -Wextra -Werror
 DEBUG = -g
 
 SRCS_FILES =	main	\
+				echo	\
 
 
 SRCS_FILES_BONUS =	main_bonus	\
