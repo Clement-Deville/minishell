@@ -10,6 +10,7 @@ DEBUG = -g
 
 SRCS_FILES =	main	\
 				echo	\
+				pwd	\
 
 
 SRCS_FILES_BONUS =	main_bonus	\
