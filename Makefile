@@ -11,6 +11,7 @@ DEBUG = -g
 SRCS_FILES =	main	\
 				echo	\
 				pwd	\
+				env	\
 
 
 SRCS_FILES_BONUS =	main_bonus	\
