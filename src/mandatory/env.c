@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 13:23:24 by cdeville          #+#    #+#             */
-/*   Updated: 2024/04/08 13:43:42 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/04/08 13:56:04 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,4 +47,18 @@ char	**generate_env(char **envp)
 		i++;
 	}
 	return (env);
+}
+
+int	do_env(char **env)
+{
+	int	i;
+
+	i = 0;
+	while (env[i])
+	{
+		ft_putstr_fd(env[i], 1);
+		ft_putchar_fd('\n', 1);
+		i++;
+	}
+	return (0);
 }

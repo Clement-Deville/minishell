@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:09:27 by cdeville          #+#    #+#             */
-/*   Updated: 2024/04/08 13:40:33 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/04/08 13:55:41 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 
 int		do_echo(char *str, t_bool nonewline);
 int		do_pwd(void);
+int		do_env(char **env);
 
 // ENV
 
