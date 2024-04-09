@@ -12,6 +12,7 @@ SRCS_FILES =	main	\
 				echo	\
 				pwd	\
 				env	\
+				utils	\
 
 
 SRCS_FILES_BONUS =	main_bonus	\

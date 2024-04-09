@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/06 13:55:59 by cdeville          #+#    #+#             */
-/*   Updated: 2024/03/26 12:01:43 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/04/08 17:38:10 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,6 +131,9 @@ t_dblist		*ft_dblstadd_before(t_dblist *actual, t_dblist *new);
 void			ft_dblstdelone(t_dblist *dblst, void (*del)(void*));
 void			ft_dblstclear(t_dblist **lst, void (*del)(void*));
 t_dblist		*ft_dblstfirst(void *content);
+t_dblist		*ft_dblstlast(t_dblist *lst);
+void			ft_dblst_iter(t_dblist *lst, void (*f)(void *));
+void			ft_dblstadd_back(t_dblist **lst, t_dblist *new);
 
 typedef struct s_freeparam {
 	t_bool	pointer;

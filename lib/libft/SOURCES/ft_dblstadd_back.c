@@ -1,26 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pwd.c                                              :+:      :+:    :+:   */
+/*   ft_dblstadd_back.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/08 11:56:01 by cdeville          #+#    #+#             */
-/*   Updated: 2024/04/08 14:52:13 by cdeville         ###   ########.fr       */
+/*   Created: 2024/04/08 16:58:31 by cdeville          #+#    #+#             */
+/*   Updated: 2024/04/08 17:56:39 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <minishell.h>
+#include "../INCLUDES/libft.h"
 
-int	do_pwd(void)
+void	ft_dblstadd_back(t_dblist **lst, t_dblist *new)
 {
-	char	*current_dir_name;
+	t_dblist	*last;
 
-	current_dir_name = getcwd(NULL, 0);
-	if (current_dir_name == NULL)
-		return (perror("Pwd error"), 1);
-	ft_putstr_fd(current_dir_name, 1);
-	ft_putchar_fd('\n', 1);
-	free(current_dir_name);
-	return (0);
+	if (!new || !lst)
+		return ;
+	if (!*lst)
+	{
+		*lst = new;
+		return ;
+	}
+	last = ft_dblstlast(*lst);
+	ft_dblstadd_after(last, new);
+	return ;
 }
