@@ -11,6 +11,7 @@ DEBUG = -g
 SRCS_FILES =	main	\
 				echo	\
 				pwd	\
+				export	\
 				env	\
 				utils	\
 				test	\

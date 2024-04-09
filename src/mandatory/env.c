@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 13:23:24 by cdeville          #+#    #+#             */
-/*   Updated: 2024/04/09 10:59:30 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/04/09 16:01:05 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,23 +22,58 @@ int	number_of_variable(char *envp[])
 	return (i);
 }
 
-void	destroy_variable(t_env *variable)
+void	destroy_variable(t_variable *variable)
 {
 	if (variable)
+	{
+		free(variable->name);
 		free(variable->value);
+	}
+	free(variable);
 }
 
-t_env	*create_variable(char *str)
+char	*get_name(char *argument)
 {
-	t_env	*variable;
+	char	*name;
+	int		size;
 
-	variable = (t_env *)malloc(sizeof(t_env));
+	size = 0;
+	while (argument[size] && argument[size] != '=')
+		size++;
+	name = (char *)malloc((size + 1) * sizeof(char));
+	if (name == NULL)
+		return (NULL);
+	name = ft_memcpy(name, argument, size);
+	return (name);
+}
+
+char	*get_value(char *argument)
+{
+	char	*value;
+	int		i;
+
+	i = 0;
+	while (argument[i] && argument[i] != '=')
+		i++;
+	value = ft_strdup(&argument[++i]);
+	if (value == NULL)
+		return (NULL);
+	return (value);
+}
+
+t_variable	*create_variable(char *argument)
+{
+	t_variable	*variable;
+
+	variable = (t_variable *)malloc(sizeof(t_variable));
 	if (variable == NULL)
 		return (perror("Malloc error"), NULL);
-	variable->value = ft_strdup(str);
-	if (variable->value == NULL)
+	variable->name = get_name(argument);
+	if (variable->name == NULL)
 		return (perror("Malloc error"), free(variable), NULL);
-	variable->export = FALSE;
+	variable->value = get_value(argument);
+	if (variable->value == NULL)
+		return (perror("Malloc error"), free(variable->name), free(variable), NULL);
 	return (variable);
 }
 
@@ -67,6 +102,6 @@ t_dblist	*generate_env(char **envp)
 
 int	do_env(t_dblist *my_env)
 {
-	ft_dblst_iter(my_env, print_env);
+	ft_dblst_iter(my_env, print_variable);
 	return (0);
 }

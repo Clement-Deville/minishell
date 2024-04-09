@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:09:27 by cdeville          #+#    #+#             */
-/*   Updated: 2024/04/09 13:31:07 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/04/09 18:59:32 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,25 +16,28 @@
 # include <libft.h>
 # include <stdio.h>
 
-typedef struct s_env
+typedef struct s_variable
 {
+	char	*name;
 	char	*value;
-	t_bool	export;
-}	t_env;
+}	t_variable;
 
 // BUILT-IN COMMANDS
 
 int			do_echo(char *str, t_bool nonewline);
 int			do_pwd(void);
 int			do_env(t_dblist *env);
+int			do_export(char **arguments, t_dblist *env);
 
 // ENV
 
 t_dblist	*generate_env(char **envp);
+t_variable	*create_variable(char *argument);
+void		destroy_variable(t_variable *variable);
 
 // UTILS
 
-void		print_env(void *content);
+void		print_variable(void *content);
 
 typedef enum s_token_type
 {
