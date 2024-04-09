@@ -13,7 +13,9 @@ SRCS_FILES =	main	\
 				pwd	\
 				env	\
 				utils	\
-
+				test	\
+				init_minishell 	\
+				lst_token_add_back	\
 
 SRCS_FILES_BONUS =	main_bonus	\
 
