@@ -8,8 +8,15 @@ FLAGS = -Wall -Wextra -Werror
 
 DEBUG = -g
 
-SRCS_FILES =	main	test	init_minishell	lst_token_add_back	\
-
+SRCS_FILES =	main	\
+				echo	\
+				pwd	\
+				env	\
+				utils	\
+				tokenization	\
+				init_minishell 	\
+				lst_token_add_back	\
+				tokens_helper \
 
 SRCS_FILES_BONUS =	main_bonus	\
 

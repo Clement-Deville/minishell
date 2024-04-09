@@ -43,10 +43,13 @@ SRCS_FILES =		ft_memset	\
 					ft_lstdelone_bonus	\
 					ft_lstiter_bonus		\
 					ft_lstmap_bonus		\
+					ft_dblst_iter	\
 					ft_dblstadd_after \
+					ft_dblstadd_back	\
 					ft_dblstadd_before \
-					ft_dblstfirst \
-					ft_dblstnew \
+					ft_dblstfirst	\
+					ft_dblstlast	\
+					ft_dblstnew	\
 					ft_dblstdelone	\
 					ft_dblstclear	\
 					ft_printf			\
