@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:09:05 by cdeville          #+#    #+#             */
-/*   Updated: 2024/04/09 16:57:54 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/04/09 21:50:47 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	main(int ac, char **av, char **env)
 	curr_token = ms.tokens;
 	while (curr_token != NULL)
 	{
-		ft_printf("Type :% d -- value : %s\n ", curr_token->type,
+		ft_printf("Type :%d -- value : %s\n ", curr_token->type,
 			curr_token->value);
 		curr_token = curr_token->next;
 	}

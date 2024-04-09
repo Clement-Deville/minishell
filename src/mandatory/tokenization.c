@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 11:24:02 by skapersk          #+#    #+#             */
-/*   Updated: 2024/04/09 17:29:33 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/04/09 23:27:02 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,13 @@ void	ft_add_token_else(char **line, t_token **t_list)
 
 	i = 0;
 	tmp = *line;
-	while (tmp[i] && !ft_is_char(tmp + i))
-		i++;
+	if (tmp[i] == '\'' || tmp[i] == '"')
+		i = there_is_quotes(tmp);
+	else
+	{
+		while (tmp[i] && !ft_is_char(tmp + i))
+			i++;
+	}
 	value = malloc(sizeof(char) * i + 1);
 	if (!value)
 		return ;
@@ -99,6 +104,8 @@ void	ft_tokenization(t_mini_env *ms)
 			|| !ft_strncmp(line, "(", 1) || !ft_strncmp(line, ")", 1)
 			|| !ft_strncmp(line, "$", 1))
 			ft_token_identify(&line, &token_list);
+		else if (!ft_strncmp(line, "\"", 1) || !ft_strncmp(line, "'", 1))
+			ft_add_token_else(&line, &token_list);
 		else if (is_space(*line))
 			line++;
 		else

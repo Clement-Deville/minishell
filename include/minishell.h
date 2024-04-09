@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:09:27 by cdeville          #+#    #+#             */
-/*   Updated: 2024/04/09 16:54:42 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/04/09 22:55:30 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ void		lst_token_add_back(t_token **token_list, t_token *new);
 
 //tokens_helper.c
 t_token		*create_new_token(char *value, t_token_type type);
+int		there_is_quotes(char *tmp);
 int			ft_is_char(char *str);
 int			is_space(char c);
 
