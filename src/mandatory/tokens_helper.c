@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 16:46:40 by skapersk          #+#    #+#             */
-/*   Updated: 2024/04/10 00:46:03 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/04/10 10:12:43 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,5 +61,7 @@ int	there_is_quotes(char *tmp)
 				i++;
 		}
 	}
+	if (!tmp[i])
+		return (i - 1);
 	return (i + 1);
 }
