@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:09:27 by cdeville          #+#    #+#             */
-/*   Updated: 2024/04/10 12:49:21 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/04/10 14:13:26 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,16 @@ void		print_export(t_dblist *env);
 // ENV
 
 t_dblist	*generate_env(char **envp);
+
+// VARIABLES
+
+char		*get_name(char *argument);
 t_variable	*create_variable(char *argument);
 void		destroy_variable(void *content);
+
+// UNSET
+
+int			do_unset(char **arguments, t_dblist *env);
 
 // UTILS
 

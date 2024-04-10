@@ -12,6 +12,7 @@ SRCS_FILES =	main	\
 				echo	\
 				pwd	\
 				export	\
+				unset	\
 				env	\
 				utils	\
 				variable	\

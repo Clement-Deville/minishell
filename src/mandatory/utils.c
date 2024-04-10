@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 10:59:15 by cdeville          #+#    #+#             */
-/*   Updated: 2024/04/10 12:53:46 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/04/10 14:22:44 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,7 @@ t_bool	name_exists(char *argument, t_dblist *env)
 	while (env)
 	{
 		if (ft_strncmp(argument, (((t_variable *)(env->content))->name),
-			ft_strlen(argument)) == 0
-			&& (((t_variable *)(env->content))->name)[ft_strlen(argument)]
-				== '=')
+			ft_strlen(argument)) == 0)
 			return (TRUE);
 		env = env->next;
 	}
