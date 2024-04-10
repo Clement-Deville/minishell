@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:09:27 by cdeville          #+#    #+#             */
-/*   Updated: 2024/04/10 14:13:26 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/04/10 18:13:01 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,10 @@ int			do_pwd(void);
 int			do_env(t_dblist *env);
 int			do_export(char **arguments, t_dblist *env);
 
+// EXPORT
+
+int			export_one(char *argument, t_dblist *env);
+
 // PRINT_EXPORT
 
 void		print_export(t_dblist *env);
@@ -42,6 +46,10 @@ t_dblist	*generate_env(char **envp);
 char		*get_name(char *argument);
 t_variable	*create_variable(char *argument);
 void		destroy_variable(void *content);
+
+// CD
+
+int			do_cd(char *directory, t_dblist	*env);
 
 // UNSET
 

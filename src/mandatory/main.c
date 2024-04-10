@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:09:05 by cdeville          #+#    #+#             */
-/*   Updated: 2024/04/10 14:10:46 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/04/10 18:35:38 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ int	main(int ac, char **av, char **env)
 	do_export(args, enviro);
 	do_export(NULL, enviro);
 	do_unset(args, enviro);
+	do_cd("../pipex", enviro);
 	do_export(NULL, enviro);
 	ft_dblstclear(&enviro, &destroy_variable);
 	return (0);

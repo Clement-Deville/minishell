@@ -14,6 +14,7 @@ SRCS_FILES =	main	\
 				export	\
 				unset	\
 				env	\
+				cd	\
 				utils	\
 				variable	\
 				print_export	\
