@@ -14,8 +14,10 @@ SRCS_FILES =	main	\
 				export	\
 				env	\
 				utils	\
+				variable	\
+				print_export	\
 				test	\
-				init_minishell 	\
+				init_minishell	\
 				lst_token_add_back	\
 
 SRCS_FILES_BONUS =	main_bonus	\
