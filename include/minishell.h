@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:09:27 by cdeville          #+#    #+#             */
-/*   Updated: 2024/04/09 22:55:30 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/04/10 18:47:24 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,22 @@ t_dblist	*generate_env(char **envp);
 
 void		print_env(void *content);
 
+typedef enum s_node_type
+{
+	NODE_CMD,
+	NODE_PIPE,
+	NODE_OR,
+	NODE_AND,
+}		t_node_type;
+
+typedef struct s_node
+{
+	t_node_type		type;
+	char			*args;
+	struct s_node	*prev;
+	struct s_node	*next;
+}		t_node;
+
 typedef enum s_token_type
 {
 	TOKEN_ELSE,
@@ -64,6 +80,7 @@ typedef struct s_mini_env
 	char	*line;
 	char	**env;
 	t_token	*tokens;
+	t_node	*ast;
 }	t_mini_env;
 
 void		ft_tokenization(t_mini_env *ms);
@@ -72,8 +89,11 @@ void		lst_token_add_back(t_token **token_list, t_token *new);
 
 //tokens_helper.c
 t_token		*create_new_token(char *value, t_token_type type);
-int		there_is_quotes(char *tmp);
+int			there_is_quotes(char *tmp);
 int			ft_is_char(char *str);
 int			is_space(char c);
+
+//parser.c
+t_node	*ft_parser(t_mini_env *ms);
 
 #endif

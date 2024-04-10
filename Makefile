@@ -17,6 +17,7 @@ SRCS_FILES =	main	\
 				init_minishell 	\
 				lst_token_add_back	\
 				tokens_helper \
+				parser \
 
 SRCS_FILES_BONUS =	main_bonus	\
 
