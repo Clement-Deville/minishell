@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:09:27 by cdeville          #+#    #+#             */
-/*   Updated: 2024/04/11 10:26:15 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/04/11 11:18:46 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include <libft.h>
 # include <stdio.h>
+# include <dirent.h>
 
 typedef struct s_variable
 {
@@ -47,6 +48,10 @@ t_dblist	*generate_env(char **envp);
 char		*get_name(char *argument);
 t_variable	*create_variable(char *argument);
 void		destroy_variable(void *content);
+
+// ASTERISK
+
+int			do_asterisk(char *argument);
 
 // CD
 

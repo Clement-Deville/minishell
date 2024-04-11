@@ -19,6 +19,7 @@ SRCS_FILES =	main	\
 				utils	\
 				variable	\
 				print_export	\
+				asterisk	\
 				test	\
 				init_minishell	\
 				lst_token_add_back	\
