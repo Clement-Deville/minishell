@@ -13,6 +13,7 @@ SRCS_FILES =	main	\
 				pwd	\
 				export	\
 				unset	\
+				exit	\
 				env	\
 				cd	\
 				utils	\

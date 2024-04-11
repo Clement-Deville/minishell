@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:09:27 by cdeville          #+#    #+#             */
-/*   Updated: 2024/04/10 18:13:01 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/04/11 10:26:15 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ int			do_echo(char *str, t_bool nonewline);
 int			do_pwd(void);
 int			do_env(t_dblist *env);
 int			do_export(char **arguments, t_dblist *env);
+int			do_exit(char *argument);
 
 // EXPORT
 
