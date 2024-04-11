@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:09:05 by cdeville          #+#    #+#             */
-/*   Updated: 2024/04/11 18:15:51 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/04/11 19:29:59 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int	main(int ac, char **av, char **env)
 	// do_unset(args, enviro);
 	// do_cd("../pipex", enviro);
 	// do_export(NULL, enviro);
-	do_asterisk("M*ake*le");
+	do_asterisk("M*ake*lele");
 	ft_dblstclear(&enviro, &destroy_variable);
 	return (do_exit(""));
 }
