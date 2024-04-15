@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 10:46:35 by cdeville          #+#    #+#             */
-/*   Updated: 2024/04/11 18:33:37 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/04/15 14:53:47 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,11 @@
 t_bool	patern_match(char *argument, char *d_name)
 {
 	char	*last_wildcard;
+	char	*last_char;
 
+	last_char = NULL;
 	last_wildcard = NULL;
-	if (argument == NULL || *d_name == 0)
+	if (argument == NULL || d_name == NULL || *d_name == 0)
 		return (FALSE);
 	while (*argument)
 	{
@@ -30,18 +32,28 @@ t_bool	patern_match(char *argument, char *d_name)
 				return (TRUE);
 			while (*d_name && *d_name != *argument)
 				d_name++;
+			if (*d_name && *d_name == *argument)
+				last_char = d_name + 1;
 		}
 		else if (*argument == *d_name)
 		{
-			argument++;
-			d_name++;
+			last_char = d_name + 1;
+			while (*argument && *argument == *d_name)
+			{
+				argument++;
+				d_name++;
+			}
+		}
+		else if (d_name == 0)
+		{
+			return (FALSE);
 		}
 		else
-			return (patern_match(last_wildcard, d_name));
+			return (patern_match(last_wildcard, last_char));
 	}
 	if (*argument == 0 && *d_name == 0)
 		return (TRUE);
-	return (patern_match(last_wildcard, d_name));
+	return (patern_match(last_wildcard, last_char));
 }
 
 int	do_closedir(DIR *dir)
