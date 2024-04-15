@@ -6,11 +6,35 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 10:46:35 by cdeville          #+#    #+#             */
-/*   Updated: 2024/04/15 14:53:47 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/04/15 17:16:18 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
+
+static t_bool	pass_wilcard(char **ptr_on_argument, char **ptr_on_d_name)
+{
+	while (**ptr_on_argument == '*')
+		(*ptr_on_argument)++;
+	if (**ptr_on_argument == 0)
+		return (TRUE);
+	while (**ptr_on_d_name && **ptr_on_d_name != **ptr_on_argument)
+		(*ptr_on_d_name)++;
+	return (FALSE);
+}
+
+static char	*pass_matching(char **ptr_on_argument, char **ptr_on_d_name)
+{
+	char	*last_char;
+
+	last_char = (*ptr_on_d_name) + 1;
+	while (**ptr_on_argument && **ptr_on_argument == **ptr_on_d_name)
+	{
+		(*ptr_on_argument)++;
+		(*ptr_on_d_name)++;
+	}
+	return (last_char);
+}
 
 t_bool	patern_match(char *argument, char *d_name)
 {
@@ -26,56 +50,19 @@ t_bool	patern_match(char *argument, char *d_name)
 		if (*argument == '*')
 		{
 			last_wildcard = argument;
-			while (*argument == '*')
-				argument++;
-			if (*argument == 0)
+			if (pass_wilcard(&argument, &d_name) == TRUE)
 				return (TRUE);
-			while (*d_name && *d_name != *argument)
-				d_name++;
-			if (*d_name && *d_name == *argument)
-				last_char = d_name + 1;
 		}
 		else if (*argument == *d_name)
-		{
-			last_char = d_name + 1;
-			while (*argument && *argument == *d_name)
-			{
-				argument++;
-				d_name++;
-			}
-		}
+			last_char = pass_matching(&argument, &d_name);
 		else if (d_name == 0)
-		{
 			return (FALSE);
-		}
 		else
 			return (patern_match(last_wildcard, last_char));
 	}
 	if (*argument == 0 && *d_name == 0)
 		return (TRUE);
 	return (patern_match(last_wildcard, last_char));
-}
-
-int	do_closedir(DIR *dir)
-{
-	if (closedir(dir) != 0)
-		return (perror("closedir"), 2);
-	return (0);
-}
-
-DIR	*do_opendir(void)
-{
-	char	*current_dir_name;
-	DIR		*dir;
-
-	current_dir_name = getcwd(NULL, 0);
-	if (current_dir_name == NULL)
-		return (perror("getcwd error"), NULL);
-	dir = opendir(current_dir_name);
-	if (dir == NULL)
-		perror("Opendir");
-	free(current_dir_name);
-	return (dir);
 }
 
 int	do_asterisk(char *argument)

@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:09:27 by cdeville          #+#    #+#             */
-/*   Updated: 2024/04/11 11:18:46 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/04/15 17:17:00 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,11 @@ int			do_asterisk(char *argument);
 // CD
 
 int			do_cd(char *directory, t_dblist	*env);
+
+// DIR
+
+int			do_closedir(DIR *dir);
+DIR			*do_opendir(void);
 
 // UNSET
 
