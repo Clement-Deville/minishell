@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:09:27 by cdeville          #+#    #+#             */
-/*   Updated: 2024/04/15 17:17:00 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/04/15 17:48:03 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,9 @@
 
 # include <libft.h>
 # include <stdio.h>
+#include <stdlib.h>
 # include <dirent.h>
+# include <signal.h>
 
 typedef struct s_variable
 {
@@ -61,6 +63,10 @@ int			do_cd(char *directory, t_dblist	*env);
 
 int			do_closedir(DIR *dir);
 DIR			*do_opendir(void);
+
+// SIGNALS
+
+int			setup_signals(void);
 
 // UNSET
 

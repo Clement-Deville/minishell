@@ -22,6 +22,7 @@ SRCS_FILES =	main	\
 				print_export	\
 				asterisk	\
 				test	\
+				signals	\
 				init_minishell	\
 				lst_token_add_back	\
 
