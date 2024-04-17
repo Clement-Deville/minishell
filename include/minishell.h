@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:09:27 by cdeville          #+#    #+#             */
-/*   Updated: 2024/04/16 17:38:32 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/04/17 19:13:16 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ int			do_env(t_dblist *env);
 // ENV
 
 t_dblist	*generate_env(char **envp);
+char		*do_expand(char *arg);
 
 // UTILS
 
@@ -71,7 +72,7 @@ typedef enum s_node_type
 typedef struct s_red_node
 {
 	t_red_type			type;
-	char				*args;
+	// char				*args;
 	char				*value;
 	struct s_red_node	*prev;
 	struct s_red_node	*next;

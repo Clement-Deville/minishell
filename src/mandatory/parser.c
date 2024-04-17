@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 09:39:20 by skapersk          #+#    #+#             */
-/*   Updated: 2024/04/17 17:16:38 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/04/17 18:50:50 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,7 +173,7 @@ int		ft_is_red_node(t_red_node **node, t_mini_env *ms)
 		tmp_red = create_red_node(red_type, ms->tokens->value);
 		if (!tmp_red)
 			return (ft_printf("ERREUR : create red node"), 0);
-		ft_add_red_node(node, tmp_red);
+		ft_add_red_node(node, tmp_red); // penser a verif si le add_red a pas echoue
 		ms->tokens = ms->tokens->next;
 	}
 	return (1);
