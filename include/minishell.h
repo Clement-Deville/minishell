@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:09:27 by cdeville          #+#    #+#             */
-/*   Updated: 2024/04/11 17:17:47 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/04/16 17:38:32 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,22 +36,6 @@ t_dblist	*generate_env(char **envp);
 
 void		print_env(void *content);
 
-typedef enum s_node_type
-{
-	NODE_CMD,
-	NODE_PIPE,
-	NODE_OR,
-	NODE_AND,
-}		t_node_type;
-
-typedef struct s_node
-{
-	t_node_type		type;
-	char			*args;
-	struct s_node	*prev;
-	struct s_node	*next;
-}		t_node;
-
 typedef enum s_token_type
 {
 	TOKEN_ELSE,
@@ -67,6 +51,40 @@ typedef enum s_token_type
 	TOKEN_SUBSHELL_CLOSE,
 	TOKEN_NULL,
 }	t_token_type;
+
+typedef enum s_red_type
+{
+	NODE_RED_IN,
+	NODE_RED_OUT,
+	NODE_APPEND,
+	NODE_HERE_DOC,
+}	t_red_type;
+
+typedef enum s_node_type
+{
+	NODE_CMD,
+	NODE_PIPE,
+	NODE_OR,
+	NODE_AND,
+}	t_node_type;
+
+typedef struct s_red_node
+{
+	t_red_type			type;
+	char				*args;
+	char				*value;
+	struct s_red_node	*prev;
+	struct s_red_node	*next;
+}	t_red_node;
+
+typedef struct s_node
+{
+	t_node_type		type;
+	t_red_node		*red_node;
+	char			*args;
+	struct s_node	*prev;
+	struct s_node	*next;
+}	t_node;
 
 typedef struct s_token
 {
@@ -90,11 +108,10 @@ void		lst_token_add_back(t_token **token_list, t_token *new);
 
 //tokens_helper.c
 t_token		*create_new_token(char *value, t_token_type type);
-int			there_is_quotes(char *tmp);
 int			ft_is_char(char *str);
 int			is_space(char c);
 
 //parser.c
-t_node	*ft_parser(t_mini_env *ms);
+t_node	*ft_parser(t_mini_env *ms, int *i, t_token *curr_token);
 
 #endif
