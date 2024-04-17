@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:09:27 by cdeville          #+#    #+#             */
-/*   Updated: 2024/04/10 18:47:24 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/04/11 17:17:47 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ typedef enum s_token_type
 	TOKEN_APPEND,
 	TOKEN_SUBSHELL_OPEN,
 	TOKEN_SUBSHELL_CLOSE,
+	TOKEN_NULL,
 }	t_token_type;
 
 typedef struct s_token
