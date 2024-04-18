@@ -14,17 +14,19 @@ SRCS_FILES =	main	\
 				export	\
 				unset	\
 				exit	\
-				env	\
 				cd	\
 				dir	\
-				utils	\
 				variable	\
 				print_export	\
 				asterisk	\
-				test	\
 				signals	\
-				init_minishell	\
+				env	\
+				utils	\
+				tokenization	\
+				init_minishell 	\
 				lst_token_add_back	\
+				tokens_helper \
+				parser \
 
 SRCS_FILES_BONUS =	main_bonus	\
 

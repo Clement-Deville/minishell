@@ -1,30 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   init_minishell.c                                   :+:      :+:    :+:   */
+/*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/08 14:37:01 by skapersk          #+#    #+#             */
-/*   Updated: 2024/04/09 17:20:13 by skapersk         ###   ########.fr       */
+/*   Created: 2024/04/17 15:44:49 by skapersk          #+#    #+#             */
+/*   Updated: 2024/04/17 17:23:48 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-void	ft_init_env(char **env, t_mini_env *ms, char *line)
+void	ft_start(t_node *node)
 {
-	ft_memset(ms, 0, sizeof(t_mini_env));
-	if (env == NULL)
-	{
-		ft_printf("Erreur : pointeur de variable d'environnement nul\n");
+
+}
+
+void	ft_init_exec(t_node *node)
+{
+	if (!node)
 		return ;
-	}
-	ms->env = env;
-	if (line == NULL)
+	if (node->type == NODE_PIPE ||
+		node->type == NODE_OR ||
+		node->type == NODE_AND)
 	{
-		ft_printf("Erreur : pointeur de ligne de commande nul\n");
-		return ;
+		ft_init_exec(node->prev);
+		// if (node->type == NODE_HERE_DOC)
+		// 	ft_init_exec(node->next);
 	}
-	ms->line = line;
+	else
+		ft_start(node);
 }

@@ -6,37 +6,36 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 09:53:24 by skapersk          #+#    #+#             */
-/*   Updated: 2024/04/09 14:02:15 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/04/18 10:09:18 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-// t_token *last_token(t_token *token)
-// {
-//     if (!token)
-//         return (NULL);
-//     while (token->next)
-//         token = token->next;
-//     return (token);
-// }
+t_token	*last_token(t_token *token)
+{
+	if (!token)
+		return (NULL);
+	while (token->next)
+		token = token->next;
+	return (token);
+}
 
-// void    lst_token_add_back(t_token **token_list, t_token *new)
-// {
-//     t_token *last;
+void	lst_token_add_back(t_token **token_list, t_token *new)
+{
+	t_token	*last;
 
-//     if (!new)
-//         return ;
-//     if (token_list)
-//     {
-//         if (!*token_list)
-//             *token_list = new;
-//         else
-//         {
-//             last = last_token(*token_list);
-//             last->next = new;
-//             new->prev = last;
-//         }
-
-//     }
-// }
+	if (!new)
+		return ;
+	if (token_list)
+	{
+		if (!*token_list)
+			*token_list = new;
+		else
+		{
+			last = last_token(*token_list);
+			last->next = new;
+			new->prev = last;
+		}
+	}
+}

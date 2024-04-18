@@ -6,30 +6,11 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/22 14:40:12 by cdeville          #+#    #+#             */
-/*   Updated: 2024/03/26 12:03:20 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/04/18 10:28:52 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../INCLUDES/libft.h"
-
-void	*ft_memcpy(void *dest, const void *src, size_t n)
-{
-	unsigned char	*ptr_src;
-	unsigned char	*ptr_dest;
-
-	if (!dest && !src)
-		return (NULL);
-	ptr_src = (unsigned char *)src;
-	ptr_dest = (unsigned char *)dest;
-	while (n)
-	{
-		*ptr_dest = *ptr_src;
-		ptr_src++;
-		ptr_dest++;
-		n--;
-	}
-	return (dest);
-}
 
 static void	*ft_rev_memcpy(void *dest, const void *src, size_t n)
 {
