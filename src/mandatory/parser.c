@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
+/*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 09:39:20 by skapersk          #+#    #+#             */
-/*   Updated: 2024/04/17 18:50:50 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/04/18 11:16:00 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,32 +16,18 @@ char	*convert_type2(t_red_type type)
 {
 	if (type == NODE_RED_IN)
 		return ("NODE_RED_IN");
-	if (type == NODE_CMD)
-		return ("NODE_CMD");
 	else if (type == NODE_RED_OUT)
 		return ("NODE_RED_OUT*");
 	else if (type == NODE_HERE_DOC)
 		return ("NODE_HERE_DOC");
-	else if (type == NODE_PIPE)
-		return ("NODE_PIPE");
-	else if (type == NODE_AND)
-		return ("NODE_AND");
-	else if (type == NODE_OR)
-		return ("NODE_OR");
 	else
 		return ("TOKEN_NULL");
 }
 
 char	*convert_type(t_node_type type)
 {
-	if (type == NODE_RED_IN)
-		return ("NODE_RED_IN");
 	if (type == NODE_CMD)
 		return ("NODE_CMD");
-	else if (type == NODE_RED_OUT)
-		return ("NODE_RED_OUT*");
-	else if (type == NODE_HERE_DOC)
-		return ("NODE_HERE_DOC");
 	else if (type == NODE_PIPE)
 		return ("NODE_PIPE");
 	else if (type == NODE_AND)

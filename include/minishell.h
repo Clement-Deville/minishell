@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
+/*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:09:27 by cdeville          #+#    #+#             */
-/*   Updated: 2024/04/18 10:22:37 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/04/18 11:00:31 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,7 @@ typedef enum s_node_type
 typedef struct s_red_node
 {
 	t_red_type			type;
-	// char				*args;
+	char				*args;
 	char				*value;
 	struct s_red_node	*prev;
 	struct s_red_node	*next;
@@ -155,6 +155,6 @@ int			ft_is_char(char *str);
 int			is_space(char c);
 
 //parser.c
-t_node	*ft_parser(t_mini_env *ms, int *i, t_token *curr_token);
+t_node		*ft_parser(t_mini_env *ms, int *i, t_token *curr_token);
 
 #endif

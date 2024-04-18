@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
+/*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:09:05 by cdeville          #+#    #+#             */
-/*   Updated: 2024/04/18 10:14:08 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/04/18 11:20:30 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,20 +30,23 @@ int	main(int ac, char **av, char **env)
 	ft_tokenization(&ms);
 	ms.ast = ft_parser(&ms, &i, ms.tokens);
 	ast_node = ms.ast;
-	// if (!ast_node->type)
-	// {
-	if (ast_node->red_node)
-		ft_printf("Type :%s -- value : %s\n ", convert_type2(ast_node->red_node->type),
-		ast_node->red_node->value);
-	// }
-	else
-		ft_printf("Type :%s -- value : %s\n ", convert_type(ast_node->type),
+	if (!ast_node->type)
+	{
+		if (ast_node->red_node)
+			ft_printf("Type :%s -- value : %s\n ", convert_type2(ast_node->red_node->type),
+				ast_node->red_node->value);
+		else
+			ft_printf("Type :%s ** value : %s\n ", convert_type(ast_node->type),
+				ast_node->args);
+	}
+	else if (ast_node->type)
+		ft_printf("Type :%s ** value : %s\n ", convert_type(ast_node->type),
 			ast_node->args);
 	if (ast_node->next && ast_node->next->args)
-		ft_printf("Type :%s -- value : %s\n ", convert_type(ast_node->next->type),
+		ft_printf("Type :%s ++ value : %s\n ", convert_type(ast_node->next->type),
 			ast_node->next->args);
 	if (ast_node->prev)
-		ft_printf("Type :%s -- value : %s\n ", convert_type(ast_node->prev->type),
+		ft_printf("Type :%s == value : %s\n ", convert_type(ast_node->prev->type),
 			ast_node->prev->args);
 	free(line);
 	while (ms.tokens != NULL)
