@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:09:05 by cdeville          #+#    #+#             */
-/*   Updated: 2024/04/18 11:20:30 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/04/18 16:19:28 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,31 @@
 
 char	*convert_type(t_node_type type);
 char	*convert_type2(t_red_type type);
+
+void    do_node(t_node *node)
+{
+    if (!node->type)
+    {
+        if (node->red_node)
+            ft_printf("Type :%s -- value : %s\n ", convert_type2(node->red_node->type),
+                node->red_node->value);
+        else
+            ft_printf("Type :%s ** value : %s\n ", convert_type(node->type),
+                node->args);
+    }
+    else if (node->type)
+        ft_printf("Type :%s ** value : %s\n ", convert_type(node->type),
+            node->args);
+}
+
+void    exec_parse(t_node *node)
+{
+    if (node == NULL)
+        return ;
+    exec_parse(node->prev);
+    do_node(node);
+    exec_parse(node->next);
+}
 
 int	main(int ac, char **av, char **env)
 {
@@ -30,24 +55,25 @@ int	main(int ac, char **av, char **env)
 	ft_tokenization(&ms);
 	ms.ast = ft_parser(&ms, &i, ms.tokens);
 	ast_node = ms.ast;
-	if (!ast_node->type)
-	{
-		if (ast_node->red_node)
-			ft_printf("Type :%s -- value : %s\n ", convert_type2(ast_node->red_node->type),
-				ast_node->red_node->value);
-		else
-			ft_printf("Type :%s ** value : %s\n ", convert_type(ast_node->type),
-				ast_node->args);
-	}
-	else if (ast_node->type)
-		ft_printf("Type :%s ** value : %s\n ", convert_type(ast_node->type),
-			ast_node->args);
-	if (ast_node->next && ast_node->next->args)
-		ft_printf("Type :%s ++ value : %s\n ", convert_type(ast_node->next->type),
-			ast_node->next->args);
-	if (ast_node->prev)
-		ft_printf("Type :%s == value : %s\n ", convert_type(ast_node->prev->type),
-			ast_node->prev->args);
+	exec_parse(ast_node);
+	// if (!ast_node->type)
+	// {
+	// 	if (ast_node->red_node)
+	// 		ft_printf("Type :%s -- value : %s\n ", convert_type2(ast_node->red_node->type),
+	// 			ast_node->red_node->value);
+	// 	else
+	// 		ft_printf("Type :%s ** value : %s\n ", convert_type(ast_node->type),
+	// 			ast_node->args);
+	// }
+	// else if (ast_node->type)
+	// 	ft_printf("Type :%s ** value : %s\n ", convert_type(ast_node->type),
+	// 		ast_node->args);
+	// if (ast_node->next && ast_node->next->args)
+	// 	ft_printf("Type :%s ++ value : %s\n ", convert_type(ast_node->next->type),
+	// 		ast_node->next->args);
+	// if (ast_node->prev)
+	// 	ft_printf("Type :%s == value : %s\n ", convert_type(ast_node->prev->type),
+	// 		ast_node->prev->args);
 	free(line);
 	while (ms.tokens != NULL)
 	{

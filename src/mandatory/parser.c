@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 09:39:20 by skapersk          #+#    #+#             */
-/*   Updated: 2024/04/18 11:16:00 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/04/18 16:03:11 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,12 +150,12 @@ int		ft_is_red_node(t_red_node **node, t_mini_env *ms)
 	t_token_type	red_type;
 	t_red_node		*tmp_red;
 
-	while (ms->tokens && ft_get_token_red(ms->tokens->type))
+	while (ms->tokens && ft_get_token_red(ms->tokens->type) != TOKEN_NULL)
 	{
 		red_type = ms->tokens->type;
 		ms->tokens = ms->tokens->next;
-		if (!ms->tokens /*|| ms->tokens->type != TOKEN_ELSE*/)
-			return (ft_printf("ERROR SYNTAX --> TOKEN RED"), 0);
+		if (!ms->tokens)
+			return (ft_printf("ERROR SYNTAX --> TOKEN RED\n"), 0);
 		tmp_red = create_red_node(red_type, ms->tokens->value);
 		if (!tmp_red)
 			return (ft_printf("ERREUR : create red node"), 0);
