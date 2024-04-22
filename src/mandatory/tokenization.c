@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 11:24:02 by skapersk          #+#    #+#             */
-/*   Updated: 2024/04/16 16:11:55 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/04/22 12:10:49 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,7 @@ void	ft_tokenization(t_mini_env *ms)
 	char	*line;
 
 	line = ms->line;
+	ft_strtrim(line, " \f\n\r\t\v");
 	token_list = NULL;
 	while (*line)
 	{

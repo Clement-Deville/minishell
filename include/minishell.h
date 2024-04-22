@@ -6,13 +6,12 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:09:27 by cdeville          #+#    #+#             */
-/*   Updated: 2024/04/18 11:00:31 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/04/22 10:18:04 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
-
 # include <libft.h>
 # include <stdio.h>
 #include <stdlib.h>
@@ -120,14 +119,19 @@ typedef struct s_red_node
 	struct s_red_node	*next;
 }	t_red_node;
 
-typedef struct s_node
+typedef struct s_subs_node
 {
-	t_node_type		type;
-	t_red_node		*red_node;
-	char			*args;
-	struct s_node	*prev;
-	struct s_node	*next;
-}	t_node;
+	char				*args;
+	struct s_subs_node	*prev;
+	struct s_subs_node	*next;
+}	t_subs_node;
+
+typedef struct s_dlist
+{
+	void			*data;
+	struct s_dlist	*prev;
+	struct s_dlist	*next;
+}	t_dlist;
 
 typedef struct s_token
 {
@@ -137,12 +141,24 @@ typedef struct s_token
 	struct s_token	*next;
 }	t_token;
 
+typedef struct s_node
+{
+	t_node_type		type;
+	t_red_node		*red_node;
+	t_subs_node		*sub_node;
+	char			*cmd;
+	struct s_token	*left;
+	struct s_token	*rigth;
+	struct s_node	*next;
+	struct s_node	*prev;
+}	t_node;
+
 typedef struct s_mini_env
 {
 	char	*line;
 	char	**env;
 	t_token	*tokens;
-	t_node	*ast;
+	t_node	*nodes;
 }	t_mini_env;
 
 void		ft_tokenization(t_mini_env *ms);
@@ -155,6 +171,6 @@ int			ft_is_char(char *str);
 int			is_space(char c);
 
 //parser.c
-t_node		*ft_parser(t_mini_env *ms, int *i, t_token *curr_token);
+t_node	*ft_parser(t_mini_env *ms);
 
 #endif
