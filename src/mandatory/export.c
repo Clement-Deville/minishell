@@ -6,11 +6,27 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 14:15:44 by cdeville          #+#    #+#             */
-/*   Updated: 2024/04/10 14:22:10 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/04/27 21:03:28 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
+
+t_bool	is_variable_valid(char *argument)
+{
+	int	i;
+
+	i = 0;
+	if (ft_isalpha(argument[i++]) == FALSE)
+		return (FALSE);
+	while (argument[i])
+	{
+		if ((ft_isalnum(argument[i++]) || argument[i] == '_') == FALSE)
+			return (FALSE);
+		i++;
+	}
+	return (TRUE);
+}
 
 int	change_value(char *argument, t_dblist *env)
 {
@@ -51,6 +67,12 @@ int	export_one(char *argument, t_dblist *env)
 	name = get_name(argument);
 	if (name == NULL)
 		return (perror("Malloc error"), -1);
+	if (is_variable_valid(name) == FALSE)
+	{
+		ft_putstr_fd("export: not an identifer:", 2);
+		ft_putstr_fd(name, 2);
+		return (ft_putstr_fd("\n", 2), 2);
+	}
 	if (name_exists(name, env) == TRUE)
 	{
 		free(name);
@@ -70,15 +92,21 @@ int	export_one(char *argument, t_dblist *env)
 int	do_export(char **arguments, t_dblist *env)
 {
 	int	i;
+	int	ret;
+	int exit_value;
 
 	i = 0;
+	exit_value = 0;
 	if (arguments == NULL)
 		return (print_export(env), 0);
 	while (arguments[i])
 	{
-		if (export_one(arguments[i], env) == -1)
-			return (-1);
+		ret = export_one(arguments[i], env);
+		if (ret == -1)
+			return (1);
+		else if (ret == 2)
+			exit_value = 1;
 		i++;
 	}
-	return (0);
+	return (exit_value);
 }
