@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 11:24:02 by skapersk          #+#    #+#             */
-/*   Updated: 2024/05/09 11:18:05 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/05/17 15:41:51 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ int	ft_add_token_sign(char **line, t_token **t_list,
 {
 	t_token	*token;
 	char	*value;
+
 	value = malloc(sizeof(char) * i + 1);
 	if (!value)
 		return (0);

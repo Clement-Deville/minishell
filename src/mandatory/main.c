@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:09:05 by cdeville          #+#    #+#             */
-/*   Updated: 2024/05/17 11:17:54 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/05/17 15:41:24 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,10 +82,16 @@ int	main_subshell(int ac, char **av, char **env)
 	t_mini_env	*ms;
 	char		*line;
 	t_token		*tmp_token;
+	int			i;
 
+	i = 0;
 	(void)ac;
-	ms = get_ms();
 	line = *av;
+	while (line[i])
+		i++;
+	line[i] = '\n';
+	line[++i] = '\0';
+	ms = get_ms();
 	ft_init_env(env, line);
 	ft_tokenization(ms);
 	ms->nodes = init_parsing(ms);
