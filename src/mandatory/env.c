@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
+/*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 13:23:24 by cdeville          #+#    #+#             */
-/*   Updated: 2024/04/18 10:11:08 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/04/23 16:35:56 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <minishell.h>
+#include "minishell.h"
 
 void	print_variable(void *content)
 {

@@ -6,11 +6,12 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:09:05 by cdeville          #+#    #+#             */
-/*   Updated: 2024/04/22 12:11:01 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/05/17 11:17:54 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
+#include <stdio.h>
 
 char	*convert2(t_red_type type)
 {
@@ -46,8 +47,14 @@ void	do_node(t_node *node)
 		ft_printf("TYPE NODE : %s --> ", convert(node->type));
 	if (node->red_node != NULL && node->red_node->value != NULL)
 	{
-		ft_printf("%s with ", convert2(node->red_node->type));
-		ft_printf("%s ", node->red_node->value);
+		// ft_printf("%s with ", convert2(node->red_node->type));
+		// ft_printf("%s ", node->red_node->value);
+		while (node->red_node)
+		{
+			ft_printf("%s with ", convert2(node->red_node->type));
+			ft_printf("%s \n", node->red_node->value);
+			node->red_node = node->red_node->next;
+		}
 	}
 	if (node->cmd != NULL)
 		ft_printf("Command: %s\n", node->cmd);
@@ -70,26 +77,52 @@ void	exec_parse(t_node *node)
 	}
 }
 
+int	main_subshell(int ac, char **av, char **env)
+{
+	t_mini_env	*ms;
+	char		*line;
+	t_token		*tmp_token;
+
+	(void)ac;
+	ms = get_ms();
+	line = *av;
+	ft_init_env(env, line);
+	ft_tokenization(ms);
+	ms->nodes = init_parsing(ms);
+	start_exec(ms->nodes, ms);
+	free(line);
+	while (ms->tokens != NULL)
+	{
+		tmp_token = ms->tokens;
+		ms->tokens = ms->tokens->next;
+		free(tmp_token->value);
+		free(tmp_token);
+	}
+	return (0);
+}
+
 int	main(int ac, char **av, char **env)
 {
-	t_mini_env	ms;
+	t_mini_env	*ms;
 	char		*line;
-	t_node		*ast_node;
+	// t_node		*ast_node;
 	t_token		*tmp_token;
 
 	(void)ac;
 	(void)av;
+	ms = get_ms();
 	line = get_next_line(0);
-	ft_init_env(env, &ms, line);
-	ft_tokenization(&ms);
-	ms.nodes = ft_parser(&ms);
-	ast_node = ms.nodes;
-	exec_parse(ast_node);
+	ft_init_env(env, line);
+	ft_tokenization(ms);
+	ms->nodes = init_parsing(ms);
+	// ast_node = ms->nodes;
+	// exec_parse(ast_node);
+	start_exec(ms->nodes, ms);
 	free(line);
-	while (ms.tokens != NULL)
+	while (ms->tokens != NULL)
 	{
-		tmp_token = ms.tokens;
-		ms.tokens = ms.tokens->next;
+		tmp_token = ms->tokens;
+		ms->tokens = ms->tokens->next;
 		free(tmp_token->value);
 		free(tmp_token);
 	}

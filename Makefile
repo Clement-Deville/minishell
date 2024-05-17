@@ -27,6 +27,16 @@ SRCS_FILES =	main	\
 				lst_token_add_back	\
 				tokens_helper \
 				parser \
+				compute_cmds \
+				wildcard \
+				init_here_doc \
+				clean_ms \
+				exec \
+				exec_red \
+				exec_builtin \
+				error_msg \
+				get_path \
+				exec_pipeline \
 
 SRCS_FILES_BONUS =	main_bonus	\
 
@@ -71,7 +81,7 @@ $(NAME): $(OBJS)
 	@echo "\e[0;32m\nGenerating libft...\n\e[0m"
 	make -C $(LIBFT_DIR)
 	@echo "\e[0;32m\nLinking executable:\n\e[0m"
-	$(CC) $(FLAGS) $(OBJS) $(DEBUG) -lft -L$(LIBFT_DIR) -o $(NAME)
+	$(CC) $(FLAGS) $(OBJS) $(DEBUG) -lft -L$(LIBFT_DIR) -lreadline -o $(NAME)
 	@echo "\e[0;32m\nMandatory part compiled !\n\e[0m"
 
 $(NAME_B): $(OBJS_B)

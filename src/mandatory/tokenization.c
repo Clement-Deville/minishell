@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 11:24:02 by skapersk          #+#    #+#             */
-/*   Updated: 2024/04/22 12:10:49 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/05/09 11:18:05 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ void	ft_add_token_else(char **line, t_token **t_list)
 	tmp = *line;
 	while (tmp[i] && !ft_is_char(tmp + i))
 		i++;
+	if (tmp[i] == '\0')
+		i -= 1;
 	value = malloc(sizeof(char) * i + 1);
 	if (!value)
 		return ;
@@ -42,7 +44,6 @@ int	ft_add_token_sign(char **line, t_token **t_list,
 {
 	t_token	*token;
 	char	*value;
-
 	value = malloc(sizeof(char) * i + 1);
 	if (!value)
 		return (0);
@@ -74,8 +75,6 @@ void	ft_token_identify(char **line, t_token **t_list)
 		i = ft_add_token_sign(line, t_list, TOKEN_AND, 2);
 	else if (!ft_strncmp(*line, "||", 2))
 		i = ft_add_token_sign(line, t_list, TOKEN_OR, 2);
-	else if (!ft_strncmp(*line, "$", 1))
-		i = ft_add_token_sign(line, t_list, TOKEN_VAR_ENV, 1);
 	else if (!ft_strncmp(*line, "(", 1))
 		i = ft_add_token_sign(line, t_list, TOKEN_SUBSHELL_OPEN, 1);
 	else if (!ft_strncmp(*line, ")", 1))
@@ -97,8 +96,7 @@ void	ft_tokenization(t_mini_env *ms)
 	{
 		if (!ft_strncmp(line, "<", 1) || !ft_strncmp(line, ">", 1)
 			|| !ft_strncmp(line, "|", 1) || !ft_strncmp(line, "&&", 2)
-			|| !ft_strncmp(line, "(", 1) || !ft_strncmp(line, ")", 1)
-			|| !ft_strncmp(line, "$", 1))
+			|| !ft_strncmp(line, "(", 1) || !ft_strncmp(line, ")", 1))
 			ft_token_identify(&line, &token_list);
 		else if (is_space(*line))
 			line++;

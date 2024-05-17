@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lst_token_add_back.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
+/*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 09:53:24 by skapersk          #+#    #+#             */
-/*   Updated: 2024/04/18 10:09:18 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/05/06 15:50:47 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,19 +23,16 @@ t_token	*last_token(t_token *token)
 
 void	lst_token_add_back(t_token **token_list, t_token *new)
 {
-	t_token	*last;
+	t_token	*curr;
 
-	if (!new)
-		return ;
-	if (token_list)
+	if (!*token_list)
 	{
-		if (!*token_list)
-			*token_list = new;
-		else
-		{
-			last = last_token(*token_list);
-			last->next = new;
-			new->prev = last;
-		}
+		*token_list = new;
+		return ;
 	}
+	curr = *token_list;
+	while (curr && curr->next)
+		curr = curr->next;
+	curr->next = new;
+	new->prev = curr;
 }

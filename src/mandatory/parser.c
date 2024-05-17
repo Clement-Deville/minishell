@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:22:01 by skapersk          #+#    #+#             */
-/*   Updated: 2024/04/22 11:48:09 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/05/12 11:28:09 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int	ft_join_args(char **args, t_token *token)
 {
 	if (!*args)
 	{
-		*args = ft_strdup("");
+		*args = ft_calloc(1, sizeof(char));
 		if (!*args)
 			return (0);
 	}
@@ -304,5 +304,20 @@ t_node	*ft_parser(t_mini_env *ms)
 			node->next->prev = node;
 		}
 	}
+	return (node);
+}
+
+t_node	*init_parsing(t_mini_env *ms)
+{
+	t_token	*tmp;
+	t_node	*node;
+
+	tmp = ms->tokens;
+	node = ft_parser(ms);
+	if (ms->tokens != NULL)
+		return (ft_printf("PB PARSING"), node);
+	else
+		ms->tokens = tmp;
+	ft_compute_cmds(node);
 	return (node);
 }

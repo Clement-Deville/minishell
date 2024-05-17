@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   asterisk.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
+/*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 10:46:35 by cdeville          #+#    #+#             */
-/*   Updated: 2024/04/15 17:16:18 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/05/07 15:42:00 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ static t_bool	pass_wilcard(char **ptr_on_argument, char **ptr_on_d_name)
 {
 	while (**ptr_on_argument == '*')
 		(*ptr_on_argument)++;
-	if (**ptr_on_argument == 0)
+	if (!**ptr_on_argument)
 		return (TRUE);
 	while (**ptr_on_d_name && **ptr_on_d_name != **ptr_on_argument)
 		(*ptr_on_d_name)++;
@@ -69,20 +69,22 @@ int	do_asterisk(char *argument)
 {
 	DIR				*dir;
 	struct dirent	*entry;
+	int				i;
 
 	dir = do_opendir();
 	if (dir == NULL)
 		return (2);
 	entry = readdir(dir);
+	i = 0;
 	while (entry != NULL)
 	{
 		if (patern_match(argument, entry->d_name) == TRUE)
-			ft_printf("Matching: %s\n", entry->d_name);
-		else
-			ft_printf("Not matching: %s\n", entry->d_name);
+			i++;
+		// else
+		// 	ft_printf("Not matching: %s\n", entry->d_name);
 		entry = readdir(dir);
 	}
 	if (do_closedir(dir) != 0)
 		return (2);
-	return (0);
+	return (i);
 }
