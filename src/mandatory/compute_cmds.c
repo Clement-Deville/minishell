@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 14:44:53 by skapersk          #+#    #+#             */
-/*   Updated: 2024/05/15 10:34:21 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/05/18 13:53:14 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -554,8 +554,13 @@ void	init_cmp(t_node *node)
 
 void	ft_compute_cmds(t_node *node)
 {
-	if (node == NULL || node->cmd == NULL)
+	if (node == NULL || (node->cmd == NULL && node->sub_node == NULL))
 		return ;
+	else if (node->sub_node != NULL)
+	{
+		ft_compute_cmds(node->next);
+		return ;
+	}
 	else if (node->red_node != NULL)
 		ft_init_heredoc(node);
 	init_cmp(node);

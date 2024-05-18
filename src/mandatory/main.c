@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:09:05 by cdeville          #+#    #+#             */
-/*   Updated: 2024/05/17 15:41:24 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/05/18 13:49:46 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,12 +85,13 @@ int	main_subshell(int ac, char **av, char **env)
 	int			i;
 
 	i = 0;
-	(void)ac;
-	line = *av;
+	line = malloc(sizeof(char) + ac + 2);
+	ft_strlcpy(line, *av, ac + 1);
 	while (line[i])
 		i++;
 	line[i] = '\n';
-	line[++i] = '\0';
+	i++;
+	line[i] = '\0';
 	ms = get_ms();
 	ft_init_env(env, line);
 	ft_tokenization(ms);
@@ -104,7 +105,7 @@ int	main_subshell(int ac, char **av, char **env)
 		free(tmp_token->value);
 		free(tmp_token);
 	}
-	return (0);
+	return (ms->exit);
 }
 
 int	main(int ac, char **av, char **env)

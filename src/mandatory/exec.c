@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 15:10:46 by skapersk          #+#    #+#             */
-/*   Updated: 2024/05/17 11:14:10 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/05/18 13:50:14 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,7 @@ int	exec_subshell(t_node *node, t_mini_env *ms)
 	if (!fork_pid)
 	{
 		main_subshell(ac, &ms->line, env);
+		exit(0);
 	}
 	waitpid(fork_pid, &status, 0);
 	return (ft_get_exit_status(status));
@@ -150,8 +151,8 @@ int	exec_node(t_node *node, t_mini_env *ms, t_bool piped, int i)
 	else if (node->sub_node != NULL)
 	{
 		status = exec_subshell(node, ms);
-		if (status == ENO_SUCCESS)
-			return (exec_node(node->next, ms, FALSE, 0));
+		if (node->rigth && node->rigth->type == TOKEN_AND)
+			return (exec_node(node->next, ms, TRUE, i));
 		return (status);
 	}
 	else
