@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 14:44:53 by skapersk          #+#    #+#             */
-/*   Updated: 2024/05/18 14:10:00 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/05/20 20:03:36 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -547,7 +547,7 @@ void	init_cmp(t_node *node)
 	// char **expanded_args = node->c_cmd->expand;
 	// while (*expanded_args)
 	// {
-	// 	ft_printf("*** %s ***\n", *expanded_args);
+	// 	ft_putendl_fd(*expanded_args, 2);
 	// 	expanded_args++;
 	// }
 }
@@ -558,6 +558,8 @@ void	ft_compute_cmds(t_node *node)
 		return ;
 	else if (node->sub_node != NULL)
 	{
+		node = node->next;
+		init_node(node);
 		ft_compute_cmds(node->next);
 		return ;
 	}

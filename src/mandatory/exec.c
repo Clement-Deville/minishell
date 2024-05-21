@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 15:10:46 by skapersk          #+#    #+#             */
-/*   Updated: 2024/05/19 11:12:08 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/05/21 09:47:03 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,12 @@ int	ft_check_red(t_node *node)
 	r_node = node->red_node;
 	while (r_node)
 	{
+
 		if (r_node->type == NODE_RED_OUT
 			&& do_out(r_node, &status) != ENO_SUCCESS)
 			return (status);
 		else if (r_node->type == NODE_RED_IN
-			&& do_out(r_node, &status) != ENO_SUCCESS)
+			&& do_in(r_node, &status) != ENO_SUCCESS)
 			return (status);
 		else if (r_node->type == NODE_APPEND
 			&& do_append(r_node, &status) !=ENO_SUCCESS)
@@ -69,7 +70,9 @@ static int	ft_exec_child(t_node *node, t_mini_env *ms)
 		path_status = ft_get_path((node->c_cmd->expand)[0]);
 		if (path_status.err.no != ENO_SUCCESS)
 		{
+
 			status = ft_err_msg(path_status.err);
+
 			ft_clean_ms();
 			exit(status);
 		}
@@ -86,41 +89,50 @@ static int	ft_exec_child(t_node *node, t_mini_env *ms)
 
 int	exec_simple_cmd(t_node *node, t_mini_env *ms, t_bool piped)
 {
-    int status;
+	int	status;
+	int	fork_pid;
 
-    if (!node->c_cmd->expand) 
+	if (!node->c_cmd->expand)
 	{
-        status = ft_check_red(node);
-        return (ft_set_stds(piped, ms), (status && ENO_GENERAL));
-    } 
+		status = ft_check_red(node);
+		return (ft_set_stds(piped, ms), (status && ENO_GENERAL));
+	}
+	else if (ft_is_builtin((node->c_cmd->expand)[0])
+		&& (!ft_strncmp((node->c_cmd->expand)[0], "cd", ft_strlen("cd"))
+			|| !ft_strncmp((node->c_cmd->expand)[0], "pwd", ft_strlen("pwd"))))
+	{
+		return (ft_exec_builtin(node->c_cmd->expand));
+	}
 	else if (ft_is_builtin((node->c_cmd->expand)[0]))
 	{
-        status = ft_check_red(node);
-        if (status != ENO_SUCCESS)
-            return (ft_set_stds(piped, ms), ENO_GENERAL);
-        else
+		status = ft_check_red(node);
+		if (status != ENO_SUCCESS)
+			return (ft_set_stds(piped, ms), ENO_GENERAL);
+		else
 		{
-            int fork_pid = fork();
-            if (fork_pid == -1)
+			fork_pid = fork();
+			if (fork_pid == -1)
 			{
-                perror("fork");
-                return ENO_GENERAL;
-            }
+				perror("fork");
+				return (ENO_GENERAL);
+			}
 			else if (fork_pid == 0)
 			{
-                status = ft_exec_builtin(node->c_cmd->expand);
-                ft_clean_ms();
-                exit(status);
-            }
-            waitpid(fork_pid, &status, 0);
-            return ft_get_exit_status(status);
-        }
-    }
+				status = ft_exec_builtin(node->c_cmd->expand);
+				ft_clean_ms();
+				exit(status);
+			}
+			waitpid(fork_pid, &status, 0);
+			return (ft_get_exit_status(status));
+		}
+	}
 	else
-        return ft_exec_child(node, ms);
+	{
+		return (ft_exec_child(node, ms));
+	}
 }
 
-int	exec_subshell(t_node *node, t_mini_env *ms)
+int	exec_subshell(t_node *node, t_mini_env *ms, t_bool piped)
 {
 	int		status;
 	int		fork_pid;
@@ -133,6 +145,12 @@ int	exec_subshell(t_node *node, t_mini_env *ms)
 	fork_pid = fork();
 	if (!fork_pid)
 	{
+		if (node->next->red_node != NULL)
+		{
+			status = ft_check_red(node->next);
+			if (status != ENO_SUCCESS)
+				return (ft_set_stds(piped, ms), ENO_GENERAL);
+		}
 		main_subshell(ac, &ms->line, env);
 		exit(0);
 	}
@@ -150,15 +168,22 @@ int	exec_node(t_node *node, t_mini_env *ms, t_bool piped, int i)
 
 	if (node == NULL)
 		return (ENO_GENERAL);
-	if (node->next && (node->rigth && node->rigth->type == TOKEN_PIPE) && i == 0)
+	else if (node->next && (node->rigth && node->rigth->type == TOKEN_PIPE) && i == 0)
 	{
 		status = ft_exec_pipeline(node, ms, 0);
 		return (status);
 	}
-	else if (node->sub_node != NULL )
+	else if (node->sub_node != NULL)
 	{
-		status = exec_subshell(node, ms);
-		if (node->next && (node->rigth->type == TOKEN_AND || node->rigth->type == TOKEN_OR))
+		status = exec_subshell(node, ms, piped);
+		if (node->next->red_node != NULL)
+		{
+			node = node->next->next;
+			if (node->next && (node->rigth && (node->rigth->type == TOKEN_AND || node->rigth->type == TOKEN_OR)))
+				return (exec_node(node, ms, FALSE, i));
+			return (status);
+		}
+		else if (node->next && (node->rigth && (node->rigth->type == TOKEN_AND || node->rigth->type == TOKEN_OR)))
 			return (exec_node(node->next, ms, FALSE, i));
 		return (status);
 	}
@@ -171,6 +196,7 @@ int	exec_node(t_node *node, t_mini_env *ms, t_bool piped, int i)
 	}
 	else if (node->next && node->rigth->type == TOKEN_AND)
 	{
+
 		status = exec_simple_cmd(node, ms, FALSE);
 		if (status == ENO_SUCCESS)
 			return (exec_node(node->next, ms, FALSE, 0));
