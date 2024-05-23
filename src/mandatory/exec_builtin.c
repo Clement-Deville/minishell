@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 16:59:11 by skapersk          #+#    #+#             */
-/*   Updated: 2024/05/20 11:19:39 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/05/19 11:04:40 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,12 @@ int	ft_exec_builtin(char **args)
 {
 	if (ft_strncmp(args[0], "echo", ft_strlen(args[0])) == 0)
 		return (do_echo(args));
-	if (ft_strncmp(args[0], "cd", ft_strlen(args[0])) == 0)
-		return (do_cd(args[1], get_ms()->envlst));
+	// if (ft_strcmp(args[0], "cd") == 0)
+	// 	return (do_cd(args[1]));
 	// if (ft_strcmp(args[0], "env") == 0)
 	// 	return (do_env());
-	if (ft_strncmp(args[0], "pwd", ft_strlen(args[0])) == 0)
-		return (do_pwd());
+	// if (ft_strcmp(args[0], "pwd") == 0)
+	// 	return (do_pwd());
 	// if (ft_strcmp(args[0], "export") == 0)
 	// 	return (do_export(args));
 	// if (ft_strcmp(args[0], "unset") == 0)

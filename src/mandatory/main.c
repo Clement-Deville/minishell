@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:09:05 by cdeville          #+#    #+#             */
-/*   Updated: 2024/05/20 14:09:51 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/05/18 13:49:46 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,21 +112,19 @@ int	main(int ac, char **av, char **env)
 {
 	t_mini_env	*ms;
 	char		*line;
+	// t_node		*ast_node;
 	t_token		*tmp_token;
 
 	(void)ac;
 	(void)av;
 	ms = get_ms();
-	while (1)
-	{
-		line = get_next_line(0);
-		if (!ft_strncmp("exit\n", line, ft_strlen(line)))
-			break ;
-		ft_init_env(env, line);
-		ft_tokenization(ms);
-		ms->nodes = init_parsing(ms);
-		start_exec(ms->nodes, ms);
-	}
+	line = get_next_line(0);
+	ft_init_env(env, line);
+	ft_tokenization(ms);
+	ms->nodes = init_parsing(ms);
+	// ast_node = ms->nodes;
+	// exec_parse(ast_node);
+	start_exec(ms->nodes, ms);
 	free(line);
 	while (ms->tokens != NULL)
 	{
