@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 11:24:02 by skapersk          #+#    #+#             */
-/*   Updated: 2024/05/17 15:41:51 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/05/26 15:37:59 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,7 @@ void	ft_add_token_else(char **line, t_token **t_list)
 	tmp = *line;
 	while (tmp[i] && !ft_is_char(tmp + i))
 		i++;
-	if (tmp[i] == '\0')
-		i -= 1;
-	value = malloc(sizeof(char) * i + 1);
+	value = malloc(sizeof(char) * (i + 1));
 	if (!value)
 		return ;
 	ft_strlcpy(value, tmp, i + 1);
@@ -89,9 +87,12 @@ void	ft_tokenization(t_mini_env *ms)
 {
 	t_token	*token_list;
 	char	*line;
+	char	*trimmed;
 
-	line = ms->line;
-	ft_strtrim(line, " \f\n\r\t\v");
+	line = ft_strtrim(ms->line, " \f\n\r\t\v");
+	if (!line)
+		return ;
+	trimmed = line;
 	token_list = NULL;
 	while (*line)
 	{
@@ -105,4 +106,5 @@ void	ft_tokenization(t_mini_env *ms)
 			ft_add_token_else(&line, &token_list);
 	}
 	ms->tokens = token_list;
+	free(trimmed);
 }

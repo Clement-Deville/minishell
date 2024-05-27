@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:22:01 by skapersk          #+#    #+#             */
-/*   Updated: 2024/05/17 16:40:13 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/05/27 13:03:23 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,19 +39,24 @@ int	ft_is_redir(t_token_type type)
 
 int	ft_join_args(char **args, t_token *token)
 {
+	char	*tmp;
+
+	tmp = NULL;
 	if (!*args)
 	{
-		*args = ft_calloc(1, sizeof(char));
-		if (!*args)
-			return (0);
+		tmp = ft_calloc(1, sizeof(char));
+		if (!tmp)
+			return (ft_big_free(args), ft_clear_token(token), 0);
 	}
 	else
 	{
-		*args = ft_strjoin(*args, " ");
-		if (!*args)
-			return (ft_printf("ARGS TO FREE"), 0);
+		tmp = ft_strjoin(*args, " ");
+		if (!tmp)
+			return (ft_big_free(args), ft_clear_token(token), 0);
+		free(*args);
 	}
-	*args = ft_strjoin(*args, token->value);
+	*args = ft_strjoin(tmp, token->value);
+	free(tmp);
 	if (!*args)
 		return (0);
 	return (1);
@@ -133,13 +138,8 @@ int	ft_get_red_node(t_red_node **node, t_mini_env *ms)
 	return (1);
 }
 
-t_node	*ft_simple_cmd(t_mini_env *ms)
+t_node	*ft_simple_cmd(t_mini_env *ms, t_node *node)
 {
-	t_node	*node;
-
-	node = ft_new_node(NODE_CMD);
-	if (!node)
-		return (ft_printf("PB MALLOC NODE_CMD"), NULL);
 	while (ms->tokens && (ms->tokens->type == TOKEN_ELSE
 			|| ft_is_redir(ms->tokens->type)))
 	{
@@ -270,7 +270,7 @@ t_node	*ft_start(t_mini_env *ms)
 		return (node);
 	}
 	else
-		return (ft_simple_cmd(ms));
+		return (ft_simple_cmd(ms, node));
 }
 
 t_node	*ft_parser(t_mini_env *ms)
@@ -307,17 +307,18 @@ t_node	*ft_parser(t_mini_env *ms)
 	return (node);
 }
 
-t_node	*init_parsing(t_mini_env *ms)
+void	init_parsing(t_mini_env *ms)
 {
 	t_token	*tmp;
-	t_node	*node;
 
 	tmp = ms->tokens;
-	node = ft_parser(ms);
+	ms->nodes = ft_parser(ms);
 	if (ms->tokens != NULL)
-		return (ft_printf("PB PARSING"), node);
+	{
+		ft_printf("PB PARSING");
+		return ;
+	}
 	else
 		ms->tokens = tmp;
-	ft_compute_cmds(node);
-	return (node);
+	ft_compute_cmds(ms->nodes);
 }

@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:09:05 by cdeville          #+#    #+#             */
-/*   Updated: 2024/05/18 13:49:46 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/05/27 13:09:22 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,6 @@ int	main_subshell(int ac, char **av, char **env)
 {
 	t_mini_env	*ms;
 	char		*line;
-	t_token		*tmp_token;
 	int			i;
 
 	i = 0;
@@ -93,45 +92,43 @@ int	main_subshell(int ac, char **av, char **env)
 	i++;
 	line[i] = '\0';
 	ms = get_ms();
-	ft_init_env(env, line);
+	ft_init_env(env);
 	ft_tokenization(ms);
-	ms->nodes = init_parsing(ms);
+	init_parsing(ms);
 	start_exec(ms->nodes, ms);
 	free(line);
-	while (ms->tokens != NULL)
-	{
-		tmp_token = ms->tokens;
-		ms->tokens = ms->tokens->next;
-		free(tmp_token->value);
-		free(tmp_token);
-	}
 	return (ms->exit);
 }
 
 int	main(int ac, char **av, char **env)
 {
 	t_mini_env	*ms;
-	char		*line;
-	// t_node		*ast_node;
-	t_token		*tmp_token;
+	int			last_exit;
 
 	(void)ac;
 	(void)av;
 	ms = get_ms();
-	line = get_next_line(0);
-	ft_init_env(env, line);
-	ft_tokenization(ms);
-	ms->nodes = init_parsing(ms);
-	// ast_node = ms->nodes;
-	// exec_parse(ast_node);
-	start_exec(ms->nodes, ms);
-	free(line);
-	while (ms->tokens != NULL)
+	last_exit = 0;
+	ft_init_env(env);
+	while (1)
 	{
-		tmp_token = ms->tokens;
-		ms->tokens = ms->tokens->next;
-		free(tmp_token->value);
-		free(tmp_token);
+		get_ms()->line = get_next_line(0);
+		if (get_ms()->line == NULL)
+		{
+			ft_printf("Erreur : pointeur de ligne de commande nul\n");
+			return (0);
+		}
+		get_ms()->exit = last_exit;
+		if (!ft_strncmp("stop\n", get_ms()->line, ft_strlen(get_ms()->line)))
+			break ;
+		ft_tokenization(get_ms());
+		init_parsing(ms);
+		start_exec(get_ms()->nodes, get_ms());
+		last_exit = get_ms()->exit;
+		ft_clean_ms();
+		free(get_ms()->line);
 	}
-	return (0);
+	free(get_ms()->line);
+	ft_clear_envlst(ms);
+	return (last_exit);
 }

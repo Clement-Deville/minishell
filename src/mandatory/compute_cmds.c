@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 14:44:53 by skapersk          #+#    #+#             */
-/*   Updated: 2024/05/18 14:10:00 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/05/27 12:25:10 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ char	*ft_handle_dollar(char *str, int *i)
 	else if (str[*i] == '?')
 	{
 		*i += 1;
-		return (ft_printf("A GERER VALEUR DE RETOUR EXEC"), ft_itoa(0));
+		return (ft_itoa(get_ms()->exit));
 	}
 	else if (!ft_is_valid_arg(str[*i]))
 		return (ft_strdup("$"));
@@ -183,26 +183,36 @@ int		check_quotes(char *str)
 char	*ft_cmd_pre_expand(char *str)
 {
 	char	*new;
+	char	*tmp;
+	char	*temp;
 	int		i;
 
 	i = 0;
 	if (check_quotes(str))
 		return (ft_printf("PB QUOTES NOT CLOSED --> TO FREE"), NULL);
-	new = ft_strdup("");
-	if (!new)
+	tmp = ft_strdup("");
+	if (!tmp)
 		return (NULL);
 	while (str[i])
 	{
 		if (str[i] == '\'')
-			new = ft_strjoin(new, ft_handle_simple_quotes(str, &i));
+			temp = ft_handle_simple_quotes(str, &i);
 		else if (str[i] == '"')
-			new = ft_strjoin(new, ft_handle_double_quotes(str, &i));
+			temp = ft_handle_double_quotes(str, &i);
 		else if (str[i] == '$')
-			new = ft_strjoin(new, ft_handle_dollar(str, &i));
+			temp = ft_handle_dollar(str, &i);
 		else
-			new = ft_strjoin(new, ft_handle_arg(str, &i));
+			temp = ft_handle_arg(str, &i);
+		if (!temp)
+			return (free(tmp), NULL);
+		new = ft_strjoin(tmp, temp);
+		free(temp);
+		free(tmp);
+		if (!new)
+			return (NULL);
+		tmp = new;
 	}
-	return (new);
+	return (tmp);
 }
 
 char	*skip_words(char *str, int *i, int *count, char *tmp)
@@ -214,7 +224,7 @@ char	*skip_words(char *str, int *i, int *count, char *tmp)
 	{
 		while (str[start] && str[start] != ' ')
 			start++;
-		tmp = ft_calloc(start + 1, sizeof(char));
+		tmp = ft_calloc(start - *i + 1, sizeof(char));
 		if (!tmp)
 			return (NULL);
 	}
@@ -326,7 +336,12 @@ char	**ft_split_args(char *str, t_node *node)
 		else if (str[i] && str[i] != ' ' && find_quotes(str[i]))
 			tmp[j] = skip_quotes(str, &i, &count, tmp[j]);
 		if (tmp[j] == NULL)
+		{
+			while (j > 0)
+				free(tmp[--j]);
+			free(tmp);
 			return (NULL);
+		}
 		j++;
 	}
 	tmp[j] = NULL;
@@ -346,6 +361,13 @@ char	**no_asterisk(char *str)
 	return (ret);
 }
 
+int	ft_visible(char *entry)
+{
+	if (entry[0] == '.')
+		return (0);
+	return (1);
+}
+
 char	**there_asterisk(char *str, int i)
 {
 	DIR				*dir;
@@ -360,13 +382,13 @@ char	**there_asterisk(char *str, int i)
 	entry = readdir(dir);
 	while (entry)
 	{
-		if (patern_match(str, entry->d_name))
+		if (patern_match(str, entry->d_name) && ft_visible(entry->d_name))
 		{
 			ret[i] = ft_strdup(entry->d_name);
 			if (!ret[i])
 				return (NULL);
+			i++;
 		}
-		i++;
 		entry = readdir(dir);
 	}
 	do_closedir(dir);
@@ -430,6 +452,29 @@ void	ft_big_free(char **str)
 	i = -1;
 	while (str[++i])
 		free(str[i]);
+	free(str);
+}
+void	free_wildcards(t_wildcard *wildcard)
+{
+	t_wildcard	*temp;
+	int			i;
+
+	while (wildcard != NULL)
+	{
+		temp = wildcard;
+		wildcard = wildcard->next;
+		if (temp->files != NULL)
+		{
+			i = 0;
+			while (temp->files[i] != NULL)
+			{
+				free(temp->files[i]);
+				i++;
+			}
+			free(temp->files);
+		}
+		free(temp);
+	}
 }
 
 char	**ft_handle_wildcard(char **glob, t_node *node)
@@ -453,7 +498,7 @@ char	**ft_handle_wildcard(char **glob, t_node *node)
 	}
 	wildcard->next = NULL;
 	new = ft_join_wildcard(node);
-	return (ft_big_free(glob), new);
+	return (ft_big_free(glob), free_wildcards(node->c_cmd->wildcard), new);
 }
 
 char	*clean_node(char *str)
@@ -484,7 +529,7 @@ char	*clean_node(char *str)
 	return (ft_strlcpy(ret, tmp, dstsize), free(tmp), ret);
 }
 
-char	**ft_expand(char *str, t_node * node)
+char	**ft_expand(char *str, t_node *node)
 {
 	char	**global;
 	char	*expanded;
@@ -497,10 +542,12 @@ char	**ft_expand(char *str, t_node * node)
 	if (!expanded)
 		return (NULL);
 	global = ft_split_args(expanded, node);
+	free(expanded);
 	if (!global)
 		return (NULL);
 	return (global);
 }
+
 void	cut_quotes(char **str)
 {
 	int		i;
@@ -531,25 +578,44 @@ void	cut_quotes(char **str)
 	}
 }
 
+void free_node(t_node *node)
+{
+	if (!node)
+		return ;
+	if (node->c_cmd)
+	{
+		if (node->c_cmd->av)
+			ft_big_free(node->c_cmd->av);
+		if (node->c_cmd->expand)
+			ft_big_free(node->c_cmd->expand);
+		if (node->c_cmd->wildcard)
+			free(node->c_cmd->wildcard);
+		free(node->c_cmd);
+	}
+	free(node);
+}
+
 void	init_cmp(t_node *node)
 {
+	char **tmp;
+
+	tmp = NULL;
 	if (!init_node(node))
 	{
-		ft_printf("FREE CMP");
+		free_node(node);
 		return ;
 	}
 	if (node->cmd != NULL)
-		node->c_cmd->expand = ft_expand(node->cmd, node);
-	node->c_cmd->expand = ft_handle_wildcard(node->c_cmd->expand, node);
-	if (!node->c_cmd->expand)
+		tmp = ft_expand(node->cmd, node);
+	if (!tmp)
 		return ;
+	node->c_cmd->expand = ft_handle_wildcard(tmp, node);
+	if (!node->c_cmd->expand)
+	{
+		free_node(node);
+		return ;
+	}
 	cut_quotes(node->c_cmd->expand);
-	// char **expanded_args = node->c_cmd->expand;
-	// while (*expanded_args)
-	// {
-	// 	ft_printf("*** %s ***\n", *expanded_args);
-	// 	expanded_args++;
-	// }
 }
 
 void	ft_compute_cmds(t_node *node)
@@ -558,7 +624,14 @@ void	ft_compute_cmds(t_node *node)
 		return ;
 	else if (node->sub_node != NULL)
 	{
-		ft_compute_cmds(node->next);
+		if (node->next && node->next->red_node != NULL)
+		{
+			node = node->next;
+			init_node(node);
+			ft_compute_cmds(node->next);
+		}
+		else
+			ft_compute_cmds(node->next);
 		return ;
 	}
 	else if (node->red_node != NULL)

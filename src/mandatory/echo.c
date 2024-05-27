@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 11:33:00 by cdeville          #+#    #+#             */
-/*   Updated: 2024/05/14 19:42:50 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/05/21 18:46:51 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ int	do_echo(char **args)
 
 	i = 1;
 	opt = 0;
+	
 	while (args[i] != NULL && ft_check_option(args[i]) == 1)
 	{
 		opt = 1;

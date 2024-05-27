@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:09:27 by cdeville          #+#    #+#             */
-/*   Updated: 2024/05/18 13:48:56 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/05/27 13:05:52 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define MINISHELL_H
 # include <libft.h>
 # include <stdio.h>
+# include <limits.h>
 # include <stdlib.h>
 # include <dirent.h>
 # include <signal.h>
@@ -36,7 +37,7 @@ int			do_echo(char **args);
 int			do_pwd(void);
 int			do_env(t_dblist *env);
 int			do_export(char **arguments, t_dblist *env);
-int			do_exit(char *argument);
+void		do_exit(char **args);
 
 // EXPORT
 
@@ -224,7 +225,7 @@ typedef struct s_mini_env
 
 t_mini_env	*get_ms(void);
 void		ft_tokenization(t_mini_env *ms);
-void		ft_init_env(char **env, char *line);
+void		ft_init_env(char **env);
 void		lst_token_add_back(t_token **token_list, t_token *new);
 
 //tokens_helper.c
@@ -234,7 +235,7 @@ int			is_space(char c);
 
 //parser.c
 t_node		*ft_parser(t_mini_env *ms);
-t_node		*init_parsing(t_mini_env *ms);
+void		init_parsing(t_mini_env *ms);
 
 //comupte_cmds.c
 void		ft_compute_cmds(t_node *node);
@@ -266,7 +267,7 @@ int			do_append(t_red_node *node, int *status);
 
 //exec_builtin.c
 int			ft_is_builtin(char *arg);
-int			ft_exec_builtin(char **args);
+int			ft_exec_builtin(char **args, t_mini_env *ms);
 
 //error_msg.c
 int			ft_err_msg(t_err err);
@@ -279,5 +280,15 @@ t_path		ft_get_path(char *cmd);
 int			ft_exec_pipeline(t_node *node, t_mini_env *ms, int i);
 
 int			main_subshell(int ac, char **av, char **env);
+
+void		*ft_garbage(void *str, t_bool clean);
+
+char		*convert(t_node_type type);
+
+void		ft_clear_token(t_token *token);
+
+void 		free_node(t_node *node);
+
+void		ft_clear_envlst(t_mini_env *mini_s);
 
 #endif
