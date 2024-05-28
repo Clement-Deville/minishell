@@ -6,13 +6,13 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 17:49:40 by cdeville          #+#    #+#             */
-/*   Updated: 2024/04/10 18:34:43 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/05/24 16:34:01 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-int	do_cd(char *directory, t_dblist *env)
+int	do_cd(char *directory, t_dblist **env)
 {
 	char	*pwd;
 	char	*complete_pwd;

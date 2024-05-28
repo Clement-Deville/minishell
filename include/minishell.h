@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:09:27 by cdeville          #+#    #+#             */
-/*   Updated: 2024/05/18 13:48:56 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/05/28 15:30:42 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,10 @@
 # include <unistd.h>
 # include <sys/types.h>
 # include <sys/wait.h>
+# include <errno.h>
+
+# define CANT_EXEC 126
+# define DONOT_EXIST 127
 
 typedef struct s_variable
 {
@@ -35,12 +39,12 @@ typedef struct s_variable
 int			do_echo(char **args);
 int			do_pwd(void);
 int			do_env(t_dblist *env);
-int			do_export(char **arguments, t_dblist *env);
+int			do_export(char **arguments, t_dblist **env);
 int			do_exit(char *argument);
 
 // EXPORT
 
-int			export_one(char *argument, t_dblist *env);
+int			export_one(char *argument, t_dblist **env);
 
 // PRINT_EXPORT
 
@@ -63,7 +67,7 @@ t_bool		patern_match(char *argument, char *d_name);
 
 // CD
 
-int			do_cd(char *directory, t_dblist	*env);
+int			do_cd(char *directory, t_dblist	**env);
 
 // DIR
 
@@ -76,7 +80,7 @@ int			setup_signals(void);
 
 // UNSET
 
-int			do_unset(char **arguments, t_dblist *env);
+int			do_unset(char **arguments, t_dblist **env);
 
 // UTILS
 
@@ -102,7 +106,8 @@ typedef enum e_err_no
 	ENO_GENERAL,
 	ENO_CANT_EXEC = 126,
 	ENO_NOT_FOUND,
-	ENO_EXEC_255 = 255
+	ENO_EXEC_255 = 255,
+	ENO_CRITICAL = 300,
 }	t_err_no;
 
 typedef struct s_err
@@ -199,6 +204,8 @@ typedef struct s_token
 
 typedef struct s_node
 {
+	int						status;
+	int						pid;
 	t_node_type				type;
 	t_red_node				*red_node;
 	t_subs_node				*sub_node;
@@ -222,9 +229,24 @@ typedef struct s_mini_env
 	t_node		*nodes;
 }	t_mini_env;
 
+// exec_pipeline
+
+int			exec_pipeline(t_node **node, t_dblist **env);
+int		exec_single(t_node **node, t_dblist **env);
+t_bool	is_pipe_cmd(t_node *node);
+
+typedef struct s_command
+{
+	int		type;
+	char	*sub_node;
+	char	**args;
+	int		status;
+	int		pid;
+}	t_command;
+
 t_mini_env	*get_ms(void);
 void		ft_tokenization(t_mini_env *ms);
-void		ft_init_env(char **env, char *line);
+void		ft_init_env(char **env);
 void		lst_token_add_back(t_token **token_list, t_token *new);
 
 //tokens_helper.c
@@ -254,8 +276,8 @@ void		ft_clean_ms(void);
 int			ft_is_builtin(char *arg);
 
 //exec.c
-void		start_exec(t_node *node, t_mini_env *ms);
-int			exec_node(t_node *node, t_mini_env *ms, t_bool piped, int i);
+int			start_exec(t_node *node, t_dblist **env);
+
 int			ft_get_exit_status(int status);
 int			exec_simple_cmd(t_node *node, t_mini_env *ms, t_bool piped);
 
@@ -264,10 +286,6 @@ int			do_out(t_red_node *node, int *status);
 int			do_in(t_red_node *node, int *status);
 int			do_append(t_red_node *node, int *status);
 
-//exec_builtin.c
-int			ft_is_builtin(char *arg);
-int			ft_exec_builtin(char **args);
-
 //error_msg.c
 int			ft_err_msg(t_err err);
 
@@ -275,9 +293,41 @@ void		ft_big_free(char **str);
 
 t_path		ft_get_path(char *cmd);
 
-//exec_pipeline.c
-int			ft_exec_pipeline(t_node *node, t_mini_env *ms, int i);
+int			main_subshell(int ac, char *av, char **env);
 
-int			main_subshell(int ac, char **av, char **env);
+// access.c
+
+int			check_for_path_access(char **cmd, t_dblist *env);
+
+// path.c
+
+char		*get_path(t_dblist *env);
+char		**parse_path(t_dblist *env);
+int			change_path(char **cmd, char *new_path);
+char		**add_dir(char **split_path);
+char		**add_cmd_to_path(char **split_path, const char *cmd);
+
+char		**list_to_tab(t_dblist *env);
+
+// redirection.c
+
+int			set_input(char *filename, t_node *node);
+int			set_output(char *filename, t_node *node);
+int			set_input_here_doc(int fd);
+int			set_output_append(char *filename, t_node *node);
+int			do_redirections(t_node *node);
+
+//	do.c
+
+int			do_dup2(int oldfd, int newfd);
+int			do_close(int fd);
+int			do_pipe(int pipfd[2]);
+
+# define NO_FORK -2
+# define WRITE 1
+# define READ 0
+# define COMMAND 0
+# define SUBSHELL 1
+# define FLAG_END 5
 
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_here_doc.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 15:44:49 by skapersk          #+#    #+#             */
-/*   Updated: 2024/05/20 19:40:51 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/05/28 14:39:55 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,10 @@ static void	ft_heredoc_sigint_handler(int signum)
 int	ft_error_exe(int p[2], int *pid)
 {
 	waitpid(*pid, pid, 0);
-	signal(SIGQUIT, NULL);
-	// g_minishell.signint_child = 0;
 	close(p[1]);
-	if (WIFEXITED(*pid) && WEXITSTATUS(*pid) == SIGINT)
-		return (1);
-	return (0);
+	if (WIFEXITED(*pid))
+		return (0);
+	return (1);
 }
 
 int	ft_is_delimiter(char *str, char *line)
@@ -160,15 +158,17 @@ void	ft_init_heredoc(t_node *node)
 	int	p[2];
 	int	pid;
 
+	if (node == NULL)
+		fprintf(stderr, "YOLO\n");
 	if (node->red_node != NULL && node->red_node->value != NULL)
 	{
 		if (node->red_node->type == NODE_HERE_DOC)
 		{
 			pipe(p);
-			pid = (signal(SIGQUIT, SIG_IGN), fork());
+			pid = (fork());
 			if (!pid)
 				ft_heredoc(node->red_node, p);
-			if (!ft_error_exe(p, &pid))
+			if (ft_error_exe(p, &pid))
 				return ;
 			node->red_node->here_doc = p[0];
 		}

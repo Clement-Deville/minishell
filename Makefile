@@ -32,11 +32,13 @@ SRCS_FILES =	main	\
 				init_here_doc \
 				clean_ms \
 				exec \
-				exec_red \
-				exec_builtin \
 				error_msg \
 				get_path \
 				exec_pipeline \
+				access	\
+				path	\
+				redirections	\
+				do	\
 
 SRCS_FILES_BONUS =	main_bonus	\
 

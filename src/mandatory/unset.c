@@ -6,48 +6,52 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 13:16:32 by cdeville          #+#    #+#             */
-/*   Updated: 2024/04/10 17:20:23 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/05/24 14:39:11 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-void	remove_element(t_dblist *env)
+void	remove_element(t_dblist *element)
 {
-	if (env->prev)
-		env->prev->next = env->next;
-	if (env->next)
-		env->next->prev = env->prev;
-	destroy_variable(env->content);
-	free(env);
+	if (element->prev)
+		element->prev->next = element->next;
+	if (element->next)
+		element->next->prev = element->prev;
+	destroy_variable(element->content);
+	free(element);
 }
 
-int	delete_variable(char *argument, t_dblist *env)
+int	delete_variable(char *argument, t_dblist **env)
 {
-	char	*name;
+	char		*name;
+	t_dblist	*actual;
 
+	actual = *env;
 	name = get_name(argument);
 	if (name == NULL)
 		return (perror("Malloc error"), -1);
-	while (env)
+	while (actual)
 	{
-		if (ft_strncmp(name, (((t_variable *)(env->content))->name),
+		if (ft_strncmp(name, (((t_variable *)(actual->content))->name),
 			ft_strlen(name)) == 0)
 			break ;
-		env = env->next;
+		actual = actual->next;
 	}
-	remove_element(env);
+	if (actual == *env)
+		*env = (*env)->next;
+	remove_element(actual);
 	return (free(name), 0);
 }
 
-int	unset_one(char *argument, t_dblist *env)
+int	unset_one(char *argument, t_dblist **env)
 {
 	char	*name;
 
 	name = get_name(argument);
 	if (name == NULL)
 		return (perror("Malloc error"), -1);
-	if (name_exists(name, env) == TRUE)
+	if (name_exists(name, *env) == TRUE)
 	{
 		delete_variable(argument, env);
 		return (free(name), 0);
@@ -56,7 +60,7 @@ int	unset_one(char *argument, t_dblist *env)
 		return (free(name), -1);
 }
 
-int	do_unset(char **arguments, t_dblist *env)
+int	do_unset(char **arguments, t_dblist **env)
 {
 	int	i;
 

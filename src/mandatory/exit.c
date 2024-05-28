@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 18:42:42 by cdeville          #+#    #+#             */
-/*   Updated: 2024/04/11 10:34:45 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/05/22 12:52:56 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ t_bool	is_numeric(char *argument)
 
 int	do_exit(char *argument)
 {
-	if (*argument == 0)
+	if (argument == NULL)
 		return (0);
 	if (is_numeric(argument) == FALSE)
 	{

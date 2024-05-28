@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 14:15:44 by cdeville          #+#    #+#             */
-/*   Updated: 2024/04/10 14:22:10 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/05/28 14:07:33 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,28 +33,40 @@ int	change_value(char *argument, t_dblist *env)
 	return (free(name), 0);
 }
 
-int	add_new_variable(char *argument, t_dblist *env)
+int	add_new_variable(char *argument, t_dblist **env)
 {
 	t_dblist	*new;
 
+	// Pas besoin de double pointeur, a verfier
 	new = ft_dblstnew(create_variable(argument));
+	ft_printf("New argument value = %s\n", ((t_variable*)(new->content))->value);
 	if (new == NULL || new->content == NULL)
-		return (free(new), -1);
-	ft_dblstadd_back(&env, new);
+		return (ft_printf("NOT ADDING\n"), free(new), -1);
+	ft_printf("Adding new value\n");
+	ft_dblstadd_back(env, new);
+	t_dblist	*test;
+	test = ft_dblstlast(*env);
+	ft_printf("Last argument value = %s\n", ((t_variable*)(test->content))->value);
+	print_variable(test->content);
+	ft_printf("Last argument next : %p\n", test->next);
+	ft_printf("Last argument prev:");
+	print_variable(test->prev->content);
 	return (0);
 }
 
-int	export_one(char *argument, t_dblist *env)
+int	export_one(char *argument, t_dblist **env)
 {
 	char	*name;
 
 	name = get_name(argument);
+	ft_printf("Name: %s\n", name);
 	if (name == NULL)
 		return (perror("Malloc error"), -1);
-	if (name_exists(name, env) == TRUE)
+	if (name_exists(name, *env) == TRUE)
 	{
+		ft_printf("Name exists\n");
 		free(name);
-		if (change_value(argument, env) == -1)
+		if (change_value(argument, *env) == -1)
 			return (1);
 		return (0);
 	}
@@ -67,17 +79,18 @@ int	export_one(char *argument, t_dblist *env)
 	}
 }
 
-int	do_export(char **arguments, t_dblist *env)
+int	do_export(char **arguments, t_dblist **env)
 {
 	int	i;
 
 	i = 0;
-	if (arguments == NULL)
-		return (print_export(env), 0);
+	if (arguments[0] == NULL)
+		return (print_export(*env), 0);
 	while (arguments[i])
 	{
+		ft_printf("ARG: %s\n", arguments[i]);
 		if (export_one(arguments[i], env) == -1)
-			return (-1);
+			return (1);
 		i++;
 	}
 	return (0);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:09:05 by cdeville          #+#    #+#             */
-/*   Updated: 2024/05/20 14:09:51 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/05/28 15:52:33 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,63 +77,81 @@ void	exec_parse(t_node *node)
 	}
 }
 
-int	main_subshell(int ac, char **av, char **env)
+int	main_subshell(int ac, char *av, char **env)
 {
-	t_mini_env	*ms;
-	char		*line;
-	t_token		*tmp_token;
-	int			i;
+	// t_mini_env    *ms;
+	char        *line;
+	int            i;
 
 	i = 0;
 	line = malloc(sizeof(char) + ac + 2);
-	ft_strlcpy(line, *av, ac + 1);
-	while (line[i])
-		i++;
-	line[i] = '\n';
-	i++;
-	line[i] = '\0';
-	ms = get_ms();
-	ft_init_env(env, line);
-	ft_tokenization(ms);
-	ms->nodes = init_parsing(ms);
-	start_exec(ms->nodes, ms);
+	ft_strlcpy(line,av, ac + 1);
+	ft_init_env(env);
+	get_ms()->line = line;
+	ft_tokenization(get_ms());
+	init_parsing(get_ms());
+	start_exec(get_ms()->nodes, &(get_ms()->envlst));
 	free(line);
-	while (ms->tokens != NULL)
-	{
-		tmp_token = ms->tokens;
-		ms->tokens = ms->tokens->next;
-		free(tmp_token->value);
-		free(tmp_token);
-	}
-	return (ms->exit);
+	return (get_ms()->exit);
 }
+
+// int	main_subshell(int ac, char **av, char **env)
+// {
+// 	t_mini_env	*ms;
+// 	char		*line;
+// 	t_token		*tmp_token;
+
+// 	ms = NULL;
+// 	line = malloc(sizeof(char) + ac + 2);
+// 	ft_strlcpy(line, *av, ac + 1);
+// 	ft_init_env(env);
+// 	 get_ms()->line = line;
+// 	// L'environement ne doit il pas etre herite du parent?
+// 	ft_tokenization(get_ms());
+// 	init_parsing(ms);
+// 	start_exec(ms->nodes, &(ms->envlst));
+// 	free(line);
+// 	while (ms->tokens != NULL)
+// 	{
+// 		tmp_token = ms->tokens;
+// 		ms->tokens = ms->tokens->next;
+// 		free(tmp_token->value);
+// 		free(tmp_token);
+// 	}
+// 	return (ms->exit);
+// }
 
 int	main(int ac, char **av, char **env)
 {
 	t_mini_env	*ms;
 	char		*line;
-	t_token		*tmp_token;
+	int			last_exit;
+	int			status;
 
 	(void)ac;
 	(void)av;
+	status = 0;
 	ms = get_ms();
+	last_exit = 0;
+	ft_init_env(env);
 	while (1)
 	{
 		line = get_next_line(0);
-		if (!ft_strncmp("exit\n", line, ft_strlen(line)))
+		if (line == NULL)
+		{
+			ft_printf("Erreur : pointeur de ligne de commande nul\n");
+			return (0);
+		}
+		get_ms()->exit = last_exit;
+		get_ms()->line = line;
+		if (!ft_strncmp("stop\n", line, ft_strlen(line)))
 			break ;
-		ft_init_env(env, line);
 		ft_tokenization(ms);
 		ms->nodes = init_parsing(ms);
-		start_exec(ms->nodes, ms);
+		start_exec(ms->nodes, &(ms->envlst));
+		last_exit = get_ms()->exit;
 	}
 	free(line);
-	while (ms->tokens != NULL)
-	{
-		tmp_token = ms->tokens;
-		ms->tokens = ms->tokens->next;
-		free(tmp_token->value);
-		free(tmp_token);
-	}
-	return (0);
+	ft_clean_ms();
+	return (last_exit);
 }
