@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 11:47:07 by cdeville          #+#    #+#             */
-/*   Updated: 2024/05/28 15:44:51 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/05/29 19:48:11 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,7 +128,6 @@ int	do_wait(int pid, int *status)
 		return (128 + WTERMSIG(*status));
 	return (1);
 }
-
 int	exec_builtin(t_node *node, t_dblist **env)
 {
 	// A verfier
@@ -139,6 +138,8 @@ int	exec_builtin(t_node *node, t_dblist **env)
 
 
 	command = node->c_cmd->expand;
+	node->silent = FALSE;
+	// gerer les cas qui utilisent l'environnement
 	pid = fork();
 	if (pid < 0)
 		return (perror("Fork error"), ENO_CRITICAL);
@@ -150,10 +151,10 @@ int	exec_builtin(t_node *node, t_dblist **env)
 			if (do_echo(command))
 				exit (1);
 		if (ft_strncmp(command[0], "cd", 3) == 0)
-			if (do_cd(command[1], env))
+			if (do_cd(node, env))
 				exit (1);
 		if (ft_strncmp(command[0], "export", 8) == 0)
-			if (do_export(&command[1], env))
+			if (do_export(node, env))
 				exit (1);
 		if (ft_strncmp(command[0], "env", 4) == 0)
 			if (do_env(*env))
@@ -165,27 +166,87 @@ int	exec_builtin(t_node *node, t_dblist **env)
 			if (do_unset(&command[1], env))
 				exit (1);
 		if (ft_strncmp(command[0], "exit", 6) == 0)
-			if (do_exit(command[1]))
+			if (do_exit(node))
 				exit (1);
 		// NEED TO FREE EVERYTHING BEFORE EXITING
 		exit (0);
 	}
 	if (do_wait(pid, &status) == -1)
 		return (ENO_CRITICAL);
-	if (ft_strncmp(command[0], "cd", 3) == 0)
-		if (do_cd(command[1], env))
-			return (1);
+	node->silent = TRUE;
 	if (ft_strncmp(command[0], "export", 8) == 0)
-		if (do_export(&command[1], env))
+		if (do_export(node, env))
+			return (1);
+	if (ft_strncmp(command[0], "cd", 3) == 0)
+		if (do_cd(node, env))
 			return (1);
 	if (ft_strncmp(command[0], "unset", 7) == 0)
 		if (do_unset(&command[1], env))
 			return (1);
 	if (ft_strncmp(command[0], "exit", 6) == 0)
-		if (do_exit(command[1]))
+		if (do_exit(node))
 			return (1);
 	return (status);
 }
+
+// int	exec_builtin(t_node *node, t_dblist **env)
+// {
+// 	// A verfier
+
+// 	int		pid;
+// 	int		status;
+// 	char	**command;
+
+
+// 	command = node->c_cmd->expand;
+// 	// gerer les cas qui utilisent l'environnement
+// 	pid = fork();
+// 	if (pid < 0)
+// 		return (perror("Fork error"), ENO_CRITICAL);
+// 	if (pid == 0)
+// 	{
+// 		if (do_redirections(node))
+// 			exit (1);
+// 		if (ft_strncmp(command[0], "echo", 6) == 0)
+// 			if (do_echo(command))
+// 				exit (1);
+// 		if (ft_strncmp(command[0], "cd", 3) == 0)
+// 			if (do_cd(command[1], env))
+// 				exit (1);
+// 		if (ft_strncmp(command[0], "export", 8) == 0)
+// 			if (do_export(&command[1], env))
+// 				exit (1);
+// 		if (ft_strncmp(command[0], "env", 4) == 0)
+// 			if (do_env(*env))
+// 				exit (1);
+// 		if (ft_strncmp(command[0], "pwd", 4) == 0)
+// 			if (do_pwd())
+// 				exit (1);
+// 		if (ft_strncmp(command[0], "unset", 7) == 0)
+// 			if (do_unset(&command[1], env))
+// 				exit (1);
+// 		if (ft_strncmp(command[0], "exit", 6) == 0)
+// 			if (do_exit(command[1]))
+// 				exit (1);
+// 		// NEED TO FREE EVERYTHING BEFORE EXITING
+// 		exit (0);
+// 	}
+// 	if (do_wait(pid, &status) == -1)
+// 		return (ENO_CRITICAL);
+// 	if (ft_strncmp(command[0], "cd", 3) == 0)
+// 		if (do_cd(command[1], env))
+// 			return (1);
+// 	if (ft_strncmp(command[0], "export", 8) == 0)
+// 		if (do_export(&command[1], env))
+// 			return (1);
+// 	if (ft_strncmp(command[0], "unset", 7) == 0)
+// 		if (do_unset(&command[1], env))
+// 			return (1);
+// 	if (ft_strncmp(command[0], "exit", 6) == 0)
+// 		if (do_exit(command[1]))
+// 			return (1);
+// 	return (status);
+// }
 
 int	exec_standard(t_node **node, t_dblist **env)
 {
@@ -223,6 +284,7 @@ int	exec_subshell(t_node **node, t_dblist **env)
 	char	**tab_env;
 	int		status;
 
+	// GERER la transmission des ENO CRITICAL et la gestion de la memoire pour chaqeu process
 	pid = fork();
 	if (pid < 0)
 		return (perror("Fork error"), ENO_CRITICAL);
@@ -337,9 +399,6 @@ int	start_exec(t_node *node, t_dblist **env)
 			status = exec_cmd(&node, env);
 			dodge_cmd(&node);
 		}
-		int i;
-		i = 0;
-		fprintf(stderr, "Node: %d\n", ++i);
 		// NEED TO CHECK FOR CRITICAL ERROR (WHAT ABOUT SUBSHELLS?)
 	}
 	return (status);

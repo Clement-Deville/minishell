@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 18:42:42 by cdeville          #+#    #+#             */
-/*   Updated: 2024/05/22 12:52:56 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/05/29 19:23:48 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,14 +30,19 @@ t_bool	is_numeric(char *argument)
 	return (TRUE);
 }
 
-int	do_exit(char *argument)
+int	do_exit(t_node *node)
 {
+	char	*argument;
+
+	argument = node->c_cmd->expand[1];
 	if (argument == NULL)
-		return (0);
+		exit (0);
 	if (is_numeric(argument) == FALSE)
 	{
-		ft_printf("exit: %s: numeric argument required\n", argument);
+		if (node->silent == FALSE)
+			ft_printf("exit: %s: numeric argument required\n", argument);
+		// A print sur stderr
 		return (2);
 	}
-	return ((unsigned char)ft_atoi(argument));
+	exit ((unsigned char)ft_atoi(argument));
 }

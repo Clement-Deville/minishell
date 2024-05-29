@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:09:05 by cdeville          #+#    #+#             */
-/*   Updated: 2024/05/28 15:52:33 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/05/29 20:01:50 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,8 +80,9 @@ void	exec_parse(t_node *node)
 int	main_subshell(int ac, char *av, char **env)
 {
 	// t_mini_env    *ms;
-	char        *line;
-	int            i;
+	char	*line;
+	int		i;
+	int		status;
 
 	i = 0;
 	line = malloc(sizeof(char) + ac + 2);
@@ -89,10 +90,10 @@ int	main_subshell(int ac, char *av, char **env)
 	ft_init_env(env);
 	get_ms()->line = line;
 	ft_tokenization(get_ms());
-	init_parsing(get_ms());
-	start_exec(get_ms()->nodes, &(get_ms()->envlst));
+	get_ms()->nodes = init_parsing(get_ms());
+	status = start_exec(get_ms()->nodes, &(get_ms()->envlst));
 	free(line);
-	return (get_ms()->exit);
+	return (status);
 }
 
 // int	main_subshell(int ac, char **av, char **env)
@@ -121,6 +122,23 @@ int	main_subshell(int ac, char *av, char **env)
 // 	return (ms->exit);
 // }
 
+int	print_balise(int last_exit)
+{
+	ft_printf("\r");
+	ft_printf("\033[K");
+	char	*current_dir_name;
+	char	*color;
+
+	current_dir_name = getcwd(NULL, 0);
+	if (last_exit)
+		color = "\e[1;31m";
+	else
+		color = "\e[0;32m";
+	ft_printf("%s\u2192  \e[1;36m%s \e[0m", color, current_dir_name);
+	free(current_dir_name);
+	return (0);
+}
+
 int	main(int ac, char **av, char **env)
 {
 	t_mini_env	*ms;
@@ -136,6 +154,7 @@ int	main(int ac, char **av, char **env)
 	ft_init_env(env);
 	while (1)
 	{
+		print_balise(last_exit);
 		line = get_next_line(0);
 		if (line == NULL)
 		{
@@ -148,7 +167,8 @@ int	main(int ac, char **av, char **env)
 			break ;
 		ft_tokenization(ms);
 		ms->nodes = init_parsing(ms);
-		start_exec(ms->nodes, &(ms->envlst));
+		get_ms()->exit = start_exec(ms->nodes, &(ms->envlst));
+		printf("EXIT VALUE: %d\n", get_ms()->exit);
 		last_exit = get_ms()->exit;
 	}
 	free(line);

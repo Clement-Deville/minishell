@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:09:27 by cdeville          #+#    #+#             */
-/*   Updated: 2024/05/28 15:30:42 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/05/29 18:53:25 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,61 +33,6 @@ typedef struct s_variable
 	char	*name;
 	char	*value;
 }	t_variable;
-
-// BUILT-IN COMMANDS
-
-int			do_echo(char **args);
-int			do_pwd(void);
-int			do_env(t_dblist *env);
-int			do_export(char **arguments, t_dblist **env);
-int			do_exit(char *argument);
-
-// EXPORT
-
-int			export_one(char *argument, t_dblist **env);
-
-// PRINT_EXPORT
-
-void		print_export(t_dblist *env);
-
-// ENV
-
-t_dblist	*generate_env(char **envp);
-
-// VARIABLES
-
-char		*get_name(char *argument);
-t_variable	*create_variable(char *argument);
-void		destroy_variable(void *content);
-
-// ASTERISK
-
-int			do_asterisk(char *argument);
-t_bool		patern_match(char *argument, char *d_name);
-
-// CD
-
-int			do_cd(char *directory, t_dblist	**env);
-
-// DIR
-
-int			do_closedir(DIR *dir);
-DIR			*do_opendir(void);
-
-// SIGNALS
-
-int			setup_signals(void);
-
-// UNSET
-
-int			do_unset(char **arguments, t_dblist **env);
-
-// UTILS
-
-t_bool		no_value(char *argument);
-t_bool		name_exists(char *argument, t_dblist *env);
-void		print_variable(void *content);
-void		print_variable_export(void *content);
 
 typedef enum e_err_msg
 {
@@ -215,6 +160,7 @@ typedef struct s_node
 	struct s_token			*rigth;
 	struct s_node			*next;
 	struct s_node			*prev;
+	t_bool					silent;
 }	t_node;
 
 typedef struct s_mini_env
@@ -228,6 +174,61 @@ typedef struct s_mini_env
 	t_token		*tokens;
 	t_node		*nodes;
 }	t_mini_env;
+
+// BUILT-IN COMMANDS
+
+int			do_echo(char **args);
+int			do_pwd(void);
+int			do_env(t_dblist *env);
+int			do_export(t_node *node, t_dblist **env);
+int			do_exit(t_node *node);
+
+// EXPORT
+
+int			export_one(char *argument, t_dblist **env);
+
+// PRINT_EXPORT
+
+void		print_export(t_dblist *env);
+
+// ENV
+
+t_dblist	*generate_env(char **envp);
+
+// VARIABLES
+
+char		*get_name(char *argument);
+t_variable	*create_variable(char *argument);
+void		destroy_variable(void *content);
+
+// ASTERISK
+
+int			do_asterisk(char *argument);
+t_bool		patern_match(char *argument, char *d_name);
+
+// CD
+
+int			do_cd(t_node *node, t_dblist	**env);
+
+// DIR
+
+int			do_closedir(DIR *dir);
+DIR			*do_opendir(void);
+
+// SIGNALS
+
+int			setup_signals(void);
+
+// UNSET
+
+int			do_unset(char **arguments, t_dblist **env);
+
+// UTILS
+
+t_bool		no_value(char *argument);
+t_bool		name_exists(char *argument, t_dblist *env);
+void		print_variable(void *content);
+void		print_variable_export(void *content);
 
 // exec_pipeline
 

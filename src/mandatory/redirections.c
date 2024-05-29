@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 19:29:26 by cdeville          #+#    #+#             */
-/*   Updated: 2024/05/28 13:40:37 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/05/29 18:42:57 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ int	set_output(char *filename, t_node *node)
 {
 	int	fd;
 
-	fprintf(stderr, "YOLO");
 	if (access(filename, W_OK) != 0 && errno != ENOENT)
 	{
 		node->pid = NO_FORK;
@@ -112,9 +111,8 @@ int	do_redirections(t_node *node)
 	int			status;
 
 	if (node->red_node == NULL)
-		return (fprintf(stderr, "RED NODE IS NULL\n"), 0);
+		return (0);
 	status = 0;
-	fprintf(stderr, "RED NODE IS NOT NULL\n");
 	tmp = node->red_node;
 	while (tmp)
 	{
