@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:09:27 by cdeville          #+#    #+#             */
-/*   Updated: 2024/05/27 13:05:52 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/05/30 15:37:16 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,7 +154,6 @@ typedef enum s_node_type
 typedef struct s_red_node
 {
 	t_red_type			type;
-	char				*args;
 	char				*value;
 	int					here_doc;
 	struct s_red_node	*prev;
@@ -203,6 +202,7 @@ typedef struct s_node
 	t_node_type				type;
 	t_red_node				*red_node;
 	t_subs_node				*sub_node;
+	struct s_node			*sub;
 	char					*cmd;
 	struct s_compute_cmd	*c_cmd;
 	struct s_token			*left;
@@ -234,7 +234,7 @@ int			ft_is_char(char *str);
 int			is_space(char c);
 
 //parser.c
-t_node		*ft_parser(t_mini_env *ms);
+t_node		*ft_parser(t_mini_env *ms, int min_prec);
 void		init_parsing(t_mini_env *ms);
 
 //comupte_cmds.c
@@ -290,5 +290,7 @@ void		ft_clear_token(t_token *token);
 void 		free_node(t_node *node);
 
 void		ft_clear_envlst(t_mini_env *mini_s);
+void		ft_clear_parsing(t_node *nodes);
+void		ft_clean_nodes(t_node *node);
 
 #endif

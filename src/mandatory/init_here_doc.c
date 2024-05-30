@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 15:44:49 by skapersk          #+#    #+#             */
-/*   Updated: 2024/05/20 19:40:51 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/05/28 15:14:26 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,10 @@ static void	ft_heredoc_sigint_handler(int signum)
 int	ft_error_exe(int p[2], int *pid)
 {
 	waitpid(*pid, pid, 0);
-	signal(SIGQUIT, NULL);
+	// signal(SIGQUIT, NULL);
 	// g_minishell.signint_child = 0;
 	close(p[1]);
-	if (WIFEXITED(*pid) && WEXITSTATUS(*pid) == SIGINT)
+	if (WIFEXITED(*pid))
 		return (1);
 	return (0);
 }
@@ -111,7 +111,7 @@ void	ft_heredoc_expand(char *str, int fd)
 
 int	ft_check_here_quotes(char *str)
 {
-	if(!check_quotes(str + 1))
+	if (!check_quotes(str + 1))
 	{
 		ft_printf("PB QUOTES NOT CLOSED --> TO FREE");
 		return (0);

@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:22:01 by skapersk          #+#    #+#             */
-/*   Updated: 2024/05/27 13:03:23 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/05/30 17:02:29 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,6 @@ t_red_node	*ft_create_red_node(t_token_type type, char *value)
 	if (!new)
 		return (NULL);
 	new->type = ft_get_red_type(type);
-	new->args = ft_add_args(type);
 	new->value = ft_strdup(value);
 	if (!new->value)
 		return (ft_printf("PB AVEC t_red_node value"), NULL);
@@ -138,8 +137,13 @@ int	ft_get_red_node(t_red_node **node, t_mini_env *ms)
 	return (1);
 }
 
-t_node	*ft_simple_cmd(t_mini_env *ms, t_node *node)
+t_node	*ft_simple_cmd(t_mini_env *ms)
 {
+	t_node	*node;
+
+	node = ft_new_node(NODE_CMD);
+	if (!node)
+		return (ft_printf("PB MALLOC NODE_CMD"), NULL);
 	while (ms->tokens && (ms->tokens->type == TOKEN_ELSE
 			|| ft_is_redir(ms->tokens->type)))
 	{
@@ -194,43 +198,88 @@ int	ft_check_subs(t_token *token)
 	return (1);
 }
 
-char	*ft_convert_args(t_mini_env *ms)
-{
-	char	*str;
-	int		i;
+// t_token *copy_token_list(t_token *original)
+// {
+// 	t_token *current_original = original->next;
+//     t_token *copy_head = create_token(original->type, original->value);
 
-	i = 1;
-	str = NULL;
-	while (ms->tokens)
-	{
-		if (ms->tokens->type == TOKEN_SUBSHELL_CLOSE)
-			i--;
-		else if (ms->tokens->type == TOKEN_SUBSHELL_OPEN)
-			i++;
-		if (ms->tokens->type == TOKEN_SUBSHELL_CLOSE && i == 0)
-			return (str);
-		if (!str)
-			str = ft_strdup(ms->tokens->value);
-		else
-		{
-			if (!ft_join_args(&str, ms->tokens))
-				return (ft_printf("PB AVEC LES ARGS CMD"), NULL);
-		}
-		ms->tokens = ms->tokens->next;
-	}
-	return (NULL);
-}
+//     t_token *current_copy = copy_head;
 
-t_subs_node	*create_sub_node(t_mini_env *ms)
-{
-	t_subs_node	*node;
+//     if (!original)
+//         return NULL;
+//     if (!copy_head)
+//         return NULL;
+//     while (current_original)
+// 	{
+//         t_token *new_token = create_token(current_original->type, current_original->value);
+//         if (!new_token)
+// 		{
+//             // Gestion de l'erreur en cas d'échec de l'allocation
+//             // Libérez la mémoire allouée jusqu'à présent
+//             t_token *temp = copy_head;
+//             while (temp) 
+// 			{
+//                 t_token *next = temp->next;
+//                 free(temp->value);
+//                 free(temp);
+//                 temp = next;
+//             }
+//             return NULL;
+//         }
 
-	node = ft_calloc(1, sizeof(t_subs_node));
-	if (!node)
-		return (NULL);
-	node->args = ft_convert_args(ms);
-	return (node);
-}
+//         new_token->prev = current_copy;
+//         current_copy->next = new_token;
+//         current_copy = new_token;
+//         current_original = current_original->next;
+//     }
+
+//     return copy_head;
+// }
+
+// void	ft_convert_args(t_node *node, t_mini_env *ms)
+// {
+// 	// char	*str;
+// 	int		i;
+// 	t_token	new;
+
+// 	i = 1;
+// 	// str = NULL;
+// 	(void)node;
+	
+
+// 	while (ms->tokens)
+// 	{
+// 		if (ms->tokens->type == TOKEN_SUBSHELL_CLOSE)
+// 			i--;
+// 		else if (ms->tokens->type == TOKEN_SUBSHELL_OPEN)
+// 			i++;
+// 		if (ms->tokens->type == TOKEN_SUBSHELL_CLOSE && i == 0)
+// 		{
+// 			// return (str);
+// 		}
+// 		node = ft_parser(ms);
+// 		// if (!str)
+// 		// 	str = ft_strdup(ms->tokens->value);
+// 		// else
+// 		// {
+// 		// 	if (!ft_join_args(&str, ms->tokens))
+// 		// 		return (ft_printf("PB AVEC LES ARGS CMD"), NULL);
+// 		// }
+// 		ms->tokens = ms->tokens->next;
+// 	}
+// 	// return (NULL);
+// }
+
+// t_node	*create_sub_node(t_mini_env *ms)
+// {
+// 	t_node	*node;
+
+// 	node = ft_calloc(1, sizeof(t_node));
+// 	if (!node)
+// 		return (NULL);
+// 	ft_convert_args(node, ms);
+// 	return (node);
+// }
 
 void	ft_add_back_sub(t_subs_node **lst, t_subs_node *new)
 {
@@ -247,7 +296,7 @@ void	ft_add_back_sub(t_subs_node **lst, t_subs_node *new)
 	curr->next = new;
 }
 
-t_node	*ft_start(t_mini_env *ms)
+t_node	*ft_start(t_mini_env *ms, int min_prec)
 {
 	t_node	*node;
 
@@ -255,25 +304,28 @@ t_node	*ft_start(t_mini_env *ms)
 	if (!node)
 		return (ft_printf("PB MALLOC NODE CMD"), NULL);
 	if (ft_get_node_type(ms->tokens->type)
-		|| ms->tokens->type == TOKEN_SUBSHELL_CLOSE)
+		|| (ms->tokens->type == TOKEN_SUBSHELL_CLOSE && min_prec == 0))
 		return (ft_printf("ERROR SYNTAX1"), NULL);
 	else if (ms->tokens->type == TOKEN_SUBSHELL_OPEN)
 	{
 		ms->tokens = ms->tokens->next;
-		if (!ft_check_subs(ms->tokens))
-			return (ft_printf("PB SYNTAX SUB"), NULL);
-		node->sub_node = create_sub_node(ms);
+		if (min_prec == 0)
+		{
+			if (!ft_check_subs(ms->tokens)) // changement de node -> passage de create sub à ft_parser
+				return (ft_printf("PB SYNTAX SUB"), NULL);
+		}
+		min_prec += 1;
+		node->sub = ft_parser(ms, min_prec);
 		if (!node)
 			return (ft_printf("PB MALLOC SUB NODE"), NULL);
-		ft_add_back_sub(&(node->sub_node), node->sub_node);
-		ms->tokens = ms->tokens->next;
+		// ms->tokens = ms->tokens->next;
 		return (node);
 	}
 	else
-		return (ft_simple_cmd(ms, node));
+		return (ft_clean_nodes(node), free(node), ft_simple_cmd(ms));
 }
 
-t_node	*ft_parser(t_mini_env *ms)
+t_node	*ft_parser(t_mini_env *ms, int min_prec)
 {
 	t_token	*tmp;
 	t_node	*node;
@@ -281,7 +333,7 @@ t_node	*ft_parser(t_mini_env *ms)
 	tmp = ms->tokens;
 	if (!tmp)
 		return (NULL);
-	node = ft_start(ms);
+	node = ft_start(ms, min_prec);
 	if (!node)
 		return (NULL);
 	node->left = NULL;
@@ -295,9 +347,18 @@ t_node	*ft_parser(t_mini_env *ms)
 		}
 		if (!ms->tokens)
 			return (ft_printf("SYNTAX ERROR BI OP"), NULL);
+		if (ft_get_node_type(ms->tokens->type)
+			|| (ms->tokens->type == TOKEN_SUBSHELL_CLOSE && min_prec > 0))
+		{
+			min_prec -= 1;
+			node->next = NULL;
+			ms->tokens = ms->tokens->next;
+			// ft_printf("--- %s\n", ms->tokens->value);
+			return (node);
+		}
 		else
 		{
-			node->next = ft_parser(ms);
+			node->next = ft_parser(ms, min_prec);
 			if (!node->next)
 				return (NULL);
 			node->next->left = node->rigth;
@@ -310,9 +371,11 @@ t_node	*ft_parser(t_mini_env *ms)
 void	init_parsing(t_mini_env *ms)
 {
 	t_token	*tmp;
+	int		nb_prec;
 
+	nb_prec = 0;
 	tmp = ms->tokens;
-	ms->nodes = ft_parser(ms);
+	ms->nodes = ft_parser(ms, nb_prec);
 	if (ms->tokens != NULL)
 	{
 		ft_printf("PB PARSING");

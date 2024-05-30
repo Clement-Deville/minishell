@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:09:05 by cdeville          #+#    #+#             */
-/*   Updated: 2024/05/27 13:09:22 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/05/30 17:05:38 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,11 @@ char	*convert(t_node_type type)
 		return (NULL);
 }
 
+void	exec_parse(t_node *node);
+
 void	do_node(t_node *node)
 {
-	if (convert(node->type) != NULL)
+	if (convert(node->type) != NULL && node->sub == NULL )
 		ft_printf("TYPE NODE : %s --> ", convert(node->type));
 	if (node->red_node != NULL && node->red_node->value != NULL)
 	{
@@ -58,8 +60,11 @@ void	do_node(t_node *node)
 	}
 	if (node->cmd != NULL)
 		ft_printf("Command: %s\n", node->cmd);
-	else if (node->sub_node != NULL)
-		ft_printf("Subshell: %s\n", node->sub_node->args);
+	else if (node->sub != NULL)
+	{
+		ft_printf("Subshell: ");
+		exec_parse(node->sub);
+	}
 	if (node->left != NULL)
 		ft_printf("LEFT : %s\n", node->left->value);
 	if (node->rigth != NULL)
@@ -79,35 +84,27 @@ void	exec_parse(t_node *node)
 
 int	main_subshell(int ac, char **av, char **env)
 {
-	t_mini_env	*ms;
 	char		*line;
-	int			i;
+	// int			i;
 
-	i = 0;
+	// i = 0;
 	line = malloc(sizeof(char) + ac + 2);
 	ft_strlcpy(line, *av, ac + 1);
-	while (line[i])
-		i++;
-	line[i] = '\n';
-	i++;
-	line[i] = '\0';
-	ms = get_ms();
 	ft_init_env(env);
-	ft_tokenization(ms);
-	init_parsing(ms);
-	start_exec(ms->nodes, ms);
+	get_ms()->line = line;
+	ft_tokenization(get_ms());
+	init_parsing(get_ms());
+	start_exec(get_ms()->nodes, get_ms());
 	free(line);
-	return (ms->exit);
+	return (get_ms()->exit);
 }
 
 int	main(int ac, char **av, char **env)
 {
-	t_mini_env	*ms;
-	int			last_exit;
+	int		last_exit;
 
 	(void)ac;
 	(void)av;
-	ms = get_ms();
 	last_exit = 0;
 	ft_init_env(env);
 	while (1)
@@ -122,13 +119,14 @@ int	main(int ac, char **av, char **env)
 		if (!ft_strncmp("stop\n", get_ms()->line, ft_strlen(get_ms()->line)))
 			break ;
 		ft_tokenization(get_ms());
-		init_parsing(ms);
-		start_exec(get_ms()->nodes, get_ms());
-		last_exit = get_ms()->exit;
-		ft_clean_ms();
+		init_parsing(get_ms());
+		exec_parse(get_ms()->nodes);
+		// start_exec(get_ms()->nodes, get_ms());
+		// last_exit = get_ms()->exit;
+		// ft_clean_ms();
 		free(get_ms()->line);
 	}
 	free(get_ms()->line);
-	ft_clear_envlst(ms);
+	ft_clear_envlst(get_ms());
 	return (last_exit);
 }

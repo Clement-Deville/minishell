@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 15:10:46 by skapersk          #+#    #+#             */
-/*   Updated: 2024/05/22 08:42:12 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/05/28 15:36:34 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	ft_check_red(t_node *node)
 			&& do_in(r_node, &status) != ENO_SUCCESS)
 			return (status);
 		else if (r_node->type == NODE_APPEND
-			&& do_append(r_node, &status) !=ENO_SUCCESS)
+			&& do_append(r_node, &status) != ENO_SUCCESS)
 			return (status);
 		else if (r_node->type == NODE_HERE_DOC)
 			(dup2(r_node->here_doc, 0), close(r_node->here_doc));
@@ -153,7 +153,7 @@ int	exec_subshell(t_node *node, t_mini_env *ms, t_bool piped)
 			if (status != ENO_SUCCESS)
 				return (ft_set_stds(piped, ms), ENO_GENERAL);
 		}
-		main_subshell(ac, &ms->line, env);
+		main_subshell(ac, &get_ms()->line, env);
 		exit(0);
 	}
 	else
@@ -198,7 +198,6 @@ int	exec_node(t_node *node, t_mini_env *ms, t_bool piped, int i)
 	}
 	else if (node->next && node->rigth->type == TOKEN_AND)
 	{
-
 		status = exec_simple_cmd(node, ms, FALSE);
 		if (status == ENO_SUCCESS)
 			return (exec_node(node->next, ms, FALSE, 0));
