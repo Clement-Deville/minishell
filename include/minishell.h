@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:09:27 by cdeville          #+#    #+#             */
-/*   Updated: 2024/05/29 18:53:25 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/05/30 17:21:42 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -323,6 +323,11 @@ int			do_redirections(t_node *node);
 int			do_dup2(int oldfd, int newfd);
 int			do_close(int fd);
 int			do_pipe(int pipfd[2]);
+
+// main.c
+
+int			print_balise(int last_exit);
+int			init_minishell(void);
 
 # define NO_FORK -2
 # define WRITE 1

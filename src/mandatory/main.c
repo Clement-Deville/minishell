@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:09:05 by cdeville          #+#    #+#             */
-/*   Updated: 2024/05/29 20:01:50 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/05/30 19:03:35 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,39 +139,80 @@ int	print_balise(int last_exit)
 	return (0);
 }
 
-int	main(int ac, char **av, char **env)
-{
-	t_mini_env	*ms;
-	char		*line;
-	int			last_exit;
-	int			status;
 
-	(void)ac;
-	(void)av;
-	status = 0;
+int	init_minishell(void)
+{
+	char		*line;
+	t_mini_env	*ms;
+
 	ms = get_ms();
-	last_exit = 0;
-	ft_init_env(env);
 	while (1)
 	{
-		print_balise(last_exit);
+		print_balise(get_ms()->exit);
 		line = get_next_line(0);
+		// if (line == NULL)
+		// {
+		// 	ft_printf("Erreur : pointeur de ligne de commande nul\n");
+		// 	return (0);
+		// }
 		if (line == NULL)
-		{
-			ft_printf("Erreur : pointeur de ligne de commande nul\n");
-			return (0);
-		}
-		get_ms()->exit = last_exit;
+			continue;
 		get_ms()->line = line;
 		if (!ft_strncmp("stop\n", line, ft_strlen(line)))
 			break ;
 		ft_tokenization(ms);
 		ms->nodes = init_parsing(ms);
-		get_ms()->exit = start_exec(ms->nodes, &(ms->envlst));
-		printf("EXIT VALUE: %d\n", get_ms()->exit);
-		last_exit = get_ms()->exit;
+		start_exec(ms->nodes, &(ms->envlst));
+		free(line);
 	}
-	free(line);
-	ft_clean_ms();
-	return (last_exit);
+	return (0);
 }
+
+int	main(int ac, char **av, char **env)
+{
+	(void)ac;
+	(void)av;
+	ft_init_env(env);
+	setup_signals();
+	init_minishell();
+	ft_clean_ms();
+	return (get_ms()->exit);
+}
+
+
+// int	main(int ac, char **av, char **env)
+// {
+// 	t_mini_env	*ms;
+// 	char		*line;
+// 	int			last_exit;
+// 	int			status;
+
+// 	(void)ac;
+// 	(void)av;
+// 	status = 0;
+// 	ms = get_ms();
+// 	last_exit = 0;
+// 	ft_init_env(env);
+// 	setup_signals();
+// 	while (1)
+// 	{
+// 		print_balise(last_exit);
+// 		line = get_next_line(0);
+// 		if (line == NULL)
+// 		{
+// 			ft_printf("Erreur : pointeur de ligne de commande nul\n");
+// 			return (0);
+// 		}
+// 		get_ms()->exit = last_exit;
+// 		get_ms()->line = line;
+// 		if (!ft_strncmp("stop\n", line, ft_strlen(line)))
+// 			break ;
+// 		ft_tokenization(ms);
+// 		ms->nodes = init_parsing(ms);
+// 		start_exec(ms->nodes, &(ms->envlst));
+// 		last_exit = get_ms()->exit;
+// 	}
+// 	free(line);
+// 	ft_clean_ms();
+// 	return (last_exit);
+// }

@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 17:49:40 by cdeville          #+#    #+#             */
-/*   Updated: 2024/05/29 18:49:22 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/05/30 15:56:20 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ int	do_cd(t_node *node, t_dblist **env)
 	free(pwd);
 	if (complete_pwd == NULL)
 		return (perror("Malloc error"), -1);
+	// Need to add condition (if name exists)
 	if (export_one(complete_pwd, env) == -1)
 		return (free(complete_pwd), -1);
 	return (free(complete_pwd), 0);

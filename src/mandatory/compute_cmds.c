@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 14:44:53 by skapersk          #+#    #+#             */
-/*   Updated: 2024/05/29 20:04:35 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/05/30 11:29:38 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ char	*ft_handle_dollar(char *str, int *i)
 	else if (str[*i] == '?')
 	{
 		*i += 1;
-		return (ft_printf("A GERER VALEUR DE RETOUR EXEC"), ft_itoa(get_ms()->exit));
+		return (ft_itoa(get_ms()->exit));
 	}
 	else if (!ft_is_valid_arg(str[*i]))
 		return (ft_strdup("$"));

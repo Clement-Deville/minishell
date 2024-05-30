@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 14:51:19 by cdeville          #+#    #+#             */
-/*   Updated: 2024/05/27 19:45:36 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/05/30 11:26:05 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -208,7 +208,7 @@ int	wait_for_all(t_node **node, int size)
 	while (i <= size)
 	{
 		if ((*node)->pid != NO_FORK
-			&& waitpid((*node)->pid, &((*node)->status), 0) == 1)
+			&& waitpid((*node)->pid, &((*node)->status), 0) == -1)
 			return (perror("Wait error"), 1);
 		if ((*node)->pid != NO_FORK && WIFEXITED((*node)->status))
 			exit_value = WEXITSTATUS((*node)->status);

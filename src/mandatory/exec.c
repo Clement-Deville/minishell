@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 11:47:07 by cdeville          #+#    #+#             */
-/*   Updated: 2024/05/29 19:48:11 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/05/30 12:18:31 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,14 +118,17 @@ char	**list_to_tab(t_dblist *env)
 	return (tab);
 }
 
-int	do_wait(int pid, int *status)
+int	do_wait(int pid)
 {
-	if (waitpid(pid, status, 0) == 1)
+	int	status;
+
+	status = 0;
+	if (waitpid(pid, &status, 0) == -1)
 		return (perror("Wait error"), ENO_CRITICAL);
-	if (WIFEXITED(*status))
-		return (WEXITSTATUS(*status));
-	if (WIFSIGNALED(*status))
-		return (128 + WTERMSIG(*status));
+	if (WIFEXITED(status))
+		return (WEXITSTATUS(status));
+	if (WIFSIGNALED(status))
+		return (128 + WTERMSIG(status));
 	return (1);
 }
 int	exec_builtin(t_node *node, t_dblist **env)
@@ -171,8 +174,7 @@ int	exec_builtin(t_node *node, t_dblist **env)
 		// NEED TO FREE EVERYTHING BEFORE EXITING
 		exit (0);
 	}
-	if (do_wait(pid, &status) == -1)
-		return (ENO_CRITICAL);
+	status = do_wait(pid);
 	node->silent = TRUE;
 	if (ft_strncmp(command[0], "export", 8) == 0)
 		if (do_export(node, env))
@@ -273,8 +275,7 @@ int	exec_standard(t_node **node, t_dblist **env)
 			exit (1);
 		exit (exec((*node)->c_cmd->expand, tab_env));
 	}
-	if (do_wait(pid, &status) == ENO_CRITICAL)
-		return (ENO_CRITICAL);
+	status = do_wait(pid);
 	return (status);
 }
 
@@ -297,8 +298,7 @@ int	exec_subshell(t_node **node, t_dblist **env)
 			exit (1);
 		exit (main_subshell(ft_strlen((*node)->sub_node->args), (*node)->sub_node->args, tab_env));
 	}
-	if (do_wait(pid, &status) == ENO_CRITICAL)
-		return (ENO_CRITICAL);
+	status = do_wait(pid);
 	return (status);
 	(void)node;
 	(void)env;
@@ -383,23 +383,21 @@ int	exec_cmd(t_node **node, t_dblist **env)
 int	start_exec(t_node *node, t_dblist **env)
 {
 	int	exit_value;
-	int	status;
 
 	exit_value = 0;
-	status = 0;
 	if (node == NULL)
 		return (1);
 	while (node)
 	{
-		if (node->left && ((node->left->type == TOKEN_AND && status != 0)
-				|| (node->left->type == TOKEN_OR && status == 0)))
+		if (node->left && ((node->left->type == TOKEN_AND && get_ms()->exit != 0)
+				|| (node->left->type == TOKEN_OR && get_ms()->exit == 0)))
 			dodge_cmd(&node);
 		else
 		{
-			status = exec_cmd(&node, env);
+			get_ms()->exit = exec_cmd(&node, env);
 			dodge_cmd(&node);
 		}
 		// NEED TO CHECK FOR CRITICAL ERROR (WHAT ABOUT SUBSHELLS?)
 	}
-	return (status);
+	return (get_ms()->exit);
 }
