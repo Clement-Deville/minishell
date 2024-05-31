@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:22:01 by skapersk          #+#    #+#             */
-/*   Updated: 2024/05/31 18:31:26 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/05/31 19:38:49 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -298,5 +298,5 @@ void	init_parsing(t_mini_env *ms)
 	}
 	else
 		ms->tokens = tmp;
-	ft_compute_cmds(ms->nodes);
+	// ft_compute_cmds(ms->nodes);
 }

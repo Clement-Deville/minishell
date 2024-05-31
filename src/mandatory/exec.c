@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 11:47:07 by cdeville          #+#    #+#             */
-/*   Updated: 2024/05/31 18:43:52 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/05/31 19:39:01 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -393,6 +393,11 @@ int	start_exec(t_node *node, t_dblist **env)
 		return (1);
 	while (node)
 	{
+		init_cmp(node);
+		if (node->red_node != NULL)
+		{
+			ft_init_heredoc(node);
+		}
 		if (node->left && ((node->left->type == TOKEN_AND && get_ms()->exit != 0)
 				|| (node->left->type == TOKEN_OR && get_ms()->exit == 0)))
 			dodge_cmd(&node);
