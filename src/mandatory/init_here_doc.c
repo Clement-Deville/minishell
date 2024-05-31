@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 15:44:49 by skapersk          #+#    #+#             */
-/*   Updated: 2024/05/28 14:39:55 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/05/31 14:50:31 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,11 @@ static void	ft_heredoc_sigint_handler(int signum)
 
 int	ft_error_exe(int p[2], int *pid)
 {
+	//SETOFF
+	// NEED TO HANDLE SIGNAL  ERPROPERLY
+	// set_ignore_signals();
 	waitpid(*pid, pid, 0);
+	// setup_signals();
 	close(p[1]);
 	if (WIFEXITED(*pid))
 		return (0);

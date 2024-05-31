@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:09:27 by cdeville          #+#    #+#             */
-/*   Updated: 2024/05/30 17:21:42 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/05/31 16:12:50 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,6 +173,7 @@ typedef struct s_mini_env
 	t_dblist	*envlst;
 	t_token		*tokens;
 	t_node		*nodes;
+	t_bool		signal;
 }	t_mini_env;
 
 // BUILT-IN COMMANDS
@@ -218,6 +219,8 @@ DIR			*do_opendir(void);
 // SIGNALS
 
 int			setup_signals(void);
+int			set_ignore_signals(void);
+int			set_child_signals(void);
 
 // UNSET
 

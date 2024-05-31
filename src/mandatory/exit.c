@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 18:42:42 by cdeville          #+#    #+#             */
-/*   Updated: 2024/05/29 19:23:48 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/05/31 15:40:59 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,5 +44,6 @@ int	do_exit(t_node *node)
 		// A print sur stderr
 		return (2);
 	}
+	//DOIT AFFICHER EXIT DANS LE PARENT
 	exit ((unsigned char)ft_atoi(argument));
 }

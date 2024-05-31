@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 11:47:07 by cdeville          #+#    #+#             */
-/*   Updated: 2024/05/30 12:18:31 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/05/31 16:12:11 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,9 +122,12 @@ int	do_wait(int pid)
 {
 	int	status;
 
+	//SETOFF
+	set_ignore_signals();
 	status = 0;
 	if (waitpid(pid, &status, 0) == -1)
-		return (perror("Wait error"), ENO_CRITICAL);
+		return (setup_signals(), perror("Wait error"), ENO_CRITICAL);
+	setup_signals();
 	if (WIFEXITED(status))
 		return (WEXITSTATUS(status));
 	if (WIFSIGNALED(status))
@@ -262,6 +265,7 @@ int	exec_standard(t_node **node, t_dblist **env)
 		return (perror("Fork error"), ENO_CRITICAL);
 	if (pid == 0)
 	{
+		set_child_signals();
 		if (do_redirections(*node))
 			exit (1);
 		access_status = check_for_path_access(&((*node)->c_cmd->expand[0]), *env);

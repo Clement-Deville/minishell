@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 14:51:19 by cdeville          #+#    #+#             */
-/*   Updated: 2024/05/30 11:26:05 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/05/31 13:34:04 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -203,13 +203,15 @@ int	wait_for_all(t_node **node, int size)
 	t_node	*head;
 
 	i = 0;
+	//SETOFF
+	set_ignore_signals();
 	exit_value = 0;
 	head = (*node);
 	while (i <= size)
 	{
 		if ((*node)->pid != NO_FORK
 			&& waitpid((*node)->pid, &((*node)->status), 0) == -1)
-			return (perror("Wait error"), 1);
+			return (setup_signals(), perror("Wait error"), 1);
 		if ((*node)->pid != NO_FORK && WIFEXITED((*node)->status))
 			exit_value = WEXITSTATUS((*node)->status);
 		if ((*node)->pid != NO_FORK && WIFSIGNALED((*node)->status))
@@ -220,6 +222,7 @@ int	wait_for_all(t_node **node, int size)
 		i++;
 	}
 	(*node) = head;
+	setup_signals();
 	return (exit_value);
 }
 

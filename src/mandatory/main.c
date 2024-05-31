@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:09:05 by cdeville          #+#    #+#             */
-/*   Updated: 2024/05/30 19:03:35 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/05/31 16:38:18 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,7 +139,6 @@ int	print_balise(int last_exit)
 	return (0);
 }
 
-
 int	init_minishell(void)
 {
 	char		*line;
@@ -156,7 +155,15 @@ int	init_minishell(void)
 		// 	return (0);
 		// }
 		if (line == NULL)
-			continue;
+		{
+			if (get_ms()->signal == FALSE)
+				exit (get_ms()->exit);
+			else
+			{
+				get_ms()->signal = FALSE;
+				continue ;
+			}
+		}
 		get_ms()->line = line;
 		if (!ft_strncmp("stop\n", line, ft_strlen(line)))
 			break ;
