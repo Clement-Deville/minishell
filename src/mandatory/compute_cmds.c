@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 14:44:53 by skapersk          #+#    #+#             */
-/*   Updated: 2024/05/28 15:13:44 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/05/31 17:58:10 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -424,7 +424,6 @@ char	**ft_join_wildcard(t_node *node)
 	char		**joined;
 	t_wildcard	*wildcard;
 
-
 	joined = ft_calloc(node->c_cmd->ac + 2, sizeof(char *));
 	if (!joined)
 		return (NULL);
@@ -616,26 +615,21 @@ void	init_cmp(t_node *node)
 		return ;
 	}
 	cut_quotes(node->c_cmd->expand);
+	char **expanded_args = node->c_cmd->expand;
+	while (*expanded_args)
+	{
+		ft_putendl_fd(*expanded_args, 2);
+		expanded_args++;
+	}
 }
 
 void	ft_compute_cmds(t_node *node)
 {
-	if (node == NULL || (node->cmd == NULL && node->sub_node == NULL
+	if (node == NULL || (node->cmd == NULL && node->sub == NULL
 			&& node->red_node == NULL))
 		return ;
-	else if (node->sub_node != NULL)
-	{
-		if (node->next && node->next->red_node != NULL)
-		{
-			node = node->next;
-			ft_init_heredoc(node);
-			init_node(node);
-			ft_compute_cmds(node->next);
-		}
-		else
-			ft_compute_cmds(node->next);
-		return ;
-	}
+	else if (node->sub != NULL)
+		ft_compute_cmds(node->sub);
 	else if (node->red_node != NULL)
 		ft_init_heredoc(node);
 	init_cmp(node);

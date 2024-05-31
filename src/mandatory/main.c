@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:09:05 by cdeville          #+#    #+#             */
-/*   Updated: 2024/05/31 17:29:01 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/05/31 17:59:38 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,7 @@ int	main(int ac, char **av, char **env)
 			break ;
 		ft_tokenization(get_ms());
 		init_parsing(get_ms());
-		exec_parse(get_ms()->nodes);
+		// exec_parse(get_ms()->nodes);
 		// start_exec(get_ms()->nodes, get_ms());
 		// last_exit = get_ms()->exit;
 		// ft_clean_ms();
