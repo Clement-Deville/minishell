@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:09:27 by cdeville          #+#    #+#             */
-/*   Updated: 2024/05/30 15:37:16 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/05/31 17:16:53 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -215,6 +215,7 @@ typedef struct s_mini_env
 {
 	char		*line;
 	char		**env;
+	int			in_sub;
 	int			exit;
 	int			stdin;
 	int			stdout;

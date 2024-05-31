@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:09:05 by cdeville          #+#    #+#             */
-/*   Updated: 2024/05/30 17:05:38 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/05/31 17:29:01 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,6 @@ void	do_node(t_node *node)
 		ft_printf("TYPE NODE : %s --> ", convert(node->type));
 	if (node->red_node != NULL && node->red_node->value != NULL)
 	{
-		// ft_printf("%s with ", convert2(node->red_node->type));
-		// ft_printf("%s ", node->red_node->value);
 		while (node->red_node)
 		{
 			ft_printf("%s with ", convert2(node->red_node->type));
@@ -73,7 +71,7 @@ void	do_node(t_node *node)
 
 void	exec_parse(t_node *node)
 {
-	if (node == NULL)
+	if (!node)
 		return ;
 	else
 	{
@@ -85,9 +83,7 @@ void	exec_parse(t_node *node)
 int	main_subshell(int ac, char **av, char **env)
 {
 	char		*line;
-	// int			i;
 
-	// i = 0;
 	line = malloc(sizeof(char) + ac + 2);
 	ft_strlcpy(line, *av, ac + 1);
 	ft_init_env(env);

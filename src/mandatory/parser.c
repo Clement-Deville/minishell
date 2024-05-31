@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:22:01 by skapersk          #+#    #+#             */
-/*   Updated: 2024/05/30 17:02:29 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/05/31 17:47:31 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,11 +174,13 @@ int	ft_get_node_type(t_token_type type)
 		return (0);
 }
 
-int	ft_check_subs(t_token *token)
+int	ft_check_subs(t_token *token, int min_prec)
 {
 	int 	count;
 	t_token	*tmp;
 
+	if (min_prec > 0)
+		return (1);
 	count = 1;
 	tmp = token;
 	while (tmp)
@@ -197,89 +199,6 @@ int	ft_check_subs(t_token *token)
 		return (ft_printf("ERROR : Parenthesis mismatch\n"), 0);
 	return (1);
 }
-
-// t_token *copy_token_list(t_token *original)
-// {
-// 	t_token *current_original = original->next;
-//     t_token *copy_head = create_token(original->type, original->value);
-
-//     t_token *current_copy = copy_head;
-
-//     if (!original)
-//         return NULL;
-//     if (!copy_head)
-//         return NULL;
-//     while (current_original)
-// 	{
-//         t_token *new_token = create_token(current_original->type, current_original->value);
-//         if (!new_token)
-// 		{
-//             // Gestion de l'erreur en cas d'échec de l'allocation
-//             // Libérez la mémoire allouée jusqu'à présent
-//             t_token *temp = copy_head;
-//             while (temp) 
-// 			{
-//                 t_token *next = temp->next;
-//                 free(temp->value);
-//                 free(temp);
-//                 temp = next;
-//             }
-//             return NULL;
-//         }
-
-//         new_token->prev = current_copy;
-//         current_copy->next = new_token;
-//         current_copy = new_token;
-//         current_original = current_original->next;
-//     }
-
-//     return copy_head;
-// }
-
-// void	ft_convert_args(t_node *node, t_mini_env *ms)
-// {
-// 	// char	*str;
-// 	int		i;
-// 	t_token	new;
-
-// 	i = 1;
-// 	// str = NULL;
-// 	(void)node;
-	
-
-// 	while (ms->tokens)
-// 	{
-// 		if (ms->tokens->type == TOKEN_SUBSHELL_CLOSE)
-// 			i--;
-// 		else if (ms->tokens->type == TOKEN_SUBSHELL_OPEN)
-// 			i++;
-// 		if (ms->tokens->type == TOKEN_SUBSHELL_CLOSE && i == 0)
-// 		{
-// 			// return (str);
-// 		}
-// 		node = ft_parser(ms);
-// 		// if (!str)
-// 		// 	str = ft_strdup(ms->tokens->value);
-// 		// else
-// 		// {
-// 		// 	if (!ft_join_args(&str, ms->tokens))
-// 		// 		return (ft_printf("PB AVEC LES ARGS CMD"), NULL);
-// 		// }
-// 		ms->tokens = ms->tokens->next;
-// 	}
-// 	// return (NULL);
-// }
-
-// t_node	*create_sub_node(t_mini_env *ms)
-// {
-// 	t_node	*node;
-
-// 	node = ft_calloc(1, sizeof(t_node));
-// 	if (!node)
-// 		return (NULL);
-// 	ft_convert_args(node, ms);
-// 	return (node);
-// }
 
 void	ft_add_back_sub(t_subs_node **lst, t_subs_node *new)
 {
@@ -300,44 +219,39 @@ t_node	*ft_start(t_mini_env *ms, int min_prec)
 {
 	t_node	*node;
 
-	node = ft_new_node(NODE_CMD);
-	if (!node)
-		return (ft_printf("PB MALLOC NODE CMD"), NULL);
+	if (!ms->tokens)
+		return (NULL);
 	if (ft_get_node_type(ms->tokens->type)
-		|| (ms->tokens->type == TOKEN_SUBSHELL_CLOSE && min_prec == 0))
-		return (ft_printf("ERROR SYNTAX1"), NULL);
-	else if (ms->tokens->type == TOKEN_SUBSHELL_OPEN)
+		|| (ms->tokens->type == TOKEN_SUBSHELL_CLOSE))
+		return (ft_printf("((: (): syntax error: operand expected (error token is \")\")\n"), NULL);
+	if (ms->tokens->type == TOKEN_SUBSHELL_OPEN)
 	{
 		ms->tokens = ms->tokens->next;
-		if (min_prec == 0)
-		{
-			if (!ft_check_subs(ms->tokens)) // changement de node -> passage de create sub à ft_parser
-				return (ft_printf("PB SYNTAX SUB"), NULL);
-		}
-		min_prec += 1;
-		node->sub = ft_parser(ms, min_prec);
+		if (!ft_check_subs(ms->tokens, min_prec))
+			return (ft_printf("PB SYNTAX SUB\n"), NULL);
+		node = ft_new_node(NODE_CMD);
 		if (!node)
-			return (ft_printf("PB MALLOC SUB NODE"), NULL);
-		// ms->tokens = ms->tokens->next;
+			return (ft_printf("PB MALLOC NODE_CMD\n"), NULL);
+		node->sub = ft_parser(ms, min_prec + 1);
+		if (!node->sub)
+			return (ft_printf("PB MALLOC SUB NODE\n"), NULL);
+		if (ms->tokens && ms->tokens->type == TOKEN_SUBSHELL_CLOSE)
+			ms->tokens = ms->tokens->next;
 		return (node);
 	}
 	else
-		return (ft_clean_nodes(node), free(node), ft_simple_cmd(ms));
+		return (ft_simple_cmd(ms));
 }
 
 t_node	*ft_parser(t_mini_env *ms, int min_prec)
 {
-	t_token	*tmp;
 	t_node	*node;
 
-	tmp = ms->tokens;
-	if (!tmp)
+	if (!ms->tokens)
 		return (NULL);
 	node = ft_start(ms, min_prec);
 	if (!node)
 		return (NULL);
-	node->left = NULL;
-	node->prev = NULL;
 	while (ms->tokens)
 	{
 		if (ft_get_node_type(ms->tokens->type))
@@ -346,15 +260,14 @@ t_node	*ft_parser(t_mini_env *ms, int min_prec)
 			ms->tokens = ms->tokens->next;
 		}
 		if (!ms->tokens)
-			return (ft_printf("SYNTAX ERROR BI OP"), NULL);
+			return (ft_printf("SYNTAX ERROR BI OP\n"), NULL);
 		if (ft_get_node_type(ms->tokens->type)
 			|| (ms->tokens->type == TOKEN_SUBSHELL_CLOSE && min_prec > 0))
 		{
-			min_prec -= 1;
+			if (ms->tokens->type == TOKEN_SUBSHELL_CLOSE)
+				ms->tokens = ms->tokens->next;
 			node->next = NULL;
-			ms->tokens = ms->tokens->next;
-			// ft_printf("--- %s\n", ms->tokens->value);
-			return (node);
+			return (ms->in_sub = 1, node);
 		}
 		else
 		{
@@ -364,6 +277,8 @@ t_node	*ft_parser(t_mini_env *ms, int min_prec)
 			node->next->left = node->rigth;
 			node->next->prev = node;
 		}
+		if (ms->in_sub == 1)
+			return (ms->in_sub = 0, node);
 	}
 	return (node);
 }
