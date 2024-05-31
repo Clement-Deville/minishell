@@ -1,32 +1,43 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   init_minishell.c                                   :+:      :+:    :+:   */
+/*   do.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/08 14:37:01 by skapersk          #+#    #+#             */
-/*   Updated: 2024/05/31 18:36:17 by cdeville         ###   ########.fr       */
+/*   Created: 2024/05/27 19:45:50 by cdeville          #+#    #+#             */
+/*   Updated: 2024/05/27 19:46:00 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-t_mini_env	*get_ms(void)
+int	do_pipe(int pipfd[2])
 {
-	static t_mini_env	minishell;
-
-	return (&minishell);
+	if (pipe(pipfd) == -1)
+	{
+		perror("Erreur lors de la creatin du pipe");
+		return (1);
+	}
+	return (0);
 }
 
-void	ft_init_env(char **env)
+int	do_close(int fd)
 {
-	ft_memset(get_ms(), 0, sizeof(t_mini_env));
-	if (env == NULL)
+	if (close(fd) == -1)
 	{
-		ft_printf("Erreur : pointeur de variable d'environnement nul\n");
-		return ;
+		perror("Close error");
+		return (-1);
 	}
-	get_ms()->env = env;
-	get_ms()->envlst = generate_env(env);
+	return (0);
+}
+
+int	do_dup2(int oldfd, int newfd)
+{
+	if (dup2(oldfd, newfd) == -1)
+	{
+		perror("Erreur lors de dup2");
+		return (1);
+	}
+	return (0);
 }

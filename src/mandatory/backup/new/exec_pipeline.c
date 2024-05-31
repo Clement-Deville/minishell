@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 14:51:19 by cdeville          #+#    #+#             */
-/*   Updated: 2024/05/31 13:34:04 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/05/27 12:51:21 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,19 @@ int	exec_cmd_pipe(const char *path, char *const args[], char *envp[])
 	return (0);
 }
 
+void	free_commands(t_command *cmds)
+{
+	int	i;
+
+	i = 0;
+	while (cmds[i].type != FLAG_END)
+	{
+		ft_free("%s", cmds[i].args);
+		i++;
+	}
+	free(cmds);
+}
+
 t_bool	are_in_child(int pid1)
 {
 	if (pid1 == 0)
@@ -29,45 +42,67 @@ t_bool	are_in_child(int pid1)
 	return (FALSE);
 }
 
-t_bool	is_cmd_executable(t_node *node)
+t_bool	is_cmd_executable(t_command cmds)
 {
-	if (node->status == 0 && node->pid != NO_FORK)
+	if (cmds.status == 0 && cmds.pid != NO_FORK)
 		return (TRUE);
 	else
 		return (FALSE);
 }
 
-t_bool	is_pipe_cmd(t_node *node)
-{
-	if (!node)
-		return (FALSE);
-	if ((node->left && node->left->type == TOKEN_PIPE)
-		|| (node->rigth && node->rigth->type == TOKEN_PIPE))
-		return (TRUE);
-	return (FALSE);
-}
-
-int	nbr_of_cmds(t_node *node)
+int	nbr_of_cmds(t_command *cmds)
 {
 	int	i;
 
 	i = 0;
-	while (is_pipe_cmd(node))
+	while (cmds[i].type != FLAG_END)
 	{
-		node = node->next;
 		i++;
 	}
 	return (i);
 }
 
-void	init(t_node *node)
+void	init(t_command *cmds)
 {
-	while (is_pipe_cmd(node))
+	int	i;
+
+	i = 0;
+	while (cmds[i].type != FLAG_END)
 	{
-		node->pid = 0;
-		node->status = 0;
-		node = node->next;
+		cmds[i].pid = 0;
+		cmds[i].status = 0;
+		i++;
 	}
+}
+
+int	do_pipe(int pipfd[2])
+{
+	if (pipe(pipfd) == -1)
+	{
+		perror("Erreur lors de la creatin du pipe");
+		return (1);
+	}
+	return (0);
+}
+
+int	do_close(int fd)
+{
+	if (close(fd) == -1)
+	{
+		perror("Close error");
+		return (-1);
+	}
+	return (0);
+}
+
+int	do_dup2(int oldfd, int newfd)
+{
+	if (dup2(oldfd, newfd) == -1)
+	{
+		perror("Erreur lors de dup2");
+		return (1);
+	}
+	return (0);
 }
 
 int	connect_read(int *pipefd)
@@ -127,45 +162,44 @@ int	close_parent(int *pipefd, int size)
 	return (0);
 }
 
-int	do_fork(t_node **node, int i, int *pipefd, t_dblist **env)
+t_node	cmd_to_node(t_command *cmds)
 {
-	(*node)->pid = fork();
-	if ((*node)->pid < 0)
+	t_node	node;
+
+	if (cmds->type == SUBSHELL)
+	{
+		node.sub_node = cmds->sub_node;
+	}
+	else
+	{
+
+	}
+
+}
+
+int	do_fork(t_command *cmds, int i, int *pipefd, t_dblist **env)
+{
+	char	**tab_env;
+	t_node	node;
+
+	cmds[i].pid = fork();
+	if (cmds[i].pid < 0)
 		return (free(pipefd), perror("Fork error"), 1);
-	if (are_in_child((*node)->pid))
+	if (are_in_child(cmds[i].pid))
 	{
 		if (i > 0)
 			if (connect_read(&pipefd[2 * i]) == 1)
 				return (1);
-		if (is_pipe_cmd((*node)->next))
+		if (cmds[i + 1].type != FLAG_END)
 			if (connect_write(&pipefd[2 * i]) == 1)
 				return (1);
 		if (close_useless_fd(pipefd, i) == 1)
 			return (1);
-		exit (exec_single(node, env));
+		node = cmd_to_node(cmds);
+		exit (exec_single());
 	}
 	return (0);
 }
-
-// int	do_fork(t_node **node, int i, int *pipefd, t_dblist **env)
-// {
-// 	(*node)->pid = fork();
-// 	if ((*node)->pid < 0)
-// 		return (free(pipefd), perror("Fork error"), 1);
-// 	if (are_in_child((*node)->pid))
-// 	{
-// 		if (i > 0)
-// 			if (connect_read(&pipefd[2 * i]) == 1)
-// 				return (1);
-// 		if (is_pipe_cmd((*node)->next))
-// 			if (connect_write(&pipefd[2 * i]) == 1)
-// 				return (1);
-// 		if (close_useless_fd(pipefd, i) == 1)
-// 			return (1);
-// 		exit (exec_single(node, env));
-// 	}
-// 	return (0);
-// }
 // char	**parse_path(char *envp[])
 // {
 // 	char		**split_path;
@@ -196,92 +230,115 @@ static int	allocate(int **pipefd, int nbr_of_cmds)
 	return (0);
 }
 
-int	wait_for_all(t_node **node, int size)
+int	wait_for_all(t_command *cmds, int size)
 {
-	int		i;
-	int		exit_value;
-	t_node	*head;
+	int	i;
+	int	exit_value;
 
 	i = 0;
-	//SETOFF
-	set_ignore_signals();
 	exit_value = 0;
-	head = (*node);
 	while (i <= size)
 	{
-		if ((*node)->pid != NO_FORK
-			&& waitpid((*node)->pid, &((*node)->status), 0) == -1)
-			return (setup_signals(), perror("Wait error"), 1);
-		if ((*node)->pid != NO_FORK && WIFEXITED((*node)->status))
-			exit_value = WEXITSTATUS((*node)->status);
-		if ((*node)->pid != NO_FORK && WIFSIGNALED((*node)->status))
-			exit_value = 128 + WTERMSIG((*node)->status);
-		if ((*node)->pid == NO_FORK)
-			exit_value = (*node)->status;
-		(*node) = (*node)->next;
+		if (cmds[i].pid != NO_FORK
+			&& waitpid(cmds[i].pid, &cmds[i].status, 0) == 1)
+			return (perror("Wait error"), 1);
+		if (cmds[i].pid != NO_FORK && WIFEXITED(cmds[i].status))
+			exit_value = WEXITSTATUS(cmds[i].status);
+		if (cmds[i].pid != NO_FORK && WIFSIGNALED(cmds[i].status))
+			exit_value = 128 + WTERMSIG(cmds[i].status);
+		if (cmds[i].pid == NO_FORK)
+			exit_value = cmds[i].status;
 		i++;
 	}
-	(*node) = head;
-	setup_signals();
 	return (exit_value);
 }
 
-int	start_piping(t_node **node, t_dblist **env)
+int	start_piping(t_command *cmds, t_dblist **env)
 {
-	int		i;
-	int		*pipefd;
-	t_node	*head;
+	int	i;
+	int	*pipefd;
 
-	i = 0;
-	head = *node;
-	if (allocate(&pipefd, nbr_of_cmds(*node)) != 0)
+	i = -1;
+	if (allocate(&pipefd, nbr_of_cmds(cmds)) != 0)
 		return (1);
-	while (is_pipe_cmd(*node))
+	while (cmds[++i].type != FLAG_END)
 	{
-		if (is_pipe_cmd((*node)->next) && pipe(&pipefd[2 * i]) == -1)
+		if (cmds[i + 1].type != FLAG_END && pipe(&pipefd[2 * i]) == -1)
 			return (free(pipefd), perror("Pipe error"), 1);
-		if ((*node)->status == -1)
-			return (free(pipefd), 1);
-		if (is_cmd_executable((*node)))
+		if (is_cmd_executable(cmds[i]))
 		{
-			if (do_fork(node, i, pipefd, env) == 1)
-				return (free(pipefd), 1);
+			if (do_fork(cmds, i, pipefd, env) == 1)
+				return (free(pipefd), free_commands(cmds), 1);
 		}
 		else
-			(*node)->pid = NO_FORK;
+			cmds[i].pid = NO_FORK;
+	}
+	if (close_parent(pipefd, --i) == 1)
+		return (1);
+	return (wait_for_all(cmds, i));
+}
+
+t_command	*parse(t_node **node)
+{
+	t_command	*cmds;
+	t_node		*temp;
+	int			i;
+
+	i = 1;
+	temp = *(node);
+	while ((*node)->rigth && (*node)->rigth->type == TOKEN_PIPE)
+	{
 		(*node) = (*node)->next;
 		i++;
 	}
-	(*node) = head;
-	if (close_parent(pipefd, --i) == 1)
-		return (1);
-	return (wait_for_all(node, i));
+	cmds = (t_command *)malloc(sizeof(t_command) * (i + 1));
+	if (cmds == NULL)
+		return (perror("Malloc"), NULL);
+	cmds[i].type = FLAG_END;
+	i = 0;
+	while (temp != *node)
+	{
+		if (temp->c_cmd && temp->c_cmd->expand)
+		{
+			cmds[i].args = temp->c_cmd->expand;
+			cmds[i].type = COMMAND;
+		}
+		else if (temp->sub_node && temp->sub_node->args)
+		{
+			cmds[i].sub_node = temp->sub_node->args;
+			cmds[i].type = SUBSHELL;
+		}
+		temp = temp->next;
+		ft_printf("Command %d = %s\n", i + 1, cmds[i].args[0]);
+		i++;
+	}
+	if (temp->c_cmd && temp->c_cmd->expand)
+	{
+		cmds[i].args = temp->c_cmd->expand;
+		cmds[i].type = COMMAND;
+	}
+	else if (temp->sub_node && temp->sub_node->args)
+	{
+		cmds[i].sub_node = temp->sub_node->args;
+		cmds[i].type = SUBSHELL;
+	}
+	ft_printf("Command %d = %s\n", i + 1, cmds[i].args[0]);
+	init(cmds);
+	return (cmds);
 }
 
 int	exec_pipeline(t_node **node, t_dblist **env)
 {
+	t_command	*cmds;
 	int			status;
 
-
-	init(*node);
-	// t_node	*test;
-	// test = (*node);
-	// while(is_pipe_cmd(test))
-	// {
-	// 	printf("ARG : %s\n", test->c_cmd->expand[0]);
-	// 	test = test->next;
-	// }
-	// t_node	*test;
-	// test = (*node);
-	// while (is_pipe_cmd(test))
-	// {
-	// 	printf("Is pipe\n");
-	// 	test = test->next;
-	// }
-	status = start_piping(node, env);
+	ft_printf("Pipeline called\n");
+	cmds = parse(node);
+	if (cmds == NULL)
+		return (ENO_CRITICAL);
+	status = start_piping(cmds, env);
+	free_commands(cmds);
 	return (status);
-	(void)status;
-	return (0);
 	(void)node;
 	(void)env;
 }

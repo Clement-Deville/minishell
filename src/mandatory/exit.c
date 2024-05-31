@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 18:42:42 by cdeville          #+#    #+#             */
-/*   Updated: 2024/05/21 19:24:06 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/05/31 18:51:29 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,16 +26,16 @@ t_bool	is_digit(char *c)
 	return (TRUE);
 }
 
-// t_bool	is_numeric(char *argument)
-// {
-// 	while (*argument)
-// 	{
-// 		if (is_digit(*argument) == FALSE)
-// 			return (FALSE);
-// 		argument++;
-// 	}
-// 	return (TRUE);
-// }
+t_bool	is_numeric(char *argument)
+{
+	while (*argument)
+	{
+		if (is_digit(argument) == FALSE)
+			return (FALSE);
+		argument++;
+	}
+	return (TRUE);
+}
 
 // int	do_exit(char *argument)
 // {
@@ -49,64 +49,82 @@ t_bool	is_digit(char *c)
 // 	return ((unsigned char)ft_atoi(argument));
 // }
 
-static void	ft_skip_spaces_and_get_sign(char *s, int *i, int *sign)
+// static void	ft_skip_spaces_and_get_sign(char *s, int *i, int *sign)
+// {
+// 	while (s[*i] && s[*i] == ' ')
+// 		(*i)++;
+// 	if (s[*i] == '+' || s[*i] == '-')
+// 	{
+// 		if (s[*i] == '-')
+// 			*sign *= -1;
+// 		(*i)++;
+// 	}
+// }
+
+// static int	ft_exittoi(char *s)
+// {
+// 	int					i;
+// 	int					sign;
+// 	int					exit_s;
+// 	unsigned long long	result;
+
+// 	i = 0;
+// 	sign = 1;
+// 	ft_skip_spaces_and_get_sign(s, &i, &sign);
+// 	if (!is_digit(s + i))
+// 	{
+// 		exit_s = ft_err_msg((t_err){ENO_EXEC_255, ERRMSG_NUMERIC_REQUI, s});
+// 		(ft_clean_ms(), exit(exit_s));
+// 	}
+// 	result = 0;
+// 	while (s[i])
+// 	{
+// 		result = (result * 10) + (s[i] - '0');
+// 		if (result > LONG_MAX)
+// 		{
+// 			exit_s = ft_err_msg((t_err){ENO_EXEC_255, ERRMSG_NUMERIC_REQUI, s});
+// 			(ft_clean_ms(), exit(exit_s));
+// 		}
+// 		i++;
+// 	}
+// 	return ((result * sign) % 256);
+// }
+
+// void	do_exit(char **args)
+// {
+// 	int	exit_s;
+
+// 	exit_s = get_ms()->exit;
+// 	if (args[1])
+// 	{
+// 		if (args[2] && is_digit(args[1]))
+// 		{
+// 			exit_s = ft_err_msg(
+// 					(t_err){ENO_GENERAL, ERRMSG_TOO_MANY_ARGS, NULL});
+// 			ft_clean_ms();
+// 			exit(exit_s);
+// 		}
+// 		else
+// 			exit_s = ft_exittoi(args[1]);
+// 	}
+// 	ft_clean_ms();
+// 	exit(exit_s);
+//	}
+
+int	do_exit(t_node *node)
 {
-	while (s[*i] && s[*i] == ' ')
-		(*i)++;
-	if (s[*i] == '+' || s[*i] == '-')
-	{
-		if (s[*i] == '-')
-			*sign *= -1;
-		(*i)++;
-	}
-}
+	char	*argument;
 
-static int	ft_exittoi(char *s)
-{
-	int					i;
-	int					sign;
-	int					exit_s;
-	unsigned long long	result;
-
-	i = 0;
-	sign = 1;
-	ft_skip_spaces_and_get_sign(s, &i, &sign);
-	if (!is_digit(s + i))
+	argument = node->c_cmd->expand[1];
+	if (argument == NULL)
+		exit (0);
+	if (is_numeric(argument) == FALSE)
 	{
-		exit_s = ft_err_msg((t_err){ENO_EXEC_255, ERRMSG_NUMERIC_REQUI, s});
-		(ft_clean_ms(), exit(exit_s));
+		if (node->silent == FALSE)
+			ft_printf("exit: %s: numeric argument required\n", argument);
+		// A print sur stderr
+		return (2);
 	}
-	result = 0;
-	while (s[i])
-	{
-		result = (result * 10) + (s[i] - '0');
-		if (result > LONG_MAX)
-		{
-			exit_s = ft_err_msg((t_err){ENO_EXEC_255, ERRMSG_NUMERIC_REQUI, s});
-			(ft_clean_ms(), exit(exit_s));
-		}
-		i++;
-	}
-	return ((result * sign) % 256);
-}
-
-void	do_exit(char **args)
-{
-	int	exit_s;
-
-	exit_s = get_ms()->exit;
-	if (args[1])
-	{
-		if (args[2] && is_digit(args[1]))
-		{
-			exit_s = ft_err_msg(
-					(t_err){ENO_GENERAL, ERRMSG_TOO_MANY_ARGS, NULL});
-			ft_clean_ms();
-			exit(exit_s);
-		}
-		else
-			exit_s = ft_exittoi(args[1]);
-	}
-	ft_clean_ms();
-	exit(exit_s);
+	//DOIT AFFICHER EXIT DANS LE PARENT
+	exit ((unsigned char)ft_atoi(argument));
 }
