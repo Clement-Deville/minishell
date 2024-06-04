@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 17:31:03 by skapersk          #+#    #+#             */
-/*   Updated: 2024/06/03 17:32:45 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/04 16:52:57 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ t_node	*ft_parser(t_mini_env *ms, int min_prec)
 	t_node	*node;
 	t_node	*result;
 
-	if (!ms->tokens)
+	if (!ms->tokens || get_ms()->err.type)
 		return (NULL);
 	node = ft_start(ms, min_prec);
 	if (!node)
@@ -42,6 +42,8 @@ void	init_parsing(t_mini_env *ms)
 	nb_prec = 0;
 	tmp = ms->tokens;
 	ms->nodes = ft_parser(ms, nb_prec);
+	if (ms->tokens)
+		ft_set_parse_err(E_SYNTAX);
 	ms->tokens = tmp;
 	// ft_compute_cmds(ms->nodes);
 }

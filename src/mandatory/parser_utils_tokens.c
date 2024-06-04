@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser_utils_token.c                               :+:      :+:    :+:   */
+/*   parser_utils_tokens.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 13:13:57 by skapersk          #+#    #+#             */
-/*   Updated: 2024/06/03 13:33:11 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/04 17:35:38 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,11 +75,11 @@ int	ft_check_subs(t_token *token, int min_prec)
 		{
 			count--;
 			if (count < 0)
-				return (ft_printf("ERROR : Parenthesis mismatch\n", 0));
+				return (ft_set_parse_err(E_SYNTAX), get_ms()->tmp = tmp, 0);
 		}
 		tmp = tmp->next;
 	}
 	if (count != 0)
-		return (ft_printf("ERROR : Parenthesis mismatch\n"), 0);
+		return (ft_set_parse_err(E_SYNTAX), get_ms()->tmp = tmp, 0);
 	return (1);
 }

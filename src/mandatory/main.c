@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:09:05 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/03 12:03:13 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/04 17:19:20 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,6 +170,11 @@ int	init_minishell(void)
 			break ;
 		ft_tokenization(ms);
 		init_parsing(ms);
+		if (get_ms()->err.str)
+		{
+			ft_handle_parse_err(ms);
+			continue ;
+		}
 		exec_parse(ms->nodes);
 		// start_exec(ms->nodes, &(ms->envlst));
 		free(line);

@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 13:20:21 by skapersk          #+#    #+#             */
-/*   Updated: 2024/06/03 13:32:09 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/04 18:33:14 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,16 +74,18 @@ int	ft_get_red_node(t_red_node **node, t_mini_env *ms)
 {
 	t_token_type	red_type;
 	t_red_node		*tmp_red;
+	t_token			*tmp;
 
 	while (ms->tokens && ft_is_redir(ms->tokens->type))
 	{
 		red_type = ms->tokens->type;
+		tmp = ms->tokens;
 		ms->tokens = ms->tokens->next;
 		if (!ms->tokens || ms->tokens->type != TOKEN_ELSE)
-			return (ft_printf("SYNTAX PB REDIR NODE"), 0);
+			return (ft_set_parse_err(E_SYNTAX), get_ms()->tmp = tmp, 0);
 		tmp_red = ft_create_red_node(red_type, ms->tokens->value);
 		if (!tmp_red)
-			return (ft_printf("PB MALLOC TMP RED"), 0);
+			return (ft_set_parse_err(E_MEMORY), 0);
 		ft_add_red_node(node, tmp_red);
 		ms->tokens = ms->tokens->next;
 	}

@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:09:27 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/03 17:46:10 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/04 16:54:27 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,12 @@ typedef enum e_err_msg
 	ERRMSG_NUMERIC_REQUI
 }	t_err_msg;
 
+typedef enum e_err_parse
+{
+	E_MEMORY = 1,
+	E_SYNTAX,
+}	t_err_parse;
+
 typedef enum e_err_no
 {
 	ENO_SUCCESS,
@@ -55,6 +61,12 @@ typedef enum e_err_no
 	ENO_EXEC_255 = 255,
 	ENO_CRITICAL = 300,
 }	t_err_no;
+
+typedef struct s_parser_error
+{
+	t_err_parse	type;
+	char		*str;
+}	t_parser_error;
 
 typedef struct s_err
 {
@@ -166,16 +178,18 @@ typedef struct s_node
 
 typedef struct s_mini_env
 {
-	char		*line;
-	char		**env;
-	int			in_sub;
-	int			exit;
-	int			stdin;
-	int			stdout;
-	t_dblist	*envlst;
-	t_token		*tokens;
-	t_node		*nodes;
-	t_bool		signal;
+	char			*line;
+	char			**env;
+	int				in_sub;
+	int				exit;
+	int				stdin;
+	int				stdout;
+	t_parser_error	err;
+	t_dblist		*envlst;
+	t_token			*tokens;
+	t_token			*tmp;
+	t_node			*nodes;
+	t_bool			signal;
 }	t_mini_env;
 
 // BUILT-IN COMMANDS
@@ -238,8 +252,8 @@ void		print_variable_export(void *content);
 // exec_pipeline
 
 int			exec_pipeline(t_node **node, t_dblist **env);
-int		exec_single(t_node **node, t_dblist **env);
-t_bool	is_pipe_cmd(t_node *node);
+int			exec_single(t_node **node, t_dblist **env);
+t_bool		is_pipe_cmd(t_node *node);
 
 typedef struct s_command
 {
@@ -380,5 +394,9 @@ void		ft_free_red_nodes(t_red_node *red_node);
 void		ft_free_c_cmd_expand(char **expand);
 void		ft_clear_parsing(t_node *nodes);
 void		ft_clean_nodes(t_node *node);
+
+//parser_utils_error.c
+void		ft_set_parse_err(t_err_parse type);
+void		ft_handle_parse_err(t_mini_env *ms);
 
 #endif

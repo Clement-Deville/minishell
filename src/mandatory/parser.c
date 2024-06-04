@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:22:01 by skapersk          #+#    #+#             */
-/*   Updated: 2024/06/03 17:31:57 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/04 18:35:11 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ t_red_node	*ft_create_red_node(t_token_type type, char *value)
 	new->type = ft_get_red_type(type);
 	new->value = ft_strdup(value);
 	if (!new->value)
-		return (ft_printf("PB AVEC t_red_node value"), NULL);
+		return (ft_set_parse_err(E_MEMORY), NULL);
 	return (new);
 }
 
@@ -32,19 +32,19 @@ t_node	*ft_simple_cmd(t_mini_env *ms)
 
 	node = ft_new_node(NODE_CMD);
 	if (!node)
-		return (ft_printf("PB MALLOC NODE_CMD"), NULL);
+		return (ft_set_parse_err(E_MEMORY), NULL);
 	while (ms->tokens && (ms->tokens->type == TOKEN_ELSE
 			|| ft_is_redir(ms->tokens->type)))
 	{
 		if (ft_is_redir(ms->tokens->type))
 		{
 			if (!ft_get_red_node(&(node->red_node), ms))
-				return (ft_printf("PB GET REDIR NODE"), NULL);
+				return (NULL);
 		}
 		else if (ms->tokens && ms->tokens->type == TOKEN_ELSE)
 		{
 			if (!ft_join_args(&(node->cmd), ms->tokens))
-				return (ft_printf("PB NODE CMD"), NULL);
+				return (ft_set_parse_err(E_MEMORY), NULL);
 			ms->tokens = ms->tokens->next;
 		}
 	}
@@ -55,22 +55,23 @@ t_node	*ft_start(t_mini_env *ms, int min_prec)
 {
 	t_node	*node;
 
-	if (!ms->tokens)
+	if (!ms->tokens || get_ms()->err.type)
 		return (NULL);
 	if (ft_get_node_type(ms->tokens->type)
 		|| (ms->tokens->type == TOKEN_SUBSHELL_CLOSE))
-		return (ft_printf("((: (): syntax error: operand expected (error token is \")\")\n"), NULL);
+		return (ft_set_parse_err(E_SYNTAX), ms->tokens = ms->tokens->next,
+			get_ms()->tmp = ms->tokens, NULL);
 	if (ms->tokens->type == TOKEN_SUBSHELL_OPEN)
 	{
 		ms->tokens = ms->tokens->next;
 		if (!ft_check_subs(ms->tokens, min_prec))
-			return (ft_printf("PB SYNTAX SUB\n"), NULL);
+			return (NULL);
 		node = ft_new_node(NODE_CMD);
 		if (!node)
-			return (ft_printf("PB MALLOC NODE_CMD\n"), NULL);
+			return (ft_set_parse_err(E_MEMORY), NULL);
 		node->sub = ft_parser(ms, min_prec + 1);
 		if (!node->sub)
-			return (ft_printf("PB MALLOC SUB NODE\n"), NULL);
+			return (ft_set_parse_err(E_MEMORY), NULL);
 		if (ms->tokens && ms->tokens->type == TOKEN_SUBSHELL_CLOSE)
 			ms->tokens = ms->tokens->next;
 		return (node);
@@ -87,10 +88,7 @@ t_node	*ft_handle_tokens(t_mini_env *ms, t_node *node, int min_prec)
 		ms->tokens = ms->tokens->next;
 	}
 	if (!ms->tokens)
-	{
-		ft_printf("SYNTAX ERROR BI OP\n");
-		return (NULL);
-	}
+		return (ft_set_parse_err(E_SYNTAX), get_ms()->tmp = node->rigth, NULL);
 	if (ft_get_node_type(ms->tokens->type)
 		|| (ms->tokens->type == TOKEN_SUBSHELL_CLOSE && min_prec > 0))
 	{

@@ -43,6 +43,7 @@ SRCS_FILES =	main	\
 				parser_utils_nodes	\
 				parser_utils_tokens	\
 				parser_init	\
+				parser_utils_error	\
 
 SRCS_FILES_BONUS =	main_bonus	\
 
