@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
+/*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:09:27 by cdeville          #+#    #+#             */
-/*   Updated: 2024/05/31 19:25:48 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/03 17:46:10 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -260,10 +260,6 @@ t_token		*create_new_token(char *value, t_token_type type);
 int			ft_is_char(char *str);
 int			is_space(char c);
 
-//parser.c
-t_node		*ft_parser(t_mini_env *ms, int min_prec);
-void		init_parsing(t_mini_env *ms);
-
 //comupte_cmds.c
 void		ft_compute_cmds(t_node *node);
 char		*ft_str_find_env(char *arg);
@@ -302,18 +298,40 @@ t_path		ft_get_path(char *cmd);
 int			main_subshell(int ac, char *av, char **env);
 
 // access.c
-
 int			check_for_path_access(char **cmd, t_dblist *env);
 
 // path.c
-
 char		*get_path(t_dblist *env);
 char		**parse_path(t_dblist *env);
 int			change_path(char **cmd, char *new_path);
 char		**add_dir(char **split_path);
 char		**add_cmd_to_path(char **split_path, const char *cmd);
-
 char		**list_to_tab(t_dblist *env);
+
+//parser_init.c
+t_node		*ft_parser(t_mini_env *ms, int min_prec);
+void		init_parsing(t_mini_env *ms);
+
+//parser.c
+t_red_node	*ft_create_red_node(t_token_type type, char *value);
+t_node		*ft_simple_cmd(t_mini_env *ms);
+t_node		*ft_start(t_mini_env *ms, int min_prec);
+t_node		*ft_handle_tokens(t_mini_env *ms, t_node *node, int min_prec);
+t_node		*ft_recursive_parse(t_mini_env *ms, t_node *node, int min_prec);
+
+// parser_utils_tokens.c
+int			ft_is_redir(t_token_type type);
+int			ft_get_node_type(t_token_type type);
+t_red_type	ft_get_red_type(t_token_type type);
+char		*ft_add_args(t_token_type node);
+int			ft_check_subs(t_token *token, int min_prec);
+
+// parser_utils_nodes.c
+t_node		*ft_new_node(t_node_type type);
+int			ft_join_args(char **args, t_token *token);
+void		ft_add_red_node(t_red_node **node, t_red_node *new);
+int			ft_get_red_node(t_red_node **node, t_mini_env *ms);
+void		ft_add_back_sub(t_subs_node **lst, t_subs_node *new);
 
 // redirection.c
 
@@ -349,9 +367,17 @@ char		*convert(t_node_type type);
 
 void		ft_clear_token(t_token *token);
 
-void 		free_node(t_node *node);
+void		free_node(t_node *node);
 
+//clean_env.c
+void		free_variable(void *content);
 void		ft_clear_envlst(t_mini_env *mini_s);
+void		ft_clean_ms(void);
+
+//clear_parsing.c
+void		ft_clear_token(t_token *token);
+void		ft_free_red_nodes(t_red_node *red_node);
+void		ft_free_c_cmd_expand(char **expand);
 void		ft_clear_parsing(t_node *nodes);
 void		ft_clean_nodes(t_node *node);
 

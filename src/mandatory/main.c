@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
+/*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:09:05 by cdeville          #+#    #+#             */
-/*   Updated: 2024/05/31 19:38:56 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/03 12:03:13 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,7 +170,8 @@ int	init_minishell(void)
 			break ;
 		ft_tokenization(ms);
 		init_parsing(ms);
-		start_exec(ms->nodes, &(ms->envlst));
+		exec_parse(ms->nodes);
+		// start_exec(ms->nodes, &(ms->envlst));
 		free(line);
 	}
 	return (0);
@@ -178,13 +179,17 @@ int	init_minishell(void)
 
 int	main(int ac, char **av, char **env)
 {
+	int	returned_val;
+
+	returned_val = 0;
 	(void)ac;
 	(void)av;
 	ft_init_env(env);
 	setup_signals();
 	init_minishell();
+	returned_val = get_ms()->exit;
 	ft_clean_ms();
-	return (get_ms()->exit);
+	return (returned_val);
 }
 
 

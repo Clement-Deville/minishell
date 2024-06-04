@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_here_doc.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
+/*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 15:44:49 by skapersk          #+#    #+#             */
-/*   Updated: 2024/05/31 18:36:55 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/03 12:54:35 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ int	ft_heredoc_handle_dollar(char *str, int i, int fd)
 
 	start = ++i;
 	if (str[i] == '?')
-		return (ft_putnbr_fd(987987, fd), 2);
+		return (ft_putnbr_fd(get_ms()->exit, fd), 2);
 	while (str[i] && str[i] != '$' && str[i] != ' ')
 		i++;
 	if (i != start)

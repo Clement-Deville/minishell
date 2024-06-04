@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_pipeline.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
+/*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 14:51:19 by cdeville          #+#    #+#             */
-/*   Updated: 2024/05/31 13:34:04 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/03 11:07:54 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -261,7 +261,6 @@ int	start_piping(t_node **node, t_dblist **env)
 int	exec_pipeline(t_node **node, t_dblist **env)
 {
 	int			status;
-
 
 	init(*node);
 	// t_node	*test;

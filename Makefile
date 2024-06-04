@@ -23,22 +23,26 @@ SRCS_FILES =	main	\
 				env	\
 				utils	\
 				tokenization	\
-				init_minishell 	\
+				init_minishell	\
 				lst_token_add_back	\
-				tokens_helper \
-				parser \
-				compute_cmds \
-				wildcard \
-				init_here_doc \
-				clean_ms \
-				exec \
-				error_msg \
-				get_path \
-				exec_pipeline \
+				tokens_helper	\
+				parser	\
+				compute_cmds	\
+				wildcard	\
+				init_here_doc	\
+				clean_parsing	\
+				clean_env	\
+				exec	\
+				error_msg	\
+				get_path	\
+				exec_pipeline	\
 				access	\
 				path	\
 				redirections	\
 				do	\
+				parser_utils_nodes	\
+				parser_utils_tokens	\
+				parser_init	\
 
 SRCS_FILES_BONUS =	main_bonus	\
 
