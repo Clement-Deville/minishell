@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 12:17:33 by skapersk          #+#    #+#             */
-/*   Updated: 2024/06/05 12:34:58 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/05 14:18:43 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,13 +37,11 @@ char	*skip_words(char *str, int *i, int *count, char *tmp)
 	return (tmp);
 }
 
-char	*skip_quotes(char *str, int *i, int *count, char *tmp)
+char	*init_and_alloc(char *str, int *i, int *count, char quote)
 {
 	int		start;
-	char	quote;
+	char	*tmp;
 
-	quote = assign_quote(str[*i]);
-	*i += 1;
 	start = *i;
 	if (*count == 0)
 	{
@@ -53,6 +51,20 @@ char	*skip_quotes(char *str, int *i, int *count, char *tmp)
 		if (!tmp)
 			return (NULL);
 	}
+	else
+		tmp = NULL;
+	return (tmp);
+}
+
+char	*skip_quotes(char *str, int *i, int *count, char *tmp)
+{
+	char	quote;
+
+	quote = assign_quote(str[*i]);
+	*i += 1;
+	tmp = init_and_alloc(str, i, count, quote);
+	if (!tmp)
+		return (NULL);
 	tmp[*count] = '"';
 	*count += 1;
 	while (str[*i] && !is_quotes(str[*i], quote))
@@ -62,7 +74,11 @@ char	*skip_quotes(char *str, int *i, int *count, char *tmp)
 		*i += 1;
 	}
 	if (str[*i] != '\0' && str[*i] != ' ')
+	{
 		tmp = skip_words(str, i, count, tmp);
+		if (!tmp)
+			return (NULL);
+	}
 	else if (str[*i] != '\0' && str[*i == ' '])
 		*i += 1;
 	tmp[*count] = '\0';
@@ -87,72 +103,30 @@ int	countwords(char *s, char c)
 	return (words);
 }
 
-char	**allocate_split_args(char *str, t_node *node)
-{
-	char	**tmp;
-
-	node->c_cmd->ac = countwords(str, ' ');
-	tmp = ft_calloc(node->c_cmd->ac + 1, sizeof(char *));
-	return (tmp);
-}
-
 char	**ft_split_args(char *str, t_node *node)
 {
 	char	**tmp;
+	int		count;
 	int		i;
 	int		j;
-	int		count;
 
-	tmp = allocate_split_args(str, node);
-	if (!tmp)
-		return (NULL);
 	i = 0;
 	j = 0;
+	node->c_cmd->ac = countwords(str, ' ');
+	tmp = ft_calloc(countwords(str, ' ') + 1, sizeof(char *));
+	if (!tmp)
+		return (NULL);
 	while (str[i])
 	{
-		if (str[i] != ' ')
-		{
-			tmp[j] = process_word(str, &i, &count);
-			if (!tmp[j])
-				return (free_split_args(tmp, j));
-			j++;
-		}
-		else
-			i++;
+		count = 0;
+		if (str[i] && str[i] != ' ' && !find_quotes(str[i]))
+			tmp[j] = skip_words(str, &i, &count, tmp[j]);
+		else if (str[i] && str[i] != ' ' && find_quotes(str[i]))
+			tmp[j] = skip_quotes(str, &i, &count, tmp[j]);
+		if (tmp[j] == NULL)
+			return (free_split_args(tmp, j), NULL);
+		j++;
 	}
 	tmp[j] = NULL;
 	return (tmp);
 }
-
-// char	**ft_split_args(char *str, t_node *node)
-// {
-// 	char	**tmp;
-// 	int		count;
-// 	int		i;
-// 	int		j;
-
-// 	i = 0;
-// 	j = 0;
-// 	node->c_cmd->ac = countwords(str, ' ');
-// 	tmp = ft_calloc(countwords(str, ' ') + 1, sizeof(char *));
-// 	if (!tmp)
-// 		return (NULL);
-// 	while (str[i])
-// 	{
-// 		count = 0;
-// 		if (str[i] && str[i] != ' ' && !find_quotes(str[i]))
-// 			tmp[j] = skip_words(str, &i, &count, tmp[j]);
-// 		else if (str[i] && str[i] != ' ' && find_quotes(str[i]))
-// 			tmp[j] = skip_quotes(str, &i, &count, tmp[j]);
-// 		if (tmp[j] == NULL)
-// 		{
-// 			while (j > 0)
-// 				free(tmp[--j]);
-// 			free(tmp);
-// 			return (NULL);
-// 		}
-// 		j++;
-// 	}
-// 	tmp[j] = NULL;
-// 	return (tmp);
-// }

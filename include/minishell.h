@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:09:27 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/05 12:49:24 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/05 15:51:23 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -280,7 +280,7 @@ int			is_space(char c);
 int			ft_contains_asterisk(char *str);
 
 //init_here_doc.c
-void		ft_init_heredoc(t_node *node);
+int			ft_init_heredoc(t_node *node);
 
 //clean_ms.c
 void		ft_clean_ms(void);
@@ -384,6 +384,8 @@ void		free_node(t_node *node);
 void		free_variable(void *content);
 void		ft_clear_envlst(t_mini_env *mini_s);
 void		ft_clean_ms(void);
+void		ft_del(void *ptr);
+
 
 //clear_parsing.c
 void		ft_clear_token(t_token *token);
@@ -453,5 +455,12 @@ char		**no_asterisk(char *str);
 int			ft_visible(char *entry);
 char		**there_asterisk(char *str, int i);
 void		free_wildcards(t_wildcard *wildcard);
+
+//init_here_doc_utils.c
+int			ft_is_delimiter(char *str, char *line);
+void		*ft_garbage(void *str, t_bool clean);
+int			ft_heredoc_handle_dollar(char *str, int i, int fd);
+void		ft_heredoc_expand(char *str, int fd);
+int			ft_check_here_quotes(char *str);
 
 #endif

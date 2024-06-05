@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 12:19:09 by skapersk          #+#    #+#             */
-/*   Updated: 2024/06/05 12:34:36 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/05 14:04:43 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,17 +35,6 @@ char	assign_quote(char c)
 	else
 		quote = '"';
 	return (quote);
-}
-
-char	*process_word(char *str, int *i, int *count)
-{
-	char	*word;
-
-	if (!find_quotes(str[*i]))
-		word = skip_words(str, i, count, NULL);
-	else
-		word = skip_quotes(str, i, count, NULL);
-	return (word);
 }
 
 char	**free_split_args(char **tmp, int j)

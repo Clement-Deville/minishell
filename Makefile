@@ -38,6 +38,7 @@ SRCS_FILES =	main	\
 				compute_wildcards	\
 				wildcard	\
 				init_here_doc	\
+				init_here_doc_utils	\
 				clean_parsing	\
 				clean_env	\
 				exec	\

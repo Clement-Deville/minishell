@@ -6,11 +6,17 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 17:41:03 by skapersk          #+#    #+#             */
-/*   Updated: 2024/06/03 18:12:42 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/05 15:50:24 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
+
+void	ft_del(void *ptr)
+{
+	free(ptr);
+	ptr = NULL;
+}
 
 void	free_variable(void *content)
 {
