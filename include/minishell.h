@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:09:27 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/04 16:54:27 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/05 12:49:24 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,8 @@ typedef enum e_err_parse
 {
 	E_MEMORY = 1,
 	E_SYNTAX,
+	E_QUOTES,
+	E_DQUOTES
 }	t_err_parse;
 
 typedef enum e_err_no
@@ -274,11 +276,6 @@ t_token		*create_new_token(char *value, t_token_type type);
 int			ft_is_char(char *str);
 int			is_space(char c);
 
-//comupte_cmds.c
-void		ft_compute_cmds(t_node *node);
-char		*ft_str_find_env(char *arg);
-int			check_quotes(char *str);
-
 //wildcard.c
 int			ft_contains_asterisk(char *str);
 
@@ -398,5 +395,63 @@ void		ft_clean_nodes(t_node *node);
 //parser_utils_error.c
 void		ft_set_parse_err(t_err_parse type);
 void		ft_handle_parse_err(t_mini_env *ms);
+
+//compute_wildcards.c
+char		**ft_expand_wildcard(char *str, t_node *node);
+char		**ft_join_wildcard(t_node *node);
+char		**ft_handle_wildcard(char **glob, t_node *node);
+
+//compute_check_quotes.c
+int			count_single_quotes(char *str, int *i);
+int			count_double_quotes(char *str, int *i);
+void		set_error(int count, int count2);
+int			check_quotes(char *str);
+
+//comupte_cmds.c
+char		*clean_node(char *str);
+char		**ft_expand(char *str, t_node *node);
+char		*remove_quotes_from_str(char *str);
+void		cut_quotes(char **str);
+void		init_cmp(t_node *node);
+void		ft_compute_cmds(t_node *node);
+
+//compute_handle_arg.c
+char		*ft_handle_arg(char *str, int *i);
+char		*ft_handle_dq_arg(char *str, int *i);
+char		*ft_handle_dollar(char *str, int *i);
+char		*ft_handle_simple_quotes(char *str, int *i);
+char		*ft_handle_double_quotes(char *str, int *i);
+
+//compute_pre_expand.c
+char		*ft_handle_quotes(char *str, int *i);
+char		*ft_expand_loop(char *str, char *tmp, int i);
+char		*ft_cmd_pre_expand(char *str);
+
+//compute_split_args_utils.c
+int			find_quotes(char c);
+int			is_quotes(char c, char x);
+char		assign_quote(char c);
+char		*process_word(char *str, int *i, int *count);
+char		**free_split_args(char **tmp, int j);
+
+//compute_split_args.c
+char		*skip_words(char *str, int *i, int *count, char *tmp);
+char		*skip_quotes(char *str, int *i, int *count, char *tmp);
+int			countwords(char *s, char c);
+char		**allocate_split_args(char *str, t_node *node);
+char		**ft_split_args(char *str, t_node *node);
+
+//compute_utils.c
+int			init_node(t_node *node);
+int			ft_is_valid_arg(char c);
+char		*ft_str_find_env(char *arg);
+void		ft_big_free(char **str);
+void		free_node(t_node *node);
+
+//compute_wildcards_utils.c
+char		**no_asterisk(char *str);
+int			ft_visible(char *entry);
+char		**there_asterisk(char *str, int i);
+void		free_wildcards(t_wildcard *wildcard);
 
 #endif

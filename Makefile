@@ -28,6 +28,14 @@ SRCS_FILES =	main	\
 				tokens_helper	\
 				parser	\
 				compute_cmds	\
+				compute_check_quotes	\
+				compute_handle_arg	\
+				compute_pre_expand	\
+				compute_split_args_utils	\
+				compute_split_args	\
+				compute_utils	\
+				compute_wildcards_utils	\
+				compute_wildcards	\
 				wildcard	\
 				init_here_doc	\
 				clean_parsing	\

@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 10:28:12 by skapersk          #+#    #+#             */
-/*   Updated: 2024/06/04 17:16:54 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/05 12:02:49 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,15 @@ void	ft_set_parse_err(t_err_parse type)
 {
 	get_ms()->err.type = type;
 	get_ms()->err.str = "ERROR";
+}
+
+void	ft_handle_expand_err(t_err_parse type)
+{
+	if (type == E_DQUOTES)
+		ft_putstr_fd("minishell: syntax error near unexpected token `\"\n", 2);
+	else if (type == E_QUOTES)
+		ft_putstr_fd("minishell: syntax error near unexpected token `\'\n", 2);
+	get_ms()->exit = 1;
 }
 
 void	ft_handle_parse_err(t_mini_env *ms)
@@ -40,6 +49,8 @@ void	ft_handle_parse_err(t_mini_env *ms)
 			ft_putstr_fd("'\n", 2);
 			get_ms()->exit = 258;
 		}
+		else if (type == E_QUOTES || type == E_DQUOTES)
+			ft_handle_expand_err(type);
 		ft_clear_token(ms->tokens);
 		ft_bzero(&(get_ms()->err), sizeof(t_parser_error));
 	}
