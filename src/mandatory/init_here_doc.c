@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 15:44:49 by skapersk          #+#    #+#             */
-/*   Updated: 2024/06/06 11:37:43 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/06 16:30:02 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,18 @@ static void	ft_heredoc_sigint_handler(int signum)
 
 int	ft_error_exe(int p[2], int *pid)
 {
+	// int status;
 	//SETOFF
 	// NEED TO HANDLE SIGNAL  ERPROPERLY
 	// set_ignore_signals();
-	waitpid(*pid, pid, 0);
-	// setup_signals();
+	if (waitpid(*pid, pid, 0) == -1)
+	{
+		perror("waitpid");
+		return (1);
+	}
 	close(p[1]);
-	if (WIFEXITED(*pid))
+	// setup_signals();
+	if (WIFEXITED(*pid) && WEXITSTATUS(*pid) == 0)
 		return (0);
 	return (1);
 }
@@ -48,13 +53,12 @@ void	ft_heredoc(t_red_node *node, int p[2])
 			break ;
 		if (ft_is_delimiter(node->value, line))
 			break ;
-		// if (!*quotes)
-		// 	ft_heredoc_expand(line, p[1]);
 		else
 		{
 			ft_putstr_fd(line, p[1]);
 			ft_putstr_fd("\n", p[1]);
 		}
+		free(line);
 	}
 	ft_clean_ms();
 	exit(0);

@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 15:41:16 by skapersk          #+#    #+#             */
-/*   Updated: 2024/06/05 15:51:47 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/06 17:23:58 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ void	ft_heredoc_expand(char *str, int fd)
 		else
 			i += (ft_putchar_fd(str[i], fd), 1);
 	}
-	ft_putchar_fd('\n', fd);
+	// ft_putchar_fd('\n', fd);
 }
 
 int	ft_check_here_quotes(char *str)

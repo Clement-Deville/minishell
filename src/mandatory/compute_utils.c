@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 12:14:33 by skapersk          #+#    #+#             */
-/*   Updated: 2024/06/06 10:14:49 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/06 17:18:39 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,15 +36,15 @@ int	ft_is_valid_arg(char c)
 
 char	*ft_str_find_env(char *arg)
 {
-	t_mini_env	*ms;
+	t_dblist	*envlst;
 
-	ms = get_ms();
-	while (ms->envlst)
+	envlst = get_ms()->envlst;
+	while (envlst)
 	{
-		if (!ft_strncmp(arg, ((t_variable *)ms->envlst->content)->name,
-				ft_strlen(arg)))
-			return (((t_variable *)ms->envlst->content)->value);
-		ms->envlst = ms->envlst->next;
+		if (!ft_strncmp(arg, ((t_variable *)envlst->content)->name,
+				ft_strlen(arg) - 1))
+			return (((t_variable *)envlst->content)->value);
+		envlst = envlst->next;
 	}
 	return (NULL);
 }

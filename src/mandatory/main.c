@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:09:05 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/06 12:10:08 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/06 17:22:21 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,34 +140,97 @@ int	print_balise(int last_exit)
 	return (0);
 }
 
+// void	ft_heredoc_go_expand(t_node *node)
+// {
+// 	char	*line;
+// 	int		tmp_fd;
+
+// 	if (node == NULL)
+// 		fprintf(stderr, "YOLO\n");
+// 	if (node->red_node != NULL && node->red_node->value != NULL)
+// 	{
+// 		if (node->red_node->type == NODE_HERE_DOC)
+// 		{
+// 			tmp_fd = open("/tmp/heredoc_expanded.tmp",
+// 					O_RDWR | O_CREAT | O_TRUNC, 0644);
+// 			if (tmp_fd < 0)
+// 			{
+// 				perror("open");
+// 				return ;
+// 			}
+// 			line = get_next_line(node->red_node->here_doc);
+// 			while (line)
+// 			{
+// 				ft_heredoc_expand(line, tmp_fd);
+// 				free(line);
+// 				line = get_next_line(node->red_node->here_doc);
+// 			}
+// 			// close(node->red_node->here_doc);
+// 			node->red_node->here_doc = tmp_fd;
+// 		}
+// 	}
+// }
+
 void	ft_heredoc_go_expand(t_node *node)
 {
-	char	*line;
 	int		tmp_fd;
+	char	*line;
+	char	buffer[1024];
+	ssize_t	bytes_read;
 
-	if (node == NULL)
-		fprintf(stderr, "YOLO\n");
-	if (node->red_node != NULL && node->red_node->value != NULL)
+	if (node->red_node->here_doc < 0)
 	{
-		if (node->red_node->type == NODE_HERE_DOC)
+		perror("open");
+		return ;
+	}
+	tmp_fd = open("/tmp/tmp_heredoc", O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (tmp_fd < 0)
+	{
+		perror("open");
+		close(node->red_node->here_doc);
+		return ;
+	}
+	while ((line = get_next_line(node->red_node->here_doc)) != NULL)
+	{
+		ft_heredoc_expand(line, tmp_fd);
+		free(line);
+	}
+	close(node->red_node->here_doc);
+	close(tmp_fd);
+	tmp_fd = open("/tmp/tmp_heredoc", O_RDONLY);
+	if (tmp_fd < 0)
+	{
+		perror("open");
+		return ;
+	}
+	int new_fd = open("/tmp/final_heredoc", O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (new_fd < 0)
+	{
+		perror("open");
+		close(tmp_fd);
+		return ;
+	}
+	while ((bytes_read = read(tmp_fd, buffer, sizeof(buffer))) > 0)
+	{
+		if (write(new_fd, buffer, bytes_read) != bytes_read)
 		{
-			tmp_fd = open("/tmp/heredoc_expanded.tmp",
-					O_RDWR | O_CREAT | O_TRUNC, 0644);
-			if (tmp_fd < 0)
-			{
-				perror("open");
-				return ;
-			}
-			line = get_next_line(node->red_node->here_doc);
-			while (line)
-			{
-				ft_heredoc_expand(line, tmp_fd);
-				free(line);
-				line = get_next_line(node->red_node->here_doc);
-			}
-			close(node->red_node->here_doc);
-			node->red_node->here_doc = tmp_fd;
+			perror("write");
+			close(new_fd);
+			close(tmp_fd);
+			return ;
 		}
+	}
+	if (bytes_read < 0)
+	{
+		perror("read");
+	}
+	close(new_fd);
+	close(tmp_fd);
+	node->red_node->here_doc = open("/tmp/final_heredoc", O_RDONLY);
+	if (node->red_node->here_doc < 0)
+	{
+		perror("open");
+		return ;
 	}
 }
 
@@ -181,10 +244,7 @@ void	exec_test(t_node *nodes)
 	while (tmp)
 	{
 		if (tmp->red_node != NULL)
-		{
 			ft_init_heredoc(tmp);
-			init_cmp(tmp);
-		}
 		dodge_cmd(&tmp);
 	}
 }
@@ -224,7 +284,6 @@ int	init_minishell(void)
 			ft_handle_parse_err(ms);
 			continue ;
 		}
-		// exec_parse(ms->nodes);
 		exec_test(ms->nodes);
 		start_exec(ms->nodes, &(ms->envlst));
 		free(line);
