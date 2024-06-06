@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 14:44:53 by skapersk          #+#    #+#             */
-/*   Updated: 2024/06/05 15:14:59 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/06 10:22:26 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,7 +129,11 @@ void	ft_compute_cmds(t_node *node)
 			&& node->red_node == NULL))
 		return ;
 	else if (node->sub != NULL)
+	{
 		ft_compute_cmds(node->sub);
+		ft_compute_cmds(node->next);
+		return ;
+	}
 	else if (node->red_node != NULL)
 	{
 		if (!ft_init_heredoc(node))

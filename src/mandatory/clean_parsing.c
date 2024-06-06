@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 12:30:19 by skapersk          #+#    #+#             */
-/*   Updated: 2024/06/03 18:12:32 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/06 10:19:05 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,10 @@ void	ft_clean_nodes(t_node *node)
 	if (tmp->red_node)
 		ft_free_red_nodes(tmp->red_node);
 	if (tmp->c_cmd)
+	{
 		ft_free_c_cmd_expand(tmp->c_cmd->expand);
+		free(tmp->c_cmd);
+	}
 	if (tmp->cmd)
 		free(tmp->cmd);
 }
