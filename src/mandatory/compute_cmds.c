@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 14:44:53 by skapersk          #+#    #+#             */
-/*   Updated: 2024/06/06 10:22:26 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/06 11:00:16 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,22 +123,22 @@ void	init_cmp(t_node *node)
 	cut_quotes(node->c_cmd->expand);
 }
 
-void	ft_compute_cmds(t_node *node)
-{
-	if (node == NULL || (node->cmd == NULL && node->sub == NULL
-			&& node->red_node == NULL))
-		return ;
-	else if (node->sub != NULL)
-	{
-		ft_compute_cmds(node->sub);
-		ft_compute_cmds(node->next);
-		return ;
-	}
-	else if (node->red_node != NULL)
-	{
-		if (!ft_init_heredoc(node))
-			return ;
-	}
-	init_cmp(node);
-	ft_compute_cmds(node->next);
-}
+// void	ft_compute_cmds(t_node *node)
+// {
+// 	if (node == NULL || (node->cmd == NULL && node->sub == NULL
+// 			&& node->red_node == NULL))
+// 		return ;
+// 	else if (node->sub != NULL)
+// 	{
+// 		ft_compute_cmds(node->sub);
+// 		ft_compute_cmds(node->next);
+// 		return ;
+// 	}
+// 	else if (node->red_node != NULL)
+// 	{
+// 		if (!ft_init_heredoc(node))
+// 			return ;
+// 	}
+// 	init_cmp(node);
+// 	ft_compute_cmds(node->next);
+// }

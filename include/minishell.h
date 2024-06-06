@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:09:27 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/05 15:51:23 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/06 11:39:43 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -462,5 +462,8 @@ void		*ft_garbage(void *str, t_bool clean);
 int			ft_heredoc_handle_dollar(char *str, int i, int fd);
 void		ft_heredoc_expand(char *str, int fd);
 int			ft_check_here_quotes(char *str);
+
+void		dodge_cmd(t_node **node);
+void		ft_heredoc_go_expand(t_node *node);
 
 #endif

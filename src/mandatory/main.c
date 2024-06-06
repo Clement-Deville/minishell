@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:09:05 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/05 15:24:24 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/06 12:10:08 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,6 +140,55 @@ int	print_balise(int last_exit)
 	return (0);
 }
 
+void	ft_heredoc_go_expand(t_node *node)
+{
+	char	*line;
+	int		tmp_fd;
+
+	if (node == NULL)
+		fprintf(stderr, "YOLO\n");
+	if (node->red_node != NULL && node->red_node->value != NULL)
+	{
+		if (node->red_node->type == NODE_HERE_DOC)
+		{
+			tmp_fd = open("/tmp/heredoc_expanded.tmp",
+					O_RDWR | O_CREAT | O_TRUNC, 0644);
+			if (tmp_fd < 0)
+			{
+				perror("open");
+				return ;
+			}
+			line = get_next_line(node->red_node->here_doc);
+			while (line)
+			{
+				ft_heredoc_expand(line, tmp_fd);
+				free(line);
+				line = get_next_line(node->red_node->here_doc);
+			}
+			close(node->red_node->here_doc);
+			node->red_node->here_doc = tmp_fd;
+		}
+	}
+}
+
+void	exec_test(t_node *nodes)
+{
+	t_node	*tmp;
+
+	tmp = nodes;
+	if (tmp == NULL)
+		return ;
+	while (tmp)
+	{
+		if (tmp->red_node != NULL)
+		{
+			ft_init_heredoc(tmp);
+			init_cmp(tmp);
+		}
+		dodge_cmd(&tmp);
+	}
+}
+
 int	init_minishell(void)
 {
 	char		*line;
@@ -175,8 +224,9 @@ int	init_minishell(void)
 			ft_handle_parse_err(ms);
 			continue ;
 		}
-		exec_parse(ms->nodes);
-		// start_exec(ms->nodes, &(ms->envlst));
+		// exec_parse(ms->nodes);
+		exec_test(ms->nodes);
+		start_exec(ms->nodes, &(ms->envlst));
 		free(line);
 	}
 	return (0);

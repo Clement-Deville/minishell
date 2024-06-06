@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 17:31:03 by skapersk          #+#    #+#             */
-/*   Updated: 2024/06/05 12:01:56 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/06 10:56:28 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,5 +45,5 @@ void	init_parsing(t_mini_env *ms)
 	if (ms->tokens)
 		ft_set_parse_err(E_SYNTAX);
 	ms->tokens = tmp;
-	ft_compute_cmds(ms->nodes);
+	// ft_compute_cmds(ms->nodes);
 }

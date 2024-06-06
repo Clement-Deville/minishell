@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 15:44:49 by skapersk          #+#    #+#             */
-/*   Updated: 2024/06/05 15:42:14 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/06 11:37:43 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,8 @@ void	ft_heredoc(t_red_node *node, int p[2])
 			break ;
 		if (ft_is_delimiter(node->value, line))
 			break ;
-		if (!*quotes)
-			ft_heredoc_expand(line, p[1]);
+		// if (!*quotes)
+		// 	ft_heredoc_expand(line, p[1]);
 		else
 		{
 			ft_putstr_fd(line, p[1]);
