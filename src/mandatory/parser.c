@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:22:01 by skapersk          #+#    #+#             */
-/*   Updated: 2024/06/10 18:52:20 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/10 19:26:51 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ t_node	*ft_start(t_mini_env *ms, int min_prec)
 			return (ft_set_parse_err(E_MEMORY), NULL);
 		if (ms->tokens && ms->tokens->type == TOKEN_SUBSHELL_CLOSE)
 			ms->tokens = ms->tokens->next;
-		if (ft_is_redir(ms->tokens->type))
+		if (ms->tokens && ft_is_redir(ms->tokens->type))
 		{
 			if (!ft_get_red_node(&(node->red_node), ms))
 				return (NULL);
