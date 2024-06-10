@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 11:47:07 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/10 13:41:48 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/10 14:06:48 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -332,14 +332,16 @@ int	exec_sub(t_node *subnode, t_dblist **env)
 
 t_bool	is_subshell(t_node *node)
 {
-	if ((node)->sub_node)
+	if ((node)->sub)
 		return (TRUE);
 	return (FALSE);
 }
 
 int	exec_single(t_node **node, t_dblist **env)
 {
-	if (is_builtin(*node))
+	if (is_subshell(*node))
+		return (exec_sub((*node)->sub, env));
+	else if (is_builtin(*node))
 		return (exec_builtin((*node), env));
 	else
 		return (exec_standard(node, env));
@@ -362,8 +364,6 @@ int	exec_cmd(t_node **node, t_dblist **env)
 
 	if (is_pipeline(*node))
 		status = exec_pipeline(node, env);
-	else if ((*node)->sub != NULL)
-		status = exec_sub((*node)->sub, env);
 	else
 		status = exec_single(node, env);
 	return (status);
