@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 18:42:42 by cdeville          #+#    #+#             */
-/*   Updated: 2024/05/31 18:51:29 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/10 14:30:09 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,11 @@ int	do_exit(t_node *node)
 
 	argument = node->c_cmd->expand[1];
 	if (argument == NULL)
+	{
+		if (get_ms()->parent == TRUE && node->silent == FALSE)
+			ft_putendl_fd("exit", 2);
 		exit (0);
+	}
 	if (is_numeric(argument) == FALSE)
 	{
 		if (node->silent == FALSE)
@@ -126,5 +130,7 @@ int	do_exit(t_node *node)
 		return (2);
 	}
 	//DOIT AFFICHER EXIT DANS LE PARENT
+	if (get_ms()->parent == TRUE && node->silent == FALSE)
+		ft_putendl_fd("exit", 2);
 	exit ((unsigned char)ft_atoi(argument));
 }

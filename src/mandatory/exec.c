@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 11:47:07 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/10 14:06:48 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/10 14:25:17 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -295,6 +295,7 @@ int	exec_sub(t_node *subnode, t_dblist **env)
 		// fprintf(stderr, "%s\n", subnode->cmd);
 		// if (do_redirections(subnode))
 		// 	exit (1);
+		get_ms()->parent = FALSE;
 		exit (start_exec(subnode, env));
 	}
 	get_ms()->exit = do_wait(pid);

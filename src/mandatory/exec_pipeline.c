@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 14:51:19 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/10 12:06:22 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/10 14:24:46 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,6 +134,7 @@ int	do_fork(t_node **node, int i, int *pipefd, t_dblist **env)
 		return (free(pipefd), perror("Fork error"), 1);
 	if (are_in_child((*node)->pid))
 	{
+		get_ms()->parent = FALSE;
 		if (i > 0)
 			if (connect_read(&pipefd[2 * i]) == 1)
 				return (1);

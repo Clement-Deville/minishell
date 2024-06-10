@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:09:05 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/10 13:38:27 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/10 14:34:25 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -257,6 +257,7 @@ int	init_minishell(void)
 	t_mini_env	*ms;
 
 	ms = get_ms();
+	ms->parent = TRUE;
 	while (1)
 	{
 		print_balise(get_ms()->exit);
@@ -269,7 +270,10 @@ int	init_minishell(void)
 		if (line == NULL)
 		{
 			if (get_ms()->signal == FALSE)
+			{
+				ft_putendl_fd("\nexit", 2);
 				exit (get_ms()->exit);
+			}
 			else
 			{
 				get_ms()->signal = FALSE;
