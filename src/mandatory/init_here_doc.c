@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_here_doc.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 15:44:49 by skapersk          #+#    #+#             */
-/*   Updated: 2024/06/06 16:30:02 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/10 13:42:01 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,8 +84,6 @@ int	ft_init_heredoc(t_node *node)
 	int	p[2];
 	int	pid;
 
-	if (node == NULL)
-		fprintf(stderr, "YOLO\n");
 	if (node->red_node != NULL && node->red_node->value != NULL)
 	{
 		if (node->red_node->type == NODE_HERE_DOC)

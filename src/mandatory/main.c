@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:09:05 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/06 17:22:21 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/10 13:38:27 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -245,6 +245,8 @@ void	exec_test(t_node *nodes)
 	{
 		if (tmp->red_node != NULL)
 			ft_init_heredoc(tmp);
+		else if (tmp->sub != NULL)
+			exec_test(tmp->sub);
 		dodge_cmd(&tmp);
 	}
 }
@@ -284,6 +286,7 @@ int	init_minishell(void)
 			ft_handle_parse_err(ms);
 			continue ;
 		}
+		// exec_parse(ms->nodes);
 		exec_test(ms->nodes);
 		start_exec(ms->nodes, &(ms->envlst));
 		free(line);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 11:47:07 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/06 16:52:38 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/10 13:41:48 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -283,31 +283,52 @@ int	exec_standard(t_node **node, t_dblist **env)
 	return (status);
 }
 
-int	exec_subshell(t_node **node, t_dblist **env)
+int	exec_sub(t_node *subnode, t_dblist **env)
 {
-	int		pid;
-	char	**tab_env;
-	int		status;
+	int	pid;
 
-	// GERER la transmission des ENO CRITICAL et la gestion de la memoire pour chaqeu process
 	pid = fork();
 	if (pid < 0)
-		return (perror("Fork error"), ENO_CRITICAL);
+		return (perror("Fork"), ENO_CRITICAL);
 	if (pid == 0)
 	{
-		if (do_redirections(*node))
-			exit (1);
-		tab_env = list_to_tab(*env);
-		if (tab_env == NULL)
-			exit (1);
-		exit (main_subshell(ft_strlen((*node)->sub_node->args), (*node)->sub_node->args, tab_env));
+		// fprintf(stderr, "%s\n", subnode->cmd);
+		// if (do_redirections(subnode))
+		// 	exit (1);
+		exit (start_exec(subnode, env));
 	}
-	status = do_wait(pid);
-	return (status);
-	(void)node;
-	(void)env;
-	return (0);
+	get_ms()->exit = do_wait(pid);
+	if (get_ms()->exit == -1)
+		return (ENO_CRITICAL);
+	return (get_ms()->exit);
+	// Need to leave program properly
 }
+
+// int	exec_subshell(t_node **node, t_dblist **env)
+// {
+// 	int		pid;
+// 	char	**tab_env;
+// 	int		status;
+
+// 	// GERER la transmission des ENO CRITICAL et la gestion de la memoire pour chaqeu process
+// 	pid = fork();
+// 	if (pid < 0)
+// 		return (perror("Fork error"), ENO_CRITICAL);
+// 	if (pid == 0)
+// 	{
+// 		if (do_redirections(*node))
+// 			exit (1);
+// 		tab_env = list_to_tab(*env);
+// 		if (tab_env == NULL)
+// 			exit (1);
+// 		exit (main_subshell(ft_strlen((*node)->sub_node->args), (*node)->sub_node->args, tab_env));
+// 	}
+// 	status = do_wait(pid);
+// 	return (status);
+// 	(void)node;
+// 	(void)env;
+// 	return (0);
+// }
 
 t_bool	is_subshell(t_node *node)
 {
@@ -320,8 +341,6 @@ int	exec_single(t_node **node, t_dblist **env)
 {
 	if (is_builtin(*node))
 		return (exec_builtin((*node), env));
-	else if (is_subshell(*node))
-		return (exec_subshell(node, env));
 	else
 		return (exec_standard(node, env));
 }
@@ -343,6 +362,8 @@ int	exec_cmd(t_node **node, t_dblist **env)
 
 	if (is_pipeline(*node))
 		status = exec_pipeline(node, env);
+	else if ((*node)->sub != NULL)
+		status = exec_sub((*node)->sub, env);
 	else
 		status = exec_single(node, env);
 	return (status);
@@ -383,7 +404,6 @@ int	exec_cmd(t_node **node, t_dblist **env)
 // 	return (status);
 // }
 
-
 int	start_exec(t_node *node, t_dblist **env)
 {
 	int	exit_value;
@@ -393,12 +413,7 @@ int	start_exec(t_node *node, t_dblist **env)
 		return (1);
 	while (node)
 	{
-		if (node->sub != NULL)
-		{
-			start_exec(node->sub, env);
-			dodge_cmd(&node);
-		}
-		else if (node->red_node != NULL)
+		if (node->red_node != NULL && node->red_node->here_doc != 0)
 			ft_heredoc_go_expand(node);
 		init_cmp(node);
 		if (node->left && ((node->left->type == TOKEN_AND && get_ms()->exit != 0)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   compute_cmds.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 14:44:53 by skapersk          #+#    #+#             */
-/*   Updated: 2024/06/06 15:21:50 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/10 09:55:11 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,8 @@ void	init_cmp(t_node *node)
 	char	**tmp;
 
 	tmp = NULL;
+	if (node == NULL)
+		return ;
 	if (!init_node(node))
 	{
 		free_node(node);
