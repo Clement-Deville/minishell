@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 19:29:26 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/10 13:40:15 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/10 18:07:26 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	set_input(char *filename, t_node *node)
 	{
 		node->pid = NO_FORK;
 		node->status = 1;
-		return (perror(filename), 0);
+		return (perror(filename), 1);
 	}
 	fd = open(filename, O_RDONLY);
 	if (fd == -1)
@@ -29,7 +29,7 @@ int	set_input(char *filename, t_node *node)
 		{
 			node->pid = NO_FORK;
 			node->status = 1;
-			return (perror(filename), 0);
+			return (perror(filename), 1);
 		}
 		return (perror("Open"), -1);
 	}
@@ -37,7 +37,7 @@ int	set_input(char *filename, t_node *node)
 		return (perror("Dup2 error"), -1);
 	if (close(fd) == -1)
 		return (perror("Close error"), -1);
-	return (fd);
+	return (0);
 }
 
 int	set_output(char *filename, t_node *node)
@@ -48,7 +48,7 @@ int	set_output(char *filename, t_node *node)
 	{
 		node->pid = NO_FORK;
 		node->status = 1;
-		return (perror(filename), 0);
+		return (perror(filename), 1);
 	}
 	fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0777);
 	if (fd == -1)
@@ -57,7 +57,7 @@ int	set_output(char *filename, t_node *node)
 		{
 			node->pid = NO_FORK;
 			node->status = 1;
-			return (perror(filename), 0);
+			return (perror(filename), 1);
 		}
 		return (perror("Open"), -1);
 	}
@@ -65,7 +65,7 @@ int	set_output(char *filename, t_node *node)
 		return (perror("Dup2 error"), -1);
 	if (close(fd) == -1)
 		return (perror("Close error"), -1);
-	return (fd);
+	return (0);
 }
 
 int	set_output_append(char *filename, t_node *node)
@@ -76,7 +76,7 @@ int	set_output_append(char *filename, t_node *node)
 	{
 		node->pid = NO_FORK;
 		node->status = 1;
-		return (perror(filename), 0);
+		return (perror(filename), 1);
 	}
 	fd = open(filename, O_WRONLY | O_CREAT | O_APPEND, 0777);
 	if (fd == -1)
@@ -85,7 +85,7 @@ int	set_output_append(char *filename, t_node *node)
 		{
 			node->pid = NO_FORK;
 			node->status = 1;
-			return (perror(filename), 0);
+			return (perror(filename), 1);
 		}
 		return (perror("Open"), -1);
 	}
@@ -93,7 +93,7 @@ int	set_output_append(char *filename, t_node *node)
 		return (-1);
 	if (do_close(fd) == -1)
 		return (-1);
-	return (fd);
+	return (0);
 }
 
 int	set_input_here_doc(int fd)
@@ -125,7 +125,9 @@ int	do_redirections(t_node *node)
 		else if (tmp->type == NODE_APPEND)
 			status = set_output_append(tmp->value, node);
 		if (status == -1)
-			return (1);
+			return (-1);
+		if (status)
+			return (status);
 		tmp = tmp->next;
 	}
 	return (0);

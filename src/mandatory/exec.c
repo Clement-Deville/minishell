@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 11:47:07 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/10 14:25:17 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/10 19:10:40 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,6 +141,7 @@ int	exec_builtin(t_node *node, t_dblist **env)
 	int		pid;
 	int		status;
 	char	**command;
+	int		red_status;
 
 
 	command = node->c_cmd->expand;
@@ -151,7 +152,13 @@ int	exec_builtin(t_node *node, t_dblist **env)
 		return (perror("Fork error"), ENO_CRITICAL);
 	if (pid == 0)
 	{
-		if (do_redirections(node))
+		red_status = do_redirections(node);
+		if (red_status == -1)
+		{
+			return (ENO_CRITICAL);
+			// NEED TO EXIT?
+		}
+		if (red_status)
 			exit (1);
 		if (ft_strncmp(command[0], "echo", 6) == 0)
 			if (do_echo(command))
@@ -259,6 +266,7 @@ int	exec_standard(t_node **node, t_dblist **env)
 	int		pid;
 	char	**tab_env;
 	int		status;
+	int		red_status;
 
 	pid = fork();
 	if (pid < 0)
@@ -266,7 +274,13 @@ int	exec_standard(t_node **node, t_dblist **env)
 	if (pid == 0)
 	{
 		set_child_signals();
-		if (do_redirections(*node))
+		red_status = do_redirections(*node);
+		if (red_status == -1)
+		{
+			return (ENO_CRITICAL);
+			// NEED TO EXIT?
+		}
+		if (red_status)
 			exit (1);
 		access_status = check_for_path_access(&((*node)->c_cmd->expand[0]), *env);
 		if (access_status == -1)
@@ -283,10 +297,13 @@ int	exec_standard(t_node **node, t_dblist **env)
 	return (status);
 }
 
-int	exec_sub(t_node *subnode, t_dblist **env)
+int	exec_sub(t_node *node, t_dblist **env)
 {
 	int	pid;
+	int	red_status;
+	t_node	*subnode;
 
+	subnode = node->sub;
 	pid = fork();
 	if (pid < 0)
 		return (perror("Fork"), ENO_CRITICAL);
@@ -295,6 +312,21 @@ int	exec_sub(t_node *subnode, t_dblist **env)
 		// fprintf(stderr, "%s\n", subnode->cmd);
 		// if (do_redirections(subnode))
 		// 	exit (1);
+		// if ((node)->next->red_node !=NULL)
+        // {
+        //     if (do_redirections((node)->next))
+        //     {
+        //         exit (1);
+        //     }
+        // }
+		red_status = do_redirections(node);
+		if (red_status == -1)
+		{
+			return (ENO_CRITICAL);
+			// NEED TO EXIT?
+		}
+		if (red_status)
+			exit (1);
 		get_ms()->parent = FALSE;
 		exit (start_exec(subnode, env));
 	}
@@ -338,10 +370,100 @@ t_bool	is_subshell(t_node *node)
 	return (FALSE);
 }
 
+t_bool	is_not_a_cmd(t_node *node)
+{
+	if (node->c_cmd->expand == NULL)
+		return (TRUE);
+	return (FALSE);
+}
+
+int	fake_set_input(char *filename)
+{
+	int	fd;
+
+	if (access(filename, R_OK) != 0)
+		return (perror(filename), 1);
+	fd = open(filename, O_RDONLY);
+	if (fd == -1)
+	{
+		if (errno == EACCES)
+			return (perror(filename), 1);
+		return (perror("Open"), -1);
+	}
+	if (close(fd) == -1)
+		return (perror("Close error"), -1);
+	return (0);
+}
+
+int	fake_set_output(char *filename)
+{
+	int	fd;
+
+	if (access(filename, W_OK) != 0 && errno != ENOENT)
+		return (perror(filename), 1);
+	fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0777);
+	if (fd == -1)
+	{
+		if (errno == EACCES)
+			return (perror(filename), 1);
+		return (perror("Open"), -1);
+	}
+	if (close(fd) == -1)
+		return (perror("Close error"), -1);
+	return (0);
+}
+
+int	fake_set_output_append(char *filename)
+{
+	int	fd;
+
+	if (access(filename, W_OK) != 0 && errno != ENOENT)
+		return (perror(filename), 1);
+	fd = open(filename, O_WRONLY | O_CREAT | O_APPEND, 0777);
+	if (fd == -1)
+	{
+		if (errno == EACCES)
+			return (perror(filename), 1);
+		return (perror("Open"), -1);
+	}
+	if (do_close(fd) == -1)
+		return (-1);
+	return (0);
+}
+
+int do_no_cmd(t_node *node)
+{
+	t_red_node	*tmp;
+	int			status;
+
+	if (node->red_node == NULL)
+		return (0);
+	status = 0;
+	tmp = node->red_node;
+	while (tmp)
+	{
+		if (tmp->type == NODE_RED_IN)
+			status = fake_set_input(tmp->value);
+		else if (tmp->type == NODE_RED_OUT)
+			status = fake_set_output(tmp->value);
+		else if (tmp->type == NODE_APPEND)
+			status = fake_set_output_append(tmp->value);
+		if (status == -1)
+			return (ENO_CRITICAL);
+		if (status)
+			return (status);
+		// NEED TO EXIT ?
+		tmp = tmp->next;
+	}
+	return (0);
+}
+
 int	exec_single(t_node **node, t_dblist **env)
 {
+	if (is_not_a_cmd(*node) && !(*node)->sub)
+		return (do_no_cmd(*node));
 	if (is_subshell(*node))
-		return (exec_sub((*node)->sub, env));
+		return (exec_sub((*node),  env));
 	else if (is_builtin(*node))
 		return (exec_builtin((*node), env));
 	else

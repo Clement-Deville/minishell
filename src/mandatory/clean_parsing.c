@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   clean_parsing.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 12:30:19 by skapersk          #+#    #+#             */
-/*   Updated: 2024/06/06 10:19:05 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/10 17:32:20 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,4 +90,5 @@ void	ft_clear_parsing(t_node *nodes)
 		ft_clear_parsing(nodes->next);
 		free(nodes);
 	}
+	// NEED TO CLOSE HERE DOC FDS
 }

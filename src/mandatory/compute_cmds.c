@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 14:44:53 by skapersk          #+#    #+#             */
-/*   Updated: 2024/06/10 09:55:11 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/10 17:22:26 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,6 +123,7 @@ void	init_cmp(t_node *node)
 		return ;
 	}
 	cut_quotes(node->c_cmd->expand);
+	// NEED TO HANDLE ERROR CASE
 }
 
 // void	ft_compute_cmds(t_node *node)

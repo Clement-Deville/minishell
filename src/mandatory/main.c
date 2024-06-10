@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:09:05 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/10 15:42:40 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/10 19:09:21 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ void	do_node(t_node *node)
 	{
 		while (node->red_node)
 		{
+			ft_printf("------ %p ------\n", node);
 			ft_printf("%s with ", convert2(node->red_node->type));
 			ft_printf("%s \n", node->red_node->value);
 			node->red_node = node->red_node->next;
@@ -60,7 +61,10 @@ void	do_node(t_node *node)
 		ft_printf("Command: %s\n", node->cmd);
 	else if (node->sub != NULL)
 	{
+		ft_printf("----- %p -----\n", node);
 		ft_printf("Subshell: ");
+		ft_printf("----- sub : %p -----\n", node->sub);
+
 		exec_parse(node->sub);
 	}
 	if (node->left != NULL)
