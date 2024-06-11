@@ -6,11 +6,23 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 13:23:24 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/11 16:17:06 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/11 16:44:45 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+char	*catch_value(char *name, t_dblist *env)
+{
+	while (env)
+	{
+		if (ft_strncmp(name, (((t_variable *)(env->content))->name),
+			ft_strlen(name)) == 0)
+			break ;
+		env = env->next;
+	}
+	return ((((t_variable *)(env->content))->value));
+}
 
 void	print_variable(void *content)
 {

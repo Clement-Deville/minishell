@@ -6,11 +6,33 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 17:49:40 by cdeville          #+#    #+#             */
-/*   Updated: 2024/05/30 15:56:20 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/11 16:50:58 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
+
+int	change_to_home(t_node *node, t_dblist **env)
+{
+	char	*home_path;
+
+	home_path = catch_value("HOME", *env);
+	if (home_path == NULL)
+	{
+		ft_putendl_fd("cd: HOME not set", 2);
+		return (1);
+	}
+	else
+	{
+		if (chdir(home_path) == -1)
+		{
+			if (node->silent == FALSE)
+				perror("Error when changing dir");
+			return (-1);
+		}
+	}
+	return (0);
+}
 
 int	do_cd(t_node *node, t_dblist **env)
 {
@@ -20,7 +42,9 @@ int	do_cd(t_node *node, t_dblist **env)
 
 	directory = node->c_cmd->expand[1];
 	if (directory == NULL)
-		return (perror("Malloc error"), -1);
+	{
+		return (change_to_home(node, env));
+	}
 	if (chdir(directory) == -1)
 	{
 		if (node->silent == FALSE)

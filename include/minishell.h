@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:09:27 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/11 16:12:19 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/11 16:44:57 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -215,6 +215,7 @@ void		print_export(t_dblist *env);
 // ENV
 
 t_dblist	*generate_env(char **envp);
+char		*catch_value(char *name, t_dblist *env);
 
 // VARIABLES
 
