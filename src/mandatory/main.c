@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:09:05 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/10 19:09:21 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/11 14:55:13 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,21 +127,30 @@ int	main_subshell(int ac, char *av, char **env)
 // 	return (ms->exit);
 // }
 
-int	print_balise(int last_exit)
+char	*get_balise(void)
 {
-	ft_printf("\r");
-	ft_printf("\033[K");
+	// ft_printf("\r");
+	// ft_printf("\033[K");
 	char	*current_dir_name;
-	char	*color;
+	char	color[8];
+	char	*balise;
 
 	current_dir_name = getcwd(NULL, 0);
-	if (last_exit)
-		color = "\e[1;31m";
+	if (get_ms()->exit)
+		ft_strlcpy(color, "\e[1;31m", 9);
 	else
-		color = "\e[0;32m";
-	ft_printf("%s\u2192  \e[1;36m%s \e[0m", color, current_dir_name);
-	free(current_dir_name);
-	return (0);
+		ft_strlcpy(color, "\e[0;32m", 9);
+	// ft_printf("%s\u2192  \e[1;36m%s \e[0m", color, current_dir_name);
+	balise = ft_strjoin(color, "\u2192  \001\033[1;36m");
+	if (balise)
+	{
+		balise = ft_strjoin(balise, current_dir_name);
+		balise = ft_strjoin(balise, " \e[0m");
+		// free (tmp);
+	}
+	if (current_dir_name)
+		free(current_dir_name);
+	return (balise);
 }
 
 // void	ft_heredoc_go_expand(t_node *node)
@@ -257,36 +266,33 @@ void	exec_test(t_node *nodes)
 
 int	init_minishell(void)
 {
-	char		*line;
 	t_mini_env	*ms;
+	char	*balise;
 
 	ms = get_ms();
 	ms->parent = TRUE;
 	while (1)
 	{
-		print_balise(get_ms()->exit);
-		line = get_next_line(0);
+		if (get_ms()->line)
+		{
+			free(get_ms()->line);
+			get_ms()->line = NULL;
+		}
+		balise = get_balise();
+		get_ms()->line = readline(balise);
+		// free(balise);
 		// if (line == NULL)
 		// {
 		// 	ft_printf("Erreur : pointeur de ligne de commande nul\n");
 		// 	return (0);
 		// }
-		if (line == NULL)
+		if (get_ms()->line == NULL)
 		{
-			if (get_ms()->signal == FALSE)
-			{
-				ft_putendl_fd("\nexit", 2);
-				exit (get_ms()->exit);
-			}
-			else
-			{
-				get_ms()->signal = FALSE;
-				continue ;
-			}
+			ft_putendl_fd("exit", 2);
+			exit (get_ms()->exit);
 		}
-		get_ms()->line = line;
-		if (!ft_strncmp("stop\n", line, ft_strlen(line)))
-			break ;
+		else if (get_ms()->line[0])
+			add_history(get_ms()->line);
 		ft_tokenization(ms);
 		init_parsing(ms);
 		if (get_ms()->err.str)
@@ -297,7 +303,6 @@ int	init_minishell(void)
 		// exec_parse(ms->nodes);
 		exec_test(ms->nodes);
 		start_exec(ms->nodes, &(ms->envlst));
-		free(line);
 	}
 	return (0);
 }

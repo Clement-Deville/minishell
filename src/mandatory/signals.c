@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 17:28:01 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/03 11:59:37 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/11 14:59:17 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,25 @@
 
 void	do_parse_new(void)
 {
-	ft_printf("\033[D\033[D\033[K\n");
-	get_ms()->exit = 130;
-	print_balise(get_ms()->exit);
+	char	*new_prompt;
+
 	get_ms()->signal = TRUE;
-	// print_balise(0);
-	// init_minishell();
+	get_ms()->exit = 130;
+	new_prompt = get_balise();
+	// if NULL exit CRITICAL
+	rl_set_prompt(new_prompt);
+	ft_printf("\n");
+	rl_on_new_line ();
+	rl_replace_line("", 0);
+	rl_redisplay();
+	free(new_prompt);
 }
 
 void	do_nothing(void)
 {
 	get_ms()->signal = TRUE;
+	free(get_ms()->line);
+	get_ms()->line = NULL;
 }
 void	handle_signal(int signo)
 {
@@ -65,10 +73,11 @@ int	setup_signals(void)
 		perror("Error sigaction");
 		return (1);
 	}
-	ignore.sa_handler = SIG_IGN;
-	sigemptyset(&ignore.sa_mask);
-	ignore.sa_flags = 0;
-	if (sigaction(SIGQUIT, &ignore, NULL) == -1)
+	(void)ignore;
+	sa.sa_handler = handle_signal;
+	sigemptyset(&sa.sa_mask);
+	sa.sa_flags = 0;
+	if (sigaction(SIGQUIT, &sa, NULL) == -1)
 	{
 		perror("Error sigaction");
 		return (1);

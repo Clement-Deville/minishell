@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 11:33:00 by cdeville          #+#    #+#             */
-/*   Updated: 2024/05/31 18:44:05 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/11 13:37:59 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,4 +67,5 @@ int	do_echo(char **args)
 	if (opt == 0)
 		ft_putstr_fd("\n", 1);
 	return (0);
+	// A VERIFIER
 }

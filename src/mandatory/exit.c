@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 18:42:42 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/10 14:30:09 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/11 13:37:26 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,4 +133,5 @@ int	do_exit(t_node *node)
 	if (get_ms()->parent == TRUE && node->silent == FALSE)
 		ft_putendl_fd("exit", 2);
 	exit ((unsigned char)ft_atoi(argument));
+	// DOIT EXIT MEME SI LES ARG SONT MAUVAIS
 }

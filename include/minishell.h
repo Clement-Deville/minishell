@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:09:27 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/10 14:21:20 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/11 13:21:10 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -361,7 +361,7 @@ int			do_pipe(int pipfd[2]);
 
 // main.c
 
-int			print_balise(int last_exit);
+char		*get_balise(void);
 int			init_minishell(void);
 
 void		init_cmp(t_node *node);
