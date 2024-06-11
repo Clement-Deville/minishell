@@ -6,11 +6,23 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 10:59:15 by cdeville          #+#    #+#             */
-/*   Updated: 2024/05/23 16:35:50 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/11 16:16:47 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
+
+int	nbr_of_args(char **args)
+{
+	int	i;
+
+	i = 0;
+	if (args == NULL)
+		return (0);
+	while (args[i] && args[i + 1])
+		i++;
+	return (i);
+}
 
 t_bool	no_value(char *argument)
 {

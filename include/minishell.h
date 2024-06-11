@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:09:27 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/11 15:01:19 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/11 16:12:19 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -200,7 +200,7 @@ typedef struct s_mini_env
 
 int			do_echo(char **args);
 int			do_pwd(void);
-int			do_env(t_dblist *env);
+int			do_env(t_node *node, t_dblist *env);
 int			do_export(t_node *node, t_dblist **env);
 int			do_exit(t_node *node);
 
@@ -252,6 +252,7 @@ t_bool		no_value(char *argument);
 t_bool		name_exists(char *argument, t_dblist *env);
 void		print_variable(void *content);
 void		print_variable_export(void *content);
+int			nbr_of_args(char **args);
 
 // exec_pipeline
 
