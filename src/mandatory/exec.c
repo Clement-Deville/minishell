@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 11:47:07 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/11 16:11:51 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/11 17:08:08 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,7 +173,7 @@ int	exec_builtin(t_node *node, t_dblist **env)
 			if (do_env(node, *env))
 				exit (1);
 		if (ft_strncmp(command[0], "pwd", 4) == 0)
-			if (do_pwd())
+			if (do_pwd(node))
 				exit (1);
 		if (ft_strncmp(command[0], "unset", 7) == 0)
 			if (do_unset(&command[1], env))

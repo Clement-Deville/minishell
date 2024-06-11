@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:09:27 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/11 16:44:57 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/11 17:10:08 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -199,7 +199,7 @@ typedef struct s_mini_env
 // BUILT-IN COMMANDS
 
 int			do_echo(char **args);
-int			do_pwd(void);
+int			do_pwd(t_node *node);
 int			do_env(t_node *node, t_dblist *env);
 int			do_export(t_node *node, t_dblist **env);
 int			do_exit(t_node *node);
