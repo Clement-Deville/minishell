@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_here_doc.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
+/*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 15:44:49 by skapersk          #+#    #+#             */
-/*   Updated: 2024/06/10 13:42:01 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/11 13:14:53 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,9 +49,7 @@ void	ft_heredoc(t_red_node *node, int p[2])
 	while (1)
 	{
 		line = readline("> ");
-		if (!line)
-			break ;
-		if (ft_is_delimiter(node->value, line))
+		if (!line || ft_is_delimiter(node->value, line))
 			break ;
 		else
 		{

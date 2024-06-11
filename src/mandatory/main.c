@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
+/*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:09:05 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/10 19:09:21 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/11 13:17:12 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,7 +181,13 @@ void	ft_heredoc_go_expand(t_node *node)
 	char	*line;
 	char	buffer[1024];
 	ssize_t	bytes_read;
+	char	*quotes;
 
+	quotes = node->red_node->value;
+	while (*quotes && *quotes != '"' && *quotes != '\'')
+		quotes++;
+	if (*quotes)
+		return ;
 	if (node->red_node->here_doc < 0)
 	{
 		perror("open");
