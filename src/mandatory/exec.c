@@ -535,7 +535,11 @@ int	start_exec(t_node *node, t_dblist **env)
 	{
 		if (node->red_node != NULL && node->red_node->here_doc != 0)
 			ft_heredoc_go_expand(node);
-		init_cmp(node);
+		if (!init_cmp(node))
+		{
+			ft_handle_parse_err(get_ms());
+			return (1);
+		}
 		if (node->left && ((node->left->type == TOKEN_AND && get_ms()->exit != 0)
 				|| (node->left->type == TOKEN_OR && get_ms()->exit == 0)))
 			dodge_cmd(&node);

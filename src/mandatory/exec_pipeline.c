@@ -240,7 +240,10 @@ int	start_piping(t_node **node, t_dblist **env)
 	while (is_pipe_cmd(*node))
 	{
 		if (i)
-			init_cmp(*node);
+		{
+			if (!init_cmp(*node))
+				return (free(pipefd), 1);
+		}
 		if (is_pipe_cmd((*node)->next) && pipe(&pipefd[2 * i]) == -1)
 			return (free(pipefd), perror("Pipe error"), 1);
 		if ((*node)->status == -1)

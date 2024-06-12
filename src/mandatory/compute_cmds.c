@@ -100,29 +100,30 @@ void	cut_quotes(char **str)
 	}
 }
 
-void	init_cmp(t_node *node)
+int	init_cmp(t_node *node)
 {
 	char	**tmp;
 
 	tmp = NULL;
 	if (node == NULL)
-		return ;
+		return (0);
 	if (!init_node(node))
 	{
 		free_node(node);
-		return ;
+		return (0);
 	}
 	if (node->cmd != NULL)
 		tmp = ft_expand(node->cmd, node);
 	if (!tmp)
-		return ;
+		return (0);
 	node->c_cmd->expand = ft_handle_wildcard(tmp, node);
 	if (!node->c_cmd->expand)
 	{
 		free_node(node);
-		return ;
+		return (0);
 	}
 	cut_quotes(node->c_cmd->expand);
+	return (1);
 	// NEED TO HANDLE ERROR CASE
 }
 

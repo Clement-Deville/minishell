@@ -367,8 +367,6 @@ int			do_pipe(int pipfd[2]);
 char		*get_balise(void);
 int			init_minishell(void);
 
-void		init_cmp(t_node *node);
-
 # define NO_FORK -2
 # define WRITE 1
 # define READ 0
@@ -418,7 +416,7 @@ char		*clean_node(char *str);
 char		**ft_expand(char *str, t_node *node);
 char		*remove_quotes_from_str(char *str);
 void		cut_quotes(char **str);
-void		init_cmp(t_node *node);
+int			init_cmp(t_node *node);
 void		ft_compute_cmds(t_node *node);
 
 //compute_handle_arg.c
