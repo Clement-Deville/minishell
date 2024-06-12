@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
+/*   By: adam <adam@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 11:47:07 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/11 17:08:08 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/12 18:07:54 by adam             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -529,9 +529,6 @@ int	exec_cmd(t_node **node, t_dblist **env)
 
 int	start_exec(t_node *node, t_dblist **env)
 {
-	int	exit_value;
-
-	exit_value = 0;
 	if (node == NULL)
 		return (1);
 	while (node)

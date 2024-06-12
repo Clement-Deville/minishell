@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   path.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
+/*   By: adam <adam@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 18:18:34 by cdeville          #+#    #+#             */
-/*   Updated: 2024/05/23 15:17:45 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/12 18:08:11 by adam             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,6 @@
 
 char	*get_path(t_dblist *env)
 {
-	int	i;
-
-	i = 0;
 	while (env)
 	{
 		if (ft_strncmp("PATH", ((t_variable *)(env->content))->name, 5) == 0)

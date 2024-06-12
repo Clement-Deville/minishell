@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   clean_env.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: adam <adam@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 17:41:03 by skapersk          #+#    #+#             */
-/*   Updated: 2024/06/05 15:50:24 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/12 18:07:20 by adam             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,6 @@ void	free_variable(void *content)
 
 void	ft_clear_envlst(t_mini_env *mini_s)
 {
-	int	i;
-
-	i = 0;
 	if (mini_s->envlst)
 		ft_dblstclear(&mini_s->envlst, free_variable);
 }

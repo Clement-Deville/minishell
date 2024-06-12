@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   access.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
+/*   By: adam <adam@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/23 11:16:12 by cdeville          #+#    #+#             */
-/*   Updated: 2024/05/23 15:15:44 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/12 18:44:25 by adam             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,8 @@ int	check_for_all(char **paths, char **cmd)
 
 	i = 0;
 	access_denied_path = NULL;
+	if (cmd && *cmd[0] == 0)
+		return (print_not_found(""), -1);
 	while (paths[i])
 	{
 		access_status = check_command_access(paths[i]);
