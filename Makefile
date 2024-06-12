@@ -6,6 +6,10 @@ CC = cc
 
 FLAGS = -Wall -Wextra -Werror
 
+VAL_HIDE := readline.hide
+
+VAL_FLAGS := --leak-check=full --show-leak-kinds=all -s --track-fds=yes  --trace-children=yes --suppressions=$(VAL_HIDE)
+
 DEBUG = -g
 
 SRCS_FILES =	main	\
@@ -80,6 +84,9 @@ OBJS_B =	$(addprefix $(OBJS_DIR), $(addsuffix .o, $(SRCS_FILES_BONUS)))
 .PHONY: all clean fclean re bonus norminette
 
 all: $(NAME)
+
+val: $(NAME)
+	valgrind $(VAL_FLAGS) ./$(NAME)
 
 bonus: $(NAME_B)
 
