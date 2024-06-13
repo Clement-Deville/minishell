@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_here_doc.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 15:44:49 by skapersk          #+#    #+#             */
-/*   Updated: 2024/06/11 13:14:53 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/13 17:11:40 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,12 @@ void	ft_heredoc(t_red_node *node, int p[2])
 		free(line);
 	}
 	ft_clean_ms();
+	if (close(p[0]) == -1 || close(p[1]) == -1)
+	{
+		perror("close");
+		exit (1);
+		//EXIT CRITICAL ERROR
+	}
 	exit(0);
 }
 
@@ -92,6 +98,7 @@ int	ft_init_heredoc(t_node *node)
 			pid = (fork());
 			if (!pid)
 				ft_heredoc(node->red_node, p);
+
 			if (ft_error_exe(p, &pid))
 				return (0);
 			node->red_node->here_doc = p[0];
