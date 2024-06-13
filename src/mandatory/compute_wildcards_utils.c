@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   compute_wildcards_utils.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 12:26:04 by skapersk          #+#    #+#             */
-/*   Updated: 2024/06/05 12:26:45 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/13 17:54:34 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,6 @@ void	free_wildcards(t_wildcard *wildcard)
 	while (wildcard != NULL)
 	{
 		temp = wildcard;
-		wildcard = wildcard->next;
 		if (temp->files != NULL)
 		{
 			i = 0;
@@ -78,6 +77,7 @@ void	free_wildcards(t_wildcard *wildcard)
 			}
 			free(temp->files);
 		}
+		wildcard = wildcard->next;
 		free(temp);
 	}
 }

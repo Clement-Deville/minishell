@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 11:47:07 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/13 16:48:50 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/13 18:21:55 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -542,7 +542,7 @@ int	start_exec(t_node *node, t_dblist **env)
 	{
 		if (node->red_node != NULL && node->red_node->here_doc != 0)
 			ft_heredoc_go_expand(node);
-		if (!init_cmp(node))
+		if (!init_cmp(node) && node->red_node == NULL)
 		{
 			get_ms()->f_or_nf = 1;
 			ft_handle_parse_err(get_ms());

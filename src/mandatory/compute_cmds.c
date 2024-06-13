@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   compute_cmds.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 14:44:53 by skapersk          #+#    #+#             */
-/*   Updated: 2024/06/13 12:08:02 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/13 17:58:18 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,8 +117,7 @@ int	init_cmp(t_node *node)
 	if (node->cmd != NULL)
 		tmp = ft_expand(node->cmd, node);
 	if (!tmp)
-		return (ft_free_c_cmd_expand(tmp),
-			free_wildcards(node->c_cmd->wildcard), 0);
+		return (ft_free_c_cmd_expand(tmp), 0);
 	node->c_cmd->expand = ft_handle_wildcard(tmp, node);
 	if (!node->c_cmd->expand)
 	{
