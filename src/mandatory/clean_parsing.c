@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 12:30:19 by skapersk          #+#    #+#             */
-/*   Updated: 2024/06/10 17:32:20 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/13 14:00:17 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ void	ft_free_red_nodes(t_red_node *red_node)
 		red_node = red_node->next;
 		if (tmp_r->value)
 			free(tmp_r->value);
+		close(tmp_r->here_doc);
 		free(tmp_r);
 	}
 }

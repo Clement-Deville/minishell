@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:09:27 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/13 11:55:33 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/13 13:49:43 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -208,7 +208,7 @@ int			do_exit(t_node *node);
 
 // EXPORT
 
-int			export_one(char *argument, t_dblist **env);
+int			export_one(char *argument, t_dblist **env, t_bool silent);
 
 // PRINT_EXPORT
 
@@ -218,6 +218,7 @@ void		print_export(t_dblist *env);
 
 t_dblist	*generate_env(char **envp);
 char		*catch_value(char *name, t_dblist *env);
+t_bool		is_valid_name(char *name);
 
 // VARIABLES
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   compute_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 12:14:33 by skapersk          #+#    #+#             */
-/*   Updated: 2024/06/06 17:18:39 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/13 13:59:14 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ char	*ft_str_find_env(char *arg)
 	while (envlst)
 	{
 		if (!ft_strncmp(arg, ((t_variable *)envlst->content)->name,
-				ft_strlen(arg) - 1))
+				ft_strlen(arg) + 1))
 			return (((t_variable *)envlst->content)->value);
 		envlst = envlst->next;
 	}

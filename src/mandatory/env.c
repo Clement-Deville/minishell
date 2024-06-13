@@ -6,11 +6,26 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 13:23:24 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/11 16:44:45 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/13 13:26:27 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+t_bool	is_valid_name(char *name)
+{
+	int	i;
+
+	i = 0;
+	if (!name || (isalpha(name[0]) == FALSE && name[0] != '_'))
+		return (FALSE);
+	while (name[++i])
+	{
+		if (isalnum(name[0]) == FALSE && name[0] != '_')
+			return (FALSE);
+	}
+	return (TRUE);
+}
 
 char	*catch_value(char *name, t_dblist *env)
 {

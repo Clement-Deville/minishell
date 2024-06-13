@@ -6,19 +6,23 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 14:15:44 by cdeville          #+#    #+#             */
-/*   Updated: 2024/05/31 18:37:02 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/13 13:53:07 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-int	change_value(char *argument, t_dblist *env)
+int	change_value(char *argument, t_dblist *env, t_bool silent)
 {
 	char	*name;
 
 	name = get_name(argument);
 	if (name == NULL)
-		return (perror("Malloc error"), -1);
+	{
+		if (!silent)
+			perror("Malloc error");
+		return (-1);
+	}
 	while (env)
 	{
 		if (ft_strncmp(name, (((t_variable *)(env->content))->name),
@@ -33,12 +37,29 @@ int	change_value(char *argument, t_dblist *env)
 	return (free(name), 0);
 }
 
-int	add_new_variable(char *argument, t_dblist **env)
+int	add_new_variable(char *argument, t_dblist **env, t_bool silent)
 {
 	t_dblist	*new;
+	t_variable	*variable;
 
 	// Pas besoin de double pointeur, a verfier
-	new = ft_dblstnew(create_variable(argument));
+	variable = create_variable(argument);
+	if (is_valid_name(variable->name) == FALSE)
+	{
+		if (silent == FALSE)
+		{
+			write(2, "not valid in this context \"", 26);
+			ft_putstr_fd(variable->name, 2);
+			write(2, "\"\n", 2);
+		}
+		free(variable->name);
+		variable->name = NULL;
+		free(variable->value);
+		variable->value = NULL;
+		free(variable);
+		return (1);
+	}
+	new = ft_dblstnew(variable);
 	// ft_printf("New argument value = %s\n", ((t_variable*)(new->content))->value);
 	if (new == NULL || new->content == NULL)
 		return (free(new), -1);
@@ -54,25 +75,33 @@ int	add_new_variable(char *argument, t_dblist **env)
 	return (0);
 }
 
-int	export_one(char *argument, t_dblist **env)
+int	export_one(char *argument, t_dblist **env, t_bool silent)
 {
 	char	*name;
+	int		status;
 
 	name = get_name(argument);
 	if (name == NULL)
-		return (perror("Malloc error"), -1);
+	{
+		if (!silent)
+			perror("Malloc error");
+		return (-1);
+	}
 	if (name_exists(name, *env) == TRUE)
 	{
 		free(name);
-		if (change_value(argument, *env) == -1)
-			return (1);
+		if (change_value(argument, *env, silent) == -1)
+			return (-1);
 		return (0);
 	}
 	else
 	{
 		free(name);
-		if (add_new_variable(argument, env) == -1)
+		status = add_new_variable(argument, env, silent);
+		if (status == -1)
 			return (-1);
+		else if (status)
+			return (1);
 		return (0);
 	}
 }
@@ -81,16 +110,22 @@ int	do_export(t_node *node, t_dblist **env)
 {
 	int		i;
 	char	**arguments;
+	int		status;
+	int		exit_status;
 
 	i = 0;
+	exit_status = 0;
 	arguments = &(node->c_cmd->expand)[1];
 	if (arguments[0] == NULL && node->silent == FALSE)
 		return (print_export(*env), 0);
 	while (arguments[i])
 	{
-		if (export_one(arguments[i], env) == -1)
+		status = export_one(arguments[i], env, node->silent);
+		if (status == -1)
 			return (1);
+		if (status)
+			exit_status = status;
 		i++;
 	}
-	return (0);
+	return (exit_status);
 }
