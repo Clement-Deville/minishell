@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
+/*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:09:05 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/13 10:16:18 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/13 11:59:28 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -316,12 +316,24 @@ int	init_minishell(void)
 		init_parsing(ms);
 		if (get_ms()->err.str)
 		{
+			get_ms()->f_or_nf = 1;
 			ft_handle_parse_err(ms);
 			continue ;
 		}
 		// exec_parse(ms->nodes);
 		exec_test(ms->nodes);
 		start_exec(ms->nodes, &(ms->envlst));
+		if (get_ms()->f_or_nf == 0)
+		{
+			ft_garbage(NULL, TRUE);
+			ft_clear_token(get_ms()->tokens);
+			ft_clear_parsing(get_ms()->nodes);
+		}
+		else
+		{
+			ft_garbage(NULL, TRUE);
+			ft_clear_parsing(get_ms()->nodes);
+		}
 	}
 	return (0);
 }

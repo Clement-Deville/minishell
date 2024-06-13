@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 11:47:07 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/13 11:01:14 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/13 11:56:27 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -537,6 +537,7 @@ int	start_exec(t_node *node, t_dblist **env)
 			ft_heredoc_go_expand(node);
 		if (!init_cmp(node))
 		{
+			get_ms()->f_or_nf = 1;
 			ft_handle_parse_err(get_ms());
 			return (1);
 		}
