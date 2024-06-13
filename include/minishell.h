@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
+/*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:09:27 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/13 13:49:43 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/13 14:54:35 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,7 +167,6 @@ typedef struct s_node
 	int						pid;
 	t_node_type				type;
 	t_red_node				*red_node;
-	t_subs_node				*sub_node;
 	struct s_node			*sub;
 	char					*cmd;
 	struct s_compute_cmd	*c_cmd;

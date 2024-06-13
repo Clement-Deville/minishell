@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   clean_parsing.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
+/*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 12:30:19 by skapersk          #+#    #+#             */
-/*   Updated: 2024/06/13 14:00:17 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/13 15:09:10 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void	ft_clean_nodes(t_node *node)
 {
 	t_node	*tmp;
 
-	if (!node || !convert(node->type))
+	if (!node || (!convert(node->type) && node->sub == NULL))
 		return ;
 	tmp = node;
 	if (tmp->red_node)
@@ -69,6 +69,8 @@ void	ft_clean_nodes(t_node *node)
 	if (tmp->c_cmd)
 	{
 		ft_free_c_cmd_expand(tmp->c_cmd->expand);
+		if (tmp->c_cmd->wildcard)
+			free_wildcards(tmp->c_cmd->wildcard);
 		free(tmp->c_cmd);
 	}
 	if (tmp->cmd)
@@ -82,7 +84,9 @@ void	ft_clear_parsing(t_node *nodes)
 	else if (nodes->sub != NULL)
 	{
 		ft_clear_parsing(nodes->sub);
+		ft_clean_nodes(nodes);
 		ft_clear_parsing(nodes->next);
+		// ft_clean_nodes(nodes);
 		free(nodes);
 	}
 	else
