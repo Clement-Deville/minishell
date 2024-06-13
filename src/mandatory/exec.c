@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 11:47:07 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/13 11:56:27 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/13 16:48:50 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -182,6 +182,7 @@ int	exec_builtin(t_node *node, t_dblist **env)
 			if (do_exit(node))
 				exit (1);
 		// NEED TO FREE EVERYTHING BEFORE EXITING
+		ft_clear_parsing(node);
 		exit (0);
 	}
 	status = do_wait(pid);
@@ -267,6 +268,7 @@ int	exec_standard(t_node **node, t_dblist **env)
 	char	**tab_env;
 	int		status;
 	int		red_status;
+	int		tmp; //CODE RAJOUTE (SIM) -> POUR FREE EN SORTANT DES CHILDS)
 
 	pid = fork();
 	if (pid < 0)
@@ -291,7 +293,9 @@ int	exec_standard(t_node **node, t_dblist **env)
 		tab_env = list_to_tab(*env);
 		if (tab_env == NULL)
 			exit (1);
-		exit (exec((*node)->c_cmd->expand, tab_env));
+		tmp = exec((*node)->c_cmd->expand, tab_env);
+		// ft_clear_parsing(*node);
+		exit (tmp);
 	}
 	status = do_wait(pid);
 	return (status);
@@ -301,6 +305,7 @@ int	exec_sub(t_node *node, t_dblist **env)
 {
 	int	pid;
 	int	red_status;
+	int	tmp;
 	t_node	*subnode;
 
 	subnode = node->sub;
@@ -328,7 +333,9 @@ int	exec_sub(t_node *node, t_dblist **env)
 		if (red_status)
 			exit (1);
 		get_ms()->parent = FALSE;
-		exit (start_exec(subnode, env));
+		tmp = start_exec(subnode, env);
+		ft_clear_parsing(node);
+		exit (tmp);
 	}
 	get_ms()->exit = do_wait(pid);
 	if (get_ms()->exit == -1)

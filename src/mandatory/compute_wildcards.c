@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 12:23:10 by skapersk          #+#    #+#             */
-/*   Updated: 2024/06/06 10:08:48 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/13 16:06:20 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,6 @@ char	**ft_handle_wildcard(char **glob, t_node *node)
 	wildcard->next = NULL;
 	new = ft_join_wildcard(node);
 	if (!new)
-		return (ft_big_free(glob), free_wildcards(node->c_cmd->wildcard), NULL);
-	return (ft_big_free(glob), free_wildcards(node->c_cmd->wildcard), new);
+		return (ft_big_free(glob), NULL);
+	return (ft_big_free(glob), new);
 }
