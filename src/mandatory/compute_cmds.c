@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   compute_cmds.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
+/*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 14:44:53 by skapersk          #+#    #+#             */
-/*   Updated: 2024/06/10 17:22:26 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/13 11:04:30 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,8 @@ int	init_cmp(t_node *node)
 		free_node(node);
 		return (0);
 	}
+	if (is_subshell(node))
+		return (1);
 	if (node->cmd != NULL)
 		tmp = ft_expand(node->cmd, node);
 	if (!tmp)
@@ -124,7 +126,6 @@ int	init_cmp(t_node *node)
 	}
 	cut_quotes(node->c_cmd->expand);
 	return (1);
-	// NEED TO HANDLE ERROR CASE
 }
 
 // void	ft_compute_cmds(t_node *node)

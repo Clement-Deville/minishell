@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
+/*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:09:27 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/11 17:10:08 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/13 11:00:06 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -465,6 +465,8 @@ int			ft_heredoc_handle_dollar(char *str, int i, int fd);
 void		ft_heredoc_expand(char *str, int fd);
 int			ft_check_here_quotes(char *str);
 
+//exec.c
+t_bool		is_subshell(t_node *node);
 void		dodge_cmd(t_node **node);
 void		ft_heredoc_go_expand(t_node *node);
 
