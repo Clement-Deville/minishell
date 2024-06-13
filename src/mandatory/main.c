@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:09:05 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/12 16:21:50 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/13 10:16:18 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,7 +134,13 @@ char	*get_balise(void)
 	char	*current_dir_name;
 	char	color[8];
 	char	*balise;
+	char	*tmp;
 
+	if (get_ms()->balise)
+	{
+		free(get_ms()->balise);
+		get_ms()->balise = NULL;
+	}
 	current_dir_name = getcwd(NULL, 0);
 	if (get_ms()->exit)
 		ft_strlcpy(color, "\e[1;31m", 9);
@@ -144,9 +150,12 @@ char	*get_balise(void)
 	balise = ft_strjoin(color, "\u2192  \001\033[1;36m");
 	if (balise)
 	{
+		tmp = balise;
 		balise = ft_strjoin(balise, current_dir_name);
+		free(tmp);
+		tmp = balise;
 		balise = ft_strjoin(balise, " \e[0m");
-		// free (tmp);
+		free (tmp);
 	}
 	if (current_dir_name)
 		free(current_dir_name);
@@ -273,7 +282,6 @@ void	exec_test(t_node *nodes)
 int	init_minishell(void)
 {
 	t_mini_env	*ms;
-	char	*balise;
 
 	ms = get_ms();
 	ms->parent = TRUE;
@@ -284,8 +292,13 @@ int	init_minishell(void)
 			free(get_ms()->line);
 			get_ms()->line = NULL;
 		}
-		balise = get_balise();
-		get_ms()->line = readline(balise);
+		get_ms()->balise = get_balise();
+		if (get_ms()->balise)
+			get_ms()->line = readline(get_ms()->balise);
+		else if (get_ms()->exit)
+			get_ms()->line = readline("\e[1;31m\u2192 \e[0m");
+		else
+			get_ms()->line = readline("\e[1;32m\u2192 \e[0m");
 		// free(balise);
 		// if (line == NULL)
 		// {
