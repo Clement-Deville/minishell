@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 17:49:40 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/13 13:49:28 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/14 14:21:44 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,12 @@ int	do_cd(t_node *node, t_dblist **env)
 	char	*pwd;
 	char	*complete_pwd;
 
+	if (nbr_of_args(node->c_cmd->expand) > 1)
+	{
+		if (node->silent == FALSE)
+			ft_putstr_fd("cd: to many arguments\n", 2);
+		return (1);
+	}
 	directory = node->c_cmd->expand[1];
 	if (directory == NULL)
 	{
@@ -48,7 +54,10 @@ int	do_cd(t_node *node, t_dblist **env)
 	if (chdir(directory) == -1)
 	{
 		if (node->silent == FALSE)
-			perror("Error when changing dir");
+		{
+			ft_putstr_fd("cd: ", 2);
+			perror(directory);
+		}
 		return (-1);
 	}
 	pwd = (char *)malloc(sizeof(char) * FILENAME_MAX);
