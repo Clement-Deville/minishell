@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 18:42:42 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/11 16:09:08 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/14 11:59:35 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ t_bool	is_digit(char *c)
 
 t_bool	is_numeric(char *argument)
 {
+	if ((*argument == '+' || *argument == '-') && is_digit(argument + 1))
+		argument++;
 	while (*argument)
 	{
 		if (is_digit(argument) == FALSE)
@@ -126,7 +128,9 @@ int	do_exit(t_node *node)
 	{
 		if (node->silent == FALSE)
 		{
-			ft_printf("exit: %s: numeric argument required\n", argument);
+			ft_putstr_fd("exit: ", 2);
+			ft_putstr_fd(argument, 2);
+			ft_putstr_fd(": numeric argument required\n", 2);
 		}
 		// A print sur stderr
 		exit (2);
@@ -144,3 +148,7 @@ int	do_exit(t_node *node)
 	exit ((unsigned char)ft_atoi(argument));
 	// DOIT EXIT MEME SI LES ARG SONT MAUVAIS
 }
+
+// Si le premier n'est pas numerique alors ca exit quand meme
+
+// S'il y a trop d'arguments et que le premier est valide alors il n'exit pas

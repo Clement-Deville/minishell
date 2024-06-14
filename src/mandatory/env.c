@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 13:23:24 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/13 13:26:27 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/14 12:04:32 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ t_bool	is_valid_name(char *name)
 		return (FALSE);
 	while (name[++i])
 	{
-		if (isalnum(name[0]) == FALSE && name[0] != '_')
+		if (isalnum(name[i]) == FALSE && name[i] != '_')
 			return (FALSE);
 	}
 	return (TRUE);
