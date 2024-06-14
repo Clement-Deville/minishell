@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 10:59:15 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/11 16:16:47 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/14 13:05:34 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ t_bool	name_exists(char *argument, t_dblist *env)
 
 void	print_variable_export(void *content)
 {
+	ft_putstr_fd("declare -x ", 1);
 	ft_putstr_fd(((t_variable *)content)->name, 1);
 	ft_putstr_fd("=\"", 1);
 	ft_putstr_fd(((t_variable *)content)->value, 1);

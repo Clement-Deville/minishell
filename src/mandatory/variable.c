@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 12:00:15 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/13 13:39:22 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/14 12:19:04 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,9 @@ char	*get_value(char *argument)
 	i = 0;
 	while (argument[i] && argument[i] != '=')
 		i++;
-	value = ft_strdup(&argument[++i]);
+	if (argument[i])
+		i++;
+	value = ft_strdup(&argument[i]);
 	if (value == NULL)
 		return (NULL);
 	return (value);
