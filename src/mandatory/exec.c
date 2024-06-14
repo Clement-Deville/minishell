@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 11:47:07 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/13 18:21:55 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/14 19:13:48 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -465,8 +465,18 @@ int do_no_cmd(t_node *node)
 	return (0);
 }
 
+t_bool	is_empty(t_node *node)
+{
+	if (!node || !node->c_cmd || !node->c_cmd->expand
+		|| !node->c_cmd->expand[0])
+		return (TRUE);
+	return (FALSE);
+}
+
 int	exec_single(t_node **node, t_dblist **env)
 {
+	if (is_empty(*node))
+		return (0);
 	if (is_not_a_cmd(*node) && !(*node)->sub)
 		return (do_no_cmd(*node));
 	if (is_subshell(*node))
