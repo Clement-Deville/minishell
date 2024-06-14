@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/23 11:16:12 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/13 17:24:20 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/14 18:09:33 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,19 @@ void	print_not_found(char *cmd)
 	ft_putstr_fd("\n", 2);
 }
 
+t_bool	is_a_dir(const char *path)
+{
+	struct stat	entity;
+
+	stat(path, &entity);
+	return (S_ISDIR(entity.st_mode));
+}
+
 int	check_command_access(const char *path)
 {
+	if (is_a_dir(path) == TRUE)
+		return (ft_putstr_fd((char *)path, 2),
+			ft_putstr_fd(": Is a directory\n", 2), 1);
 	if (access(path, R_OK) == 0)
 		if (access(path, X_OK) == 0)
 			return (0);
@@ -64,7 +75,7 @@ int	check_for_all(char **paths, char **cmd)
 		access_status = check_command_access(access_denied_path);
 		return (perror(access_denied_path), access_status);
 	}
-	if (access_status != 0)
+	if (access_status != 0 && access_status != 1)
 		print_not_found(*cmd);
 	return (access_status);
 }
@@ -78,7 +89,7 @@ int	check_for_path_access(char **cmd, t_dblist *env)
 	if (is_path(*cmd) == TRUE)
 	{
 		access_status = check_command_access(*cmd);
-		if (access_status != 0)
+		if (access_status != 0 && access_status != 1)
 			perror(*cmd);
 		return (access_status);
 	}
