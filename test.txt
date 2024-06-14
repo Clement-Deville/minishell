@@ -1,0 +1,1 @@
+bash: exit: wwergwerg: numeric argument required
