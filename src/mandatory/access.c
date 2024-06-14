@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/23 11:16:12 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/14 18:09:33 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/14 18:24:07 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ t_bool	is_a_dir(const char *path)
 	struct stat	entity;
 
 	stat(path, &entity);
+	if (errno == EACCES || errno == ENOENT)
+		return (FALSE);
 	return (S_ISDIR(entity.st_mode));
 }
 
