@@ -51,8 +51,8 @@ char	*ft_cmd_pre_expand(char *str)
 {
 	char	*tmp;
 
-	if (check_quotes(str))
-		return (NULL);
+	// if (check_quotes(str))
+	// 	return (NULL);
 	tmp = ft_strdup("");
 	if (!tmp)
 		return (NULL);

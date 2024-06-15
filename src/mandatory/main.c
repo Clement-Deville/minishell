@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
+/*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:09:05 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/13 18:23:15 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/15 16:04:48 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -312,7 +312,12 @@ int	init_minishell(void)
 		}
 		else if (get_ms()->line[0])
 			add_history(get_ms()->line);
-		ft_tokenization(ms);
+		if (!ft_tokenization(ms))
+		{
+			ft_handle_parse_err(ms);
+			ft_clear_token(ms->tokens);
+			continue ;
+		}
 		init_parsing(ms);
 		if (get_ms()->err.str)
 		{

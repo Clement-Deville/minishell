@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
+/*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:09:27 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/14 17:48:33 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/15 15:54:36 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -274,7 +274,7 @@ typedef struct s_command
 }	t_command;
 
 t_mini_env	*get_ms(void);
-void		ft_tokenization(t_mini_env *ms);
+int		ft_tokenization(t_mini_env *ms);
 void		ft_init_env(char **env);
 void		lst_token_add_back(t_token **token_list, t_token *new);
 
@@ -440,11 +440,12 @@ int			is_quotes(char c, char x);
 char		assign_quote(char c);
 char		*process_word(char *str, int *i, int *count);
 char		**free_split_args(char **tmp, int j);
+char		**ft_expander_split(char const *s, t_node *node);
 
 //compute_split_args.c
 char		*skip_words(char *str, int *i, int *count, char *tmp);
 char		*skip_quotes(char *str, int *i, int *count, char *tmp);
-int			countwords(char *s, char c);
+int			countwords(const char *s, char c);
 char		**allocate_split_args(char *str, t_node *node);
 char		**ft_split_args(char *str, t_node *node);
 
@@ -467,6 +468,8 @@ void		*ft_garbage(void *str, t_bool clean);
 int			ft_heredoc_handle_dollar(char *str, int i, int fd);
 void		ft_heredoc_expand(char *str, int fd);
 int			ft_check_here_quotes(char *str);
+
+char		*ft_strip_quotes(char *str);
 
 //exec.c
 t_bool		is_subshell(t_node *node);

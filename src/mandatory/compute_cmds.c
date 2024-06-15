@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   compute_cmds.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
+/*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 14:44:53 by skapersk          #+#    #+#             */
-/*   Updated: 2024/06/13 17:58:18 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/15 16:09:36 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ char	**ft_expand(char *str, t_node *node)
 {
 	char	**global;
 	char	*expanded;
+	int		i;
 
 	expanded = NULL;
 	expanded = ft_cmd_pre_expand(str);
@@ -52,10 +53,16 @@ char	**ft_expand(char *str, t_node *node)
 	expanded = clean_node(expanded);
 	if (!expanded)
 		return (NULL);
-	global = ft_split_args(expanded, node);
+	global = ft_expander_split(expanded, node);
 	free(expanded);
 	if (!global)
 		return (NULL);
+	i = 0;
+	while (global[i])
+	{
+		global[i] = ft_strip_quotes(global[i]);
+		i++;
+	}
 	return (global);
 }
 
@@ -124,7 +131,7 @@ int	init_cmp(t_node *node)
 		free_node(node);
 		return (0);
 	}
-	cut_quotes(node->c_cmd->expand);
+	// cut_quotes(node->c_cmd->expand);
 	return (1);
 }
 

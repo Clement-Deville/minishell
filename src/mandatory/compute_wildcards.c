@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 12:23:10 by skapersk          #+#    #+#             */
-/*   Updated: 2024/06/13 16:06:20 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/15 11:20:28 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ char	**ft_join_wildcard(t_node *node)
 	char		**joined;
 	t_wildcard	*wildcard;
 
-	joined = ft_calloc(node->c_cmd->ac + 2, sizeof(char *));
+	joined = ft_calloc(node->c_cmd->ac + 1, sizeof(char *));
 	if (!joined)
 		return (NULL);
 	k = 0;

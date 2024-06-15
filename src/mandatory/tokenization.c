@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 17:15:30 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/03 17:17:57 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/15 16:07:55 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,31 @@ void	ft_token_identify(char **line, t_token **t_list)
 	*line += i;
 }
 
-void	ft_tokenization(t_mini_env *ms)
+int	ft_token_else_by_quotes(char **line, t_token **t_list)
+{
+	int		i;
+	char	quote_type;
+
+	if (*line && (**line == '"' || **line == '\''))
+	{
+		quote_type = **line; // Sauvegarder le type de guillemet
+		i = 1; // Initialiser l'index à 1 pour sauter le guillemet initial
+		while ((*line)[i] && (*line)[i] != quote_type) // Boucle jusqu'à trouver le guillemet fermant
+			i++;
+		if (!(*line)[i] && (*line)[i - 1] != quote_type) // Si guillemet fermant non trouvé
+		{
+			ft_set_parse_err(quote_type == '"' ? E_DQUOTES : E_QUOTES);
+			return (0);
+		}
+		// Ajouter le token incluant les guillemets
+		ft_add_token_sign(line, t_list, TOKEN_ELSE, i + 1);
+		*line += i + 1; // Avancer le pointeur de ligne
+	}
+	return (1);
+}
+
+
+int	ft_tokenization(t_mini_env *ms)
 {
 	t_token	*token_list;
 	char	*line;
@@ -93,20 +117,25 @@ void	ft_tokenization(t_mini_env *ms)
 
 	line = ft_strtrim(ms->line, " \f\n\r\t\v");
 	if (!line)
-		return ;
-	trimmed = line;
+		return (1);
 	token_list = NULL;
+	trimmed = line;
 	while (*line)
 	{
 		if (!ft_strncmp(line, "<", 1) || !ft_strncmp(line, ">", 1)
 			|| !ft_strncmp(line, "|", 1) || !ft_strncmp(line, "&&", 2)
 			|| !ft_strncmp(line, "(", 1) || !ft_strncmp(line, ")", 1))
 			ft_token_identify(&line, &token_list);
+		else if (!ft_strncmp(line, "\"", 1) || ! ft_strncmp(line, "'", 1))
+		{
+			if (!ft_token_else_by_quotes(&line, &token_list))
+				return (free(trimmed), ft_clear_token(token_list), (0));
+		}
 		else if (is_space(*line))
 			line++;
 		else
 			ft_add_token_else(&line, &token_list);
 	}
 	ms->tokens = token_list;
-	free(trimmed);
+	return (free(trimmed), 1);
 }

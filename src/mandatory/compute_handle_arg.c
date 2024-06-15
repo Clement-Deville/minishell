@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 12:10:27 by skapersk          #+#    #+#             */
-/*   Updated: 2024/06/05 12:12:05 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/15 19:13:41 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,9 +73,38 @@ char	*ft_handle_simple_quotes(char *str, int *i)
 	return (ft_substr(str, start, *i - start));
 }
 
+// char	*ft_handle_double_quotes(char *str, int *i)
+// {
+// 	char	*new;
+
+// 	new = ft_strdup("\"");
+// 	if (!new)
+// 		return (NULL);
+// 	*i += 1;
+// 	while (str[*i] && str[*i] != '"')
+// 	{
+// 		if (str[*i] == '$')
+// 		{
+// 			new = ft_strjoin(new, ft_handle_dollar(str, i));
+// 			if (!new)
+// 				return (NULL);
+// 		}
+// 		else
+// 		{
+// 			new = ft_strjoin(new, ft_handle_dq_arg(str, i));
+// 			if (!new)
+// 				return (NULL);
+// 		}
+// 	}
+// 	*i += 1;
+// 	return (ft_strjoin(new, "\""));
+// }
+
 char	*ft_handle_double_quotes(char *str, int *i)
 {
 	char	*new;
+	char	*temp;
+	char	*joined;
 
 	new = ft_strdup("\"");
 	if (!new)
@@ -85,17 +114,26 @@ char	*ft_handle_double_quotes(char *str, int *i)
 	{
 		if (str[*i] == '$')
 		{
-			new = ft_strjoin(new, ft_handle_dollar(str, i));
-			if (!new)
-				return (NULL);
+			temp = ft_handle_dollar(str, i);
 		}
 		else
 		{
-			new = ft_strjoin(new, ft_handle_dq_arg(str, i));
-			if (!new)
-				return (NULL);
+			temp = ft_handle_dq_arg(str, i);
 		}
+		if (!temp)
+		{
+			free(new);
+			return (NULL);
+		}
+		joined = ft_strjoin(new, temp);
+		free(temp);
+		free(new);
+		if (!joined)
+			return (NULL);
+		new = joined;
 	}
 	*i += 1;
-	return (ft_strjoin(new, "\""));
+	joined = ft_strjoin(new, "\"");
+	free(new);
+	return (joined);
 }
