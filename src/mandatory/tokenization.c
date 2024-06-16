@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 17:15:30 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/15 16:07:55 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/16 21:14:50 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,29 +85,167 @@ void	ft_token_identify(char **line, t_token **t_list)
 	*line += i;
 }
 
-int	ft_token_else_by_quotes(char **line, t_token **t_list)
+int	in_quotes(char **tmp, char **line)
 {
-	int		i;
 	char	quote_type;
+	int		i;
 
 	if (*line && (**line == '"' || **line == '\''))
 	{
-		quote_type = **line; // Sauvegarder le type de guillemet
-		i = 1; // Initialiser l'index à 1 pour sauter le guillemet initial
-		while ((*line)[i] && (*line)[i] != quote_type) // Boucle jusqu'à trouver le guillemet fermant
-			i++;
-		if (!(*line)[i] && (*line)[i - 1] != quote_type) // Si guillemet fermant non trouvé
+		quote_type = **line;
+		i = 1;
+		while ((*line)[i])
+		{
+			if ((*line)[i] == quote_type)
+				break ;
+			else
+				i++;
+		}
+		if (!(*line)[i] && (*line)[i - 1] != quote_type)
 		{
 			ft_set_parse_err(quote_type == '"' ? E_DQUOTES : E_QUOTES);
 			return (0);
 		}
-		// Ajouter le token incluant les guillemets
-		ft_add_token_sign(line, t_list, TOKEN_ELSE, i + 1);
-		*line += i + 1; // Avancer le pointeur de ligne
+		if (!tmp)
+		{
+			tmp = malloc(sizeof(char) * i + 1);
+			if (!tmp)
+				return (0);
+		}
+		ft_strlcpy(*tmp, *line, i + 2);
+		*line += i + 3;
 	}
 	return (1);
 }
 
+// int	ft_token_else_by_quotes(char **line, t_token **t_list)
+// {
+// 	int		i;
+// 	t_token	*token;
+// 	char	quote_type;
+// 	char	*tmp;
+
+// 	if (*line && (**line == '"' || **line == '\''))
+// 	{
+// 		quote_type = **line;
+// 		i = 0;
+// 		while ((*line)[i])
+// 		{
+// 			if ((*line)[i] == quote_type)
+// 				in_quotes(&tmp, line);
+// 			if (!**line || (**line) == ' ')
+// 				break ;
+// 			else
+// 			{
+// 				if (!tmp)
+// 				{
+// 					tmp = malloc(sizeof(char) * i + 1);
+// 					if (!tmp)
+// 						return (0);
+// 				}
+// 				ft_strlcpy(tmp, *line, i + 1);
+// 			}
+// 			i++;
+// 		}
+// 		token = create_new_token(tmp, TOKEN_ELSE);
+// 		if (!token)
+// 		{
+// 			free(tmp);
+// 			return (0);
+// 		}
+// 		lst_token_add_back(t_list, token);
+// 		*line += i + 1;
+// 	}
+// 	return (1);
+// }
+
+int	ft_token_else_by_quotes(char **line, t_token **t_list)
+{
+	int		i;
+	t_token	*token;
+	char	quote_type;
+	char	*tmp = NULL;
+
+	if (*line && (**line == '"' || **line == '\''))
+	{
+		quote_type = **line;
+		i = 1;
+		while ((*line)[i])
+		{
+			if ((*line)[i] == quote_type)
+			{
+				i++;
+				break;
+			}
+			i++;
+		}
+		if (!(*line)[i - 1])
+		{
+			ft_set_parse_err(quote_type == '"' ? E_DQUOTES : E_QUOTES);
+			return (0);
+		}
+		tmp = malloc(sizeof(char) * (i + 1));
+		if (!tmp)
+			return (0);
+		ft_strlcpy(tmp, *line, i + 1);
+		*line += i;
+
+		while (**line && !is_space(**line))
+		{
+			i = 0;
+			while ((*line)[i] && !is_space((*line)[i]) && (*line)[i] != '<' && (*line)[i] != '>' && (*line)[i] != '|' && (*line)[i] != '&' && (*line)[i] != '(' && (*line)[i] != ')')
+				i++;
+			char *tmp2 = malloc(sizeof(char) * (strlen(tmp) + i + 1));
+			if (!tmp2)
+			{
+				free(tmp);
+				return (0);
+			}
+			ft_strlcpy(tmp2, tmp, strlen(tmp) + 1);
+			ft_strlcat(tmp2, *line, strlen(tmp) + i + 1);
+			free(tmp);
+			tmp = tmp2;
+			*line += i;
+		}
+
+		token = create_new_token(tmp, TOKEN_ELSE);
+		if (!token)
+		{
+			free(tmp);
+			return (0);
+		}
+		lst_token_add_back(t_list, token);
+	}
+	return (1);
+}
+
+
+// int	ft_token_else_by_quotes(char **line, t_token **t_list)
+// {
+// 	int		i;
+// 	char	quote_type;
+
+// 	if (*line && (**line == '"' || **line == '\''))
+// 	{
+// 		quote_type = **line;
+// 		i = 1;
+// 		while ((*line)[i])
+// 		{
+// 			if ((*line)[i] == quote_type)
+// 				break ;
+// 			else
+// 				i++;
+// 		}
+// 		if (!(*line)[i] && (*line)[i - 1] != quote_type)
+// 		{
+// 			ft_set_parse_err(quote_type == '"' ? E_DQUOTES : E_QUOTES);
+// 			return (0);
+// 		}
+// 		ft_add_token_sign(line, t_list, TOKEN_ELSE, i + 1);
+// 		*line += i + 1;
+// 	}
+// 	return (1);
+// }
 
 int	ft_tokenization(t_mini_env *ms)
 {
