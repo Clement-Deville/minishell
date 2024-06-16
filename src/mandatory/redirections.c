@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 19:29:26 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/15 22:42:34 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/16 15:01:05 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int	set_input(char *filename, t_node *node)
 {
 	int	fd;
-	
+
 	cut_quotes(&filename);
 	if (access(filename, R_OK) != 0)
 	{
@@ -79,7 +79,7 @@ int	set_output_append(char *filename, t_node *node)
 	{
 		node->pid = NO_FORK;
 		node->status = 1;
-		return (perror(filename), free(filename), 1);
+		return (perror(filename), 1);
 	}
 	fd = open(filename, O_WRONLY | O_CREAT | O_APPEND, 0777);
 	if (fd == -1)
@@ -88,15 +88,15 @@ int	set_output_append(char *filename, t_node *node)
 		{
 			node->pid = NO_FORK;
 			node->status = 1;
-			return (perror(filename), free(filename), 1);
+			return (perror(filename), 1);
 		}
-		return (perror("Open"), free(filename), -1);
+		return (perror("Open"), 1);
 	}
 	if (do_dup2(fd, STDOUT_FILENO) == -1)
-		return (free(filename), -1);
+		return (-1);
 	if (do_close(fd) == -1)
-		return (free(filename), -1);
-	return (free(filename), 0);
+		return (-1);
+	return (0);
 }
 
 int	set_input_here_doc(int fd)

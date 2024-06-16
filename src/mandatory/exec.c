@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 11:47:07 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/15 19:27:50 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/16 11:54:13 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,6 +134,7 @@ int	do_wait(int pid)
 		return (128 + WTERMSIG(status));
 	return (1);
 }
+
 int	exec_builtin(t_node *node, t_dblist **env)
 {
 	// A verfier
