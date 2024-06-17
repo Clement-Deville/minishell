@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 13:16:32 by cdeville          #+#    #+#             */
-/*   Updated: 2024/05/24 14:39:11 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/17 16:18:15 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,23 +53,30 @@ int	unset_one(char *argument, t_dblist **env)
 		return (perror("Malloc error"), -1);
 	if (name_exists(name, *env) == TRUE)
 	{
-		delete_variable(argument, env);
+		if (delete_variable(argument, env))
+			return (free(name), -1);
 		return (free(name), 0);
 	}
 	else
-		return (free(name), -1);
+		return (free(name), 1);
 }
 
 int	do_unset(char **arguments, t_dblist **env)
 {
 	int	i;
+	int	status;
+	int	exit_status;
 
+	exit_status = 0;
 	i = 0;
 	while (arguments[i])
 	{
-		if (unset_one(arguments[i], env) == -1)
+		status = unset_one(arguments[i], env);
+		if (status == -1)
 			return (1);
+		if (status)
+			exit_status = status;
 		i++;
 	}
-	return (0);
+	return (exit_status);
 }
