@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 14:44:53 by skapersk          #+#    #+#             */
-/*   Updated: 2024/06/16 14:24:39 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/17 14:02:15 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,32 +90,27 @@ char	*remove_quotes_from_str(char *str)
 	return (new);
 }
 
-void cut_quotes(char **str)
+char	*cut_quotes(char *str)
 {
-    int i;
-    char *new;
+	char	*new;
 
-    i = 0;
-    if (str == NULL)
-        return;
-    while (str[i] != NULL)
-    {
-        new = NULL;
-        if (str[i][0] == '"')
-            new = ft_strtrim(str[i], "\"");
-        else if (str[i][0] == '\'')
-            new = ft_strtrim(str[i], "\'");
-        
-        if (!new)
-            return;
-
-        free(str[i]);
-        str[i] = strdup(new);
-        free(new);
-        i++;
-    }
+	if (str == NULL)
+		return (NULL);
+	new = NULL;
+	if (str[0] == '"' || str[0] == '\'')
+	{
+		if (str[0] == '"')
+			new = ft_strtrim(str, "\"");
+		else if (str[0] == '\'')
+			new = ft_strtrim(str, "\'");
+		if (new)
+		{
+			// free(str);
+			return (new);
+		}
+	}
+	return (str);
 }
-
 
 int	init_cmp(t_node *node)
 {

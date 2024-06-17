@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 11:47:07 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/16 11:54:13 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/17 14:33:32 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -183,7 +183,7 @@ int	exec_builtin(t_node *node, t_dblist **env)
 			if (do_exit(node))
 				exit (1);
 		// NEED TO FREE EVERYTHING BEFORE EXITING
-		ft_clear_parsing(node);
+		// ft_clear_parsing(node);
 		exit (0);
 	}
 	status = do_wait(pid);

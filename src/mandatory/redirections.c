@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 19:29:26 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/16 15:01:05 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/17 12:31:34 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@ int	set_input(char *filename, t_node *node)
 {
 	int	fd;
 
-	cut_quotes(&filename);
+	node->red_node->value = cut_quotes(filename);
+	filename = node->red_node->value;
 	if (access(filename, R_OK) != 0)
 	{
 		node->pid = NO_FORK;
@@ -45,7 +46,8 @@ int	set_output(char *filename, t_node *node)
 {
 	int		fd;
 
-	cut_quotes(&filename);
+	node->red_node->value = cut_quotes(filename);
+	filename = node->red_node->value;
 	if (access(filename, W_OK) != 0 && errno != ENOENT)
 	{
 		node->pid = NO_FORK;
@@ -74,7 +76,8 @@ int	set_output_append(char *filename, t_node *node)
 {
 	int		fd;
 
-	cut_quotes(&filename);
+	node->red_node->value = cut_quotes(filename);
+	filename = node->red_node->value;
 	if (access(filename, W_OK) != 0 && errno != ENOENT)
 	{
 		node->pid = NO_FORK;

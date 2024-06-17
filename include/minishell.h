@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:09:27 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/15 15:54:36 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/17 12:15:37 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -418,7 +418,7 @@ int			check_quotes(char *str);
 char		*clean_node(char *str);
 char		**ft_expand(char *str, t_node *node);
 char		*remove_quotes_from_str(char *str);
-void		cut_quotes(char **str);
+char		*cut_quotes(char *str);
 int			init_cmp(t_node *node);
 void		ft_compute_cmds(t_node *node);
 
