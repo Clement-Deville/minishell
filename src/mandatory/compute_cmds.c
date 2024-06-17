@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 14:44:53 by skapersk          #+#    #+#             */
-/*   Updated: 2024/06/17 18:00:51 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/17 23:06:43 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ char	**ft_expand(char *str, t_node *node)
 {
 	char	**global;
 	char	*expanded;
-	int		i;
+	// int		i;
 
 	expanded = NULL;
 	expanded = ft_cmd_pre_expand(str);
@@ -57,12 +57,12 @@ char	**ft_expand(char *str, t_node *node)
 	free(expanded);
 	if (!global)
 		return (NULL);
-	i = 0;
-	while (global[i])
-	{
-		global[i] = ft_strip_quotes(global[i]);
-		i++;
-	}
+	// i = 0;
+	// while (global[i])
+	// {
+	// 	global[i] = ft_strip_quotes(global[i]);
+	// 	i++;
+	// }
 	return (global);
 }
 
@@ -124,7 +124,8 @@ char	*cut_quotes(char *str)
 int	init_cmp(t_node *node)
 {
 	char	**tmp;
-
+	int		i;
+	
 	tmp = NULL;
 	if (node == NULL)
 		return (0);
@@ -144,6 +145,12 @@ int	init_cmp(t_node *node)
 	{
 		free_node(node);
 		return (0);
+	}
+	i = 0;
+	while (node->c_cmd->expand[i])
+	{
+		node->c_cmd->expand[i] = ft_strip_quotes(node->c_cmd->expand[i]);
+		i++;
 	}
 	return (1);
 }

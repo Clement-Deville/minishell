@@ -6,11 +6,21 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 12:23:10 by skapersk          #+#    #+#             */
-/*   Updated: 2024/06/17 18:01:50 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/17 23:06:54 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
+
+int	is_in_quotes(char *str)
+{
+	int len;
+
+	len = strlen(str);
+	if (len >= 2 && str[0] == '"' && str[len - 1] == '"')
+		return (1);
+	return (0);
+}
 
 char	**ft_expand_wildcard(char *str, t_node *node)
 {
@@ -19,7 +29,7 @@ char	**ft_expand_wildcard(char *str, t_node *node)
 
 	i = do_asterisk(str);
 	node->c_cmd->ac += i;
-	if (!ft_contains_asterisk(str) || !i)
+	if ((!ft_contains_asterisk(str) || !i) || is_in_quotes(str))
 	{
 		ret = no_asterisk(str);
 		if (!ret)

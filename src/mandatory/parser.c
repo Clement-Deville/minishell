@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:22:01 by skapersk          #+#    #+#             */
-/*   Updated: 2024/06/17 17:24:25 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/17 22:35:08 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ t_node	*ft_start(t_mini_env *ms, int min_prec)
 		return (NULL);
 	if (ft_get_node_type(ms->tokens->type)
 		|| (ms->tokens->type == TOKEN_SUBSHELL_CLOSE))
-		return (ft_set_parse_err(E_SYNTAX), ms->tokens = ms->tokens->next,
+		return (ft_set_parse_err(E_SYNTAX), /*ms->tokens = ms->tokens->next,*/
 			get_ms()->tmp = ms->tokens, NULL);
 	if (ms->tokens->type == TOKEN_SUBSHELL_OPEN)
 	{
@@ -92,7 +92,7 @@ t_node	*ft_handle_tokens(t_mini_env *ms, t_node *node, int min_prec)
 		node->rigth = ms->tokens;
 		ms->tokens = ms->tokens->next;
 	}
-	if (!ms->tokens)
+	if (!ms->tokens || ft_get_node_type(ms->tokens->type))
 		return (ft_set_parse_err(E_SYNTAX), get_ms()->tmp = node->rigth, NULL);
 	if (ft_get_node_type(ms->tokens->type)
 		|| (ms->tokens->type == TOKEN_SUBSHELL_CLOSE && min_prec > 0))

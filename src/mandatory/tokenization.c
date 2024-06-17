@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 17:15:30 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/16 21:14:50 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/17 23:24:15 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -207,7 +207,7 @@ int	ft_token_else_by_quotes(char **line, t_token **t_list)
 			tmp = tmp2;
 			*line += i;
 		}
-
+		ft_printf("%s\n", tmp);
 		token = create_new_token(tmp, TOKEN_ELSE);
 		if (!token)
 		{
