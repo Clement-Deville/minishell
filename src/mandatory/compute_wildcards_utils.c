@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   compute_wildcards_utils.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
+/*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 12:26:04 by skapersk          #+#    #+#             */
-/*   Updated: 2024/06/13 17:54:34 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/17 17:45:36 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

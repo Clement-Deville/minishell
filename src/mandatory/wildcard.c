@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 09:53:38 by skapersk          #+#    #+#             */
-/*   Updated: 2024/05/07 09:58:26 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/17 17:47:15 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	ft_contains_asterisk(char *str)
 	int	i;
 
 	i = 0;
-	while (str[i] == '*')
+	while (str[i])
 	{
 		if (str[i] == '*')
 			return (1);
