@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirections.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 19:29:26 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/17 12:31:34 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/17 14:48:30 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@ int	set_input(char *filename, t_node *node)
 			node->status = 1;
 			return (perror(filename), 1);
 		}
+		if (errno == ENOENT)
+			return (perror(filename), 1);
 		return (perror("Open"), -1);
 	}
 	if (dup2(fd, STDIN_FILENO) == -1)
@@ -63,6 +65,8 @@ int	set_output(char *filename, t_node *node)
 			node->status = 1;
 			return (perror(filename), 1);
 		}
+		if (errno == ENOENT)
+			return (perror(filename), 1);
 		return (perror("Open"), -1);
 	}
 	if (dup2(fd, STDOUT_FILENO) == -1)
@@ -93,7 +97,9 @@ int	set_output_append(char *filename, t_node *node)
 			node->status = 1;
 			return (perror(filename), 1);
 		}
-		return (perror("Open"), 1);
+		if (errno == ENOENT)
+			return (perror(filename), 1);
+		return (perror("Open"), -1);
 	}
 	if (do_dup2(fd, STDOUT_FILENO) == -1)
 		return (-1);

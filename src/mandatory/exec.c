@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 11:47:07 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/17 14:33:32 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/17 14:44:23 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,7 +156,7 @@ int	exec_builtin(t_node *node, t_dblist **env)
 		red_status = do_redirections(node);
 		if (red_status == -1)
 		{
-			return (ENO_CRITICAL);
+			exit (ENO_CRITICAL);
 			// NEED TO EXIT?
 		}
 		if (red_status)
@@ -280,7 +280,7 @@ int	exec_standard(t_node **node, t_dblist **env)
 		red_status = do_redirections(*node);
 		if (red_status == -1)
 		{
-			return (ENO_CRITICAL);
+			exit (ENO_CRITICAL);
 			// NEED TO EXIT?
 		}
 		if (red_status)
