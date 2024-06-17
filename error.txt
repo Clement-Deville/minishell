@@ -1,3 +1,0 @@
-
-command not found: missing.out
-exit

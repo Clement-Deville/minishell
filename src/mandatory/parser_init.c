@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 17:31:03 by skapersk          #+#    #+#             */
-/*   Updated: 2024/06/15 11:53:15 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/17 17:33:44 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ t_node	*ft_parser(t_mini_env *ms, int min_prec)
 		result = ft_recursive_parse(ms, node, min_prec);
 		if (result)
 			return (result);
+		if (get_ms()->err.type)
+			return (NULL);
 	}
 	return (node);
 }

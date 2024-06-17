@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 10:28:12 by skapersk          #+#    #+#             */
-/*   Updated: 2024/06/15 16:02:27 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/17 17:23:53 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void	ft_handle_parse_err(t_mini_env *ms)
 			ft_putstr_fd("minishell: syntax error near unexpected token `", 2);
 			ft_putstr_fd(types[token_type], 2);
 			ft_putstr_fd("'\n", 2);
-			get_ms()->exit = 258;
+			get_ms()->exit = 2;
 		}
 		else if (type == E_QUOTES || type == E_DQUOTES)
 			ft_handle_expand_err(type);

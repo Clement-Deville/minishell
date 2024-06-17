@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:22:01 by skapersk          #+#    #+#             */
-/*   Updated: 2024/06/15 14:23:50 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/17 17:24:25 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ t_red_node	*ft_create_red_node(t_token_type type, char *value)
 t_node	*ft_simple_cmd(t_mini_env *ms)
 {
 	t_node	*node;
-	
+
 	node = ft_new_node(NODE_CMD);
 	if (!node)
 		return (ft_set_parse_err(E_MEMORY), NULL);

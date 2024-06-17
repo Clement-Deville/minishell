@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 14:44:53 by skapersk          #+#    #+#             */
-/*   Updated: 2024/06/17 14:02:15 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/17 17:09:57 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,24 +92,33 @@ char	*remove_quotes_from_str(char *str)
 
 char	*cut_quotes(char *str)
 {
+	size_t	i;
+	size_t	j;
 	char	*new;
+	char	quote;
 
-	if (str == NULL)
+	new = malloc(strlen(str) + 1);
+	if (!new)
 		return (NULL);
-	new = NULL;
-	if (str[0] == '"' || str[0] == '\'')
+	i = 0;
+	j = 0;
+	while (i < strlen(str))
 	{
-		if (str[0] == '"')
-			new = ft_strtrim(str, "\"");
-		else if (str[0] == '\'')
-			new = ft_strtrim(str, "\'");
-		if (new)
+		if (str[i] == '"' || str[i] == '\'')
 		{
-			// free(str);
-			return (new);
+			quote = str[i];
+			i++;
+			while (i < strlen(str) && str[i] != quote)
+				new[j++] = str[i++];
+			if (i < strlen(str) && str[i] == quote)
+				i++;
 		}
+		else
+			new[j++] = str[i++];
 	}
-	return (str);
+	new[j] = '\0';
+	free(str);
+	return (new);
 }
 
 int	init_cmp(t_node *node)
