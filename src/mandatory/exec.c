@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 11:47:07 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/17 14:44:23 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/17 16:34:10 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -335,7 +335,6 @@ int	exec_sub(t_node *node, t_dblist **env)
 			exit (1);
 		get_ms()->parent = FALSE;
 		tmp = start_exec(subnode, env);
-		ft_clear_parsing(node);
 		exit (tmp);
 	}
 	get_ms()->exit = do_wait(pid);
@@ -469,19 +468,19 @@ int do_no_cmd(t_node *node)
 t_bool	is_empty(t_node *node)
 {
 	if (!node || !node->c_cmd || !node->c_cmd->expand
-		|| !node->c_cmd->expand[0])
+		|| !node->c_cmd->expand[0] )
 		return (TRUE);
 	return (FALSE);
 }
 
 int	exec_single(t_node **node, t_dblist **env)
 {
+	if (is_subshell(*node))
+		return (exec_sub((*node),  env));
 	if (is_empty(*node))
 		return (0);
 	if (is_not_a_cmd(*node) && !(*node)->sub)
 		return (do_no_cmd(*node));
-	if (is_subshell(*node))
-		return (exec_sub((*node),  env));
 	else if (is_builtin(*node))
 		return (exec_builtin((*node), env));
 	else

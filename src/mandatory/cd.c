@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 17:49:40 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/14 14:21:44 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/17 16:34:44 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ int	do_cd(t_node *node, t_dblist **env)
 	if (nbr_of_args(node->c_cmd->expand) > 1)
 	{
 		if (node->silent == FALSE)
-			ft_putstr_fd("cd: to many arguments\n", 2);
+			ft_putstr_fd("cd: too many arguments\n", 2);
 		return (1);
 	}
 	directory = node->c_cmd->expand[1];

@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 14:15:44 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/14 12:08:40 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/17 16:36:24 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ int	add_new_variable(char *argument, t_dblist **env, t_bool silent)
 		{
 			ft_putstr_fd("export: `", 2);
 			ft_putstr_fd(variable->name, 2);
-			ft_putstr_fd("\": not valid a valid identifier \n", 2);
+			ft_putstr_fd("\": not a valid identifier\n", 2);
 		}
 		free(variable->name);
 		variable->name = NULL;
