@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 18:42:42 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/14 11:59:35 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/18 12:03:08 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,6 +122,7 @@ int	do_exit(t_node *node)
 	{
 		if (get_ms()->parent == TRUE && node->silent == FALSE)
 			ft_putendl_fd("exit", 2);
+		ft_clean_ms();
 		exit (0);
 	}
 	if (is_numeric(argument) == FALSE)
@@ -133,6 +134,7 @@ int	do_exit(t_node *node)
 			ft_putstr_fd(": numeric argument required\n", 2);
 		}
 		// A print sur stderr
+		ft_clean_ms();
 		exit (2);
 	}
 	if (nbr_of_args(node->c_cmd->expand) > 1)
@@ -145,6 +147,7 @@ int	do_exit(t_node *node)
 	//DOIT AFFICHER EXIT DANS LE PARENT
 	if (get_ms()->parent == TRUE && node->silent == FALSE)
 		ft_putendl_fd("exit", 2);
+	ft_clean_ms();
 	exit ((unsigned char)ft_atoi(argument));
 	// DOIT EXIT MEME SI LES ARG SONT MAUVAIS
 }

@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 17:49:40 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/17 16:34:44 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/18 10:47:16 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,17 +62,26 @@ int	do_cd(t_node *node, t_dblist **env)
 	}
 	pwd = (char *)malloc(sizeof(char) * FILENAME_MAX);
 	if (pwd == NULL)
-		return (perror("Malloc error"), -1);
+	{
+		if (node->silent == FALSE)
+			perror("Malloc error");
+		return (-1);
+	}
 	if (getcwd(pwd, FILENAME_MAX) == NULL)
 	{
 		if (node->silent == FALSE)
-			perror("Getcwd error");
+			if (node->silent == FALSE)
+				perror("getcwd");
 		return (free(pwd), -1);
 	}
 	complete_pwd = ft_strjoin("PWD=", pwd);
 	free(pwd);
 	if (complete_pwd == NULL)
-		return (perror("Malloc error"), -1);
+	{
+		if (node->silent == FALSE)
+			perror("Malloc error");
+		return (-1);
+	}
 	// Need to add condition (if name exists)
 	if (export_one(complete_pwd, env, node->silent) == -1)
 		return (free(complete_pwd), -1);

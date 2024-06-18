@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 13:23:24 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/14 12:04:32 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/18 11:54:07 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ t_dblist	*generate_env(char **envp)
 	{
 		new = ft_dblstnew(create_variable(envp[i]));
 		if (new == NULL || new->content == NULL)
-			return (ft_dblstclear(&my_env, free), free(new), NULL);
+			return (ft_dblstclear(&my_env, destroy_variable), free(new), NULL);
 		ft_dblstadd_back(&my_env, new);
 		i++;
 	}
