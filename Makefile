@@ -38,6 +38,7 @@ SRCS_FILES =	main	\
 				compute_split_args_utils	\
 				compute_split_args	\
 				compute_utils	\
+				compute_re_node_wildcards	\
 				compute_wildcards_utils	\
 				compute_wildcards	\
 				wildcard	\

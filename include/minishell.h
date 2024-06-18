@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:09:27 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/17 12:15:37 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/18 16:25:43 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -470,6 +470,7 @@ void		ft_heredoc_expand(char *str, int fd);
 int			ft_check_here_quotes(char *str);
 
 char		*ft_strip_quotes(char *str);
+int			init_red_cmp(t_red_node *node);
 
 //exec.c
 t_bool		is_subshell(t_node *node);

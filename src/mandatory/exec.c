@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
+/*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 11:47:07 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/18 16:06:36 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/18 16:26:19 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -492,6 +492,8 @@ int do_no_cmd(t_node *node)
 	tmp = node->red_node;
 	while (tmp)
 	{
+		if (!init_red_cmp(tmp))
+			return (1);
 		if (tmp->type == NODE_RED_IN)
 			status = fake_set_input(tmp->value);
 		else if (tmp->type == NODE_RED_OUT)

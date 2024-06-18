@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirections.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
+/*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 19:29:26 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/17 14:48:30 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/18 16:31:38 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,6 +128,8 @@ int	do_redirections(t_node *node)
 	tmp = node->red_node;
 	while (tmp)
 	{
+		if (!init_red_cmp(tmp))
+			return (1);
 		if (tmp->type == NODE_HERE_DOC)
 			status = set_input_here_doc(tmp->here_doc);
 		else if (tmp->type == NODE_RED_IN)
