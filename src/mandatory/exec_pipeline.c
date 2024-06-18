@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_pipeline.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 14:51:19 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/16 11:48:57 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/18 12:25:31 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -212,7 +212,7 @@ int	wait_for_all(t_node **node, int size)
 	{
 		if ((*node)->pid != NO_FORK
 			&& waitpid((*node)->pid, &((*node)->status), 0) == -1)
-			return (setup_signals(), perror("Wait error"), 1);
+			return (setup_signals(), perror("Wait error"), ENO_CRITICAL);
 		if ((*node)->pid != NO_FORK && WIFEXITED((*node)->status))
 			exit_value = WEXITSTATUS((*node)->status);
 		if ((*node)->pid != NO_FORK && WIFSIGNALED((*node)->status))
@@ -222,6 +222,7 @@ int	wait_for_all(t_node **node, int size)
 		(*node) = (*node)->next;
 		i++;
 	}
+	// si un process retourne ENO CRITICAL FAUT IL ATTENDRE TOUS LES PROCESSES?
 	(*node) = head;
 	setup_signals();
 	return (exit_value);
@@ -236,22 +237,22 @@ int	start_piping(t_node **node, t_dblist **env)
 	i = 0;
 	head = *node;
 	if (allocate(&pipefd, nbr_of_cmds(*node)) != 0)
-		return (1);
+		return (ENO_CRITICAL);
 	while (is_pipe_cmd(*node))
 	{
 		if (i)
 		{
 			if (!init_cmp(*node))
-				return (free(pipefd), 1);
+				return (free(pipefd), ENO_CRITICAL);
 		}
 		if (is_pipe_cmd((*node)->next) && pipe(&pipefd[2 * i]) == -1)
-			return (free(pipefd), perror("Pipe error"), 1);
+			return (free(pipefd), perror("Pipe error"), ENO_CRITICAL);
 		if ((*node)->status == -1)
-			return (free(pipefd), 1);
+			return (free(pipefd), ENO_CRITICAL);
 		if (is_cmd_executable((*node)))
 		{
 			if (do_fork(node, i, pipefd, env) == 1)
-				return (free(pipefd), 1);
+				return (free(pipefd), ENO_CRITICAL);
 		}
 		else
 			(*node)->pid = NO_FORK;
@@ -260,7 +261,7 @@ int	start_piping(t_node **node, t_dblist **env)
 	}
 	(*node) = head;
 	if (close_parent(pipefd, --i) == 1)
-		return (1);
+		return (ENO_CRITICAL);
 	return (wait_for_all(node, i));
 }
 

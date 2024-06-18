@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 18:42:42 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/18 12:03:08 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/18 12:33:00 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,8 @@ t_bool	is_numeric(char *argument)
 
 int	do_exit(t_node *node)
 {
-	char	*argument;
+	char			*argument;
+	unsigned char	exit_value;
 
 	argument = node->c_cmd->expand[1];
 	if (argument == NULL)
@@ -147,8 +148,9 @@ int	do_exit(t_node *node)
 	//DOIT AFFICHER EXIT DANS LE PARENT
 	if (get_ms()->parent == TRUE && node->silent == FALSE)
 		ft_putendl_fd("exit", 2);
+	exit_value = (unsigned char)ft_atoi(argument);
 	ft_clean_ms();
-	exit ((unsigned char)ft_atoi(argument));
+	exit (exit_value);
 	// DOIT EXIT MEME SI LES ARG SONT MAUVAIS
 }
 

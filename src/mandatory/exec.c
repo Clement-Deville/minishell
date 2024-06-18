@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 11:47:07 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/18 12:13:07 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/18 12:18:13 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -609,11 +609,15 @@ int	start_exec(t_node *node, t_dblist **env)
 			get_ms()->exit = exec_cmd(&node, env);
 			if (get_ms()->exit == ENO_CRITICAL && get_ms()->parent == TRUE)
 			{
-				ft_clean_ms();
-				exit (1);
+				if (get_ms()->parent == TRUE)
+				{
+					ft_clean_ms();
+					exit (1);
+				}
+				else
+					return (ENO_CRITICAL);
 			}
-			if (get_ms()->exit == ENO_CRITICAL)
-				return (ENO_CRITICAL);
+
 			dodge_cmd(&node);
 		}
 		// NEED TO CHECK FOR CRITICAL ERROR (WHAT ABOUT SUBSHELLS?)
