@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   clean_parsing.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 12:30:19 by skapersk          #+#    #+#             */
-/*   Updated: 2024/06/17 14:07:02 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/18 10:37:50 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ void	ft_free_red_nodes(t_red_node *red_node)
 
 	while (red_node)
 	{
+		if (red_node->here_doc)
+			close(red_node->here_doc);
 		tmp_r = red_node;
 		red_node = red_node->next;
 		if (tmp_r->value)

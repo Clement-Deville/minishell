@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 11:47:07 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/17 16:34:10 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/18 10:24:06 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,34 +156,59 @@ int	exec_builtin(t_node *node, t_dblist **env)
 		red_status = do_redirections(node);
 		if (red_status == -1)
 		{
+			ft_clean_ms();
 			exit (ENO_CRITICAL);
 			// NEED TO EXIT?
 		}
 		if (red_status)
+		{
+			ft_clean_ms();
 			exit (1);
+		}
 		if (ft_strncmp(command[0], "echo", 6) == 0)
 			if (do_echo(command))
+			{
+				ft_clean_ms();
 				exit (1);
+			}
 		if (ft_strncmp(command[0], "cd", 3) == 0)
 			if (do_cd(node, env))
+			{
+				ft_clean_ms();
 				exit (1);
+			}
 		if (ft_strncmp(command[0], "export", 8) == 0)
 			if (do_export(node, env))
+			{
+				ft_clean_ms();
 				exit (1);
+			}
 		if (ft_strncmp(command[0], "env", 4) == 0)
 			if (do_env(node, *env))
+			{
+				ft_clean_ms();
 				exit (1);
+			}
 		if (ft_strncmp(command[0], "pwd", 4) == 0)
 			if (do_pwd(node))
+			{
+				ft_clean_ms();
 				exit (1);
+			}
 		if (ft_strncmp(command[0], "unset", 7) == 0)
 			if (do_unset(&command[1], env))
+			{
+				ft_clean_ms();
 				exit (1);
+			}
 		if (ft_strncmp(command[0], "exit", 6) == 0)
 			if (do_exit(node))
+			{
+				ft_clean_ms();
 				exit (1);
+			}
 		// NEED TO FREE EVERYTHING BEFORE EXITING
-		// ft_clear_parsing(node);
+		ft_clean_ms();
 		exit (0);
 	}
 	status = do_wait(pid);
@@ -280,22 +305,35 @@ int	exec_standard(t_node **node, t_dblist **env)
 		red_status = do_redirections(*node);
 		if (red_status == -1)
 		{
+			ft_clean_ms();
 			exit (ENO_CRITICAL);
 			// NEED TO EXIT?
 		}
 		if (red_status)
+		{
+			ft_clean_ms();
 			exit (1);
+		}
 		access_status = check_for_path_access(&((*node)->c_cmd->expand[0]), *env);
 		if (access_status == -1)
+		{
+			ft_clean_ms();;
 			exit (ENO_CRITICAL);
+		}
 		if (access_status)
+		{
+			ft_clean_ms();
 			exit (access_status);
+		}
 		// NEED TO FREE EVERYTHING HERE
 		tab_env = list_to_tab(*env);
 		if (tab_env == NULL)
+		{
+			ft_clean_ms();
 			exit (1);
+		}
 		tmp = exec((*node)->c_cmd->expand, tab_env);
-		// ft_clear_parsing(*node);
+		ft_clean_ms();
 		exit (tmp);
 	}
 	status = do_wait(pid);
@@ -328,13 +366,18 @@ int	exec_sub(t_node *node, t_dblist **env)
 		red_status = do_redirections(node);
 		if (red_status == -1)
 		{
+			ft_clean_ms();
 			return (ENO_CRITICAL);
 			// NEED TO EXIT?
 		}
 		if (red_status)
+		{
+			ft_clean_ms();
 			exit (1);
+		}
 		get_ms()->parent = FALSE;
 		tmp = start_exec(subnode, env);
+		ft_clean_ms();
 		exit (tmp);
 	}
 	get_ms()->exit = do_wait(pid);
