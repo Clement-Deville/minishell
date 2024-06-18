@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 11:47:07 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/18 12:18:13 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/18 16:06:36 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -520,10 +520,10 @@ int	exec_single(t_node **node, t_dblist **env)
 {
 	if (is_subshell(*node))
 		return (exec_sub((*node),  env));
-	if (is_empty(*node))
-		return (0);
-	if (is_not_a_cmd(*node) && !(*node)->sub)
+	else if (is_not_a_cmd(*node) && !(*node)->sub)
 		return (do_no_cmd(*node));
+	else if (is_empty(*node))
+		return (0);
 	else if (is_builtin(*node))
 		return (exec_builtin((*node), env));
 	else
@@ -617,7 +617,6 @@ int	start_exec(t_node *node, t_dblist **env)
 				else
 					return (ENO_CRITICAL);
 			}
-
 			dodge_cmd(&node);
 		}
 		// NEED TO CHECK FOR CRITICAL ERROR (WHAT ABOUT SUBSHELLS?)
