@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 14:44:53 by skapersk          #+#    #+#             */
-/*   Updated: 2024/06/17 23:06:43 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/18 13:56:51 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,7 @@ char	*cut_quotes(char *str)
 			new[j++] = str[i++];
 	}
 	new[j] = '\0';
-	free(str);
+	// free(str);
 	return (new);
 }
 
@@ -125,7 +125,7 @@ int	init_cmp(t_node *node)
 {
 	char	**tmp;
 	int		i;
-	
+
 	tmp = NULL;
 	if (node == NULL)
 		return (0);

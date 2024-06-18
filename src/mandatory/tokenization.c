@@ -6,37 +6,105 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 17:15:30 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/18 09:25:20 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/18 13:56:13 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-void	ft_add_token_else(char **line, t_token **t_list)
+int	ft_is_quote(char c)
 {
-	t_token	*token;
-	char	*value;
-	char	*tmp;
-	int		i;
+	if (c == '\'' || c == '"')
+		return (1);
+	return (0);
+}
 
+int	ft_is_separator(char *s)
+{
+	if (!ft_strncmp(s, "&&", 2) || *s == ' ' || *s == '\t'
+		|| *s == '<' || *s == '>' || *s == '|' || *s == '(' || *s == ')')
+		return (1);
+	return (0);
+}
+
+t_bool	ft_skip_quotes(char *line, size_t *i)
+{
+	char	quote;
+
+	quote = line[*i];
+	if (ft_strchr(line + *i + 1, quote))
+	{
+		(*i)++;
+		while (line[*i] != quote)
+			(*i)++;
+		(*i)++;
+		return (TRUE);
+	}
+	return (FALSE);
+}
+
+void	ft_print_quote_err(char c)
+{
+	ft_putstr_fd("minishell: unexpected EOF while looking for matching `", 2);
+	ft_putchar_fd(c, 2);
+	ft_putstr_fd("'\n", 2);
+	get_ms()->exit = 258;
+}
+
+int	ft_add_token_else(char **line_ptr, t_token **token_list)
+{
+	char	*tmp_line;
+	char	*value;
+	t_token	*token;
+	size_t	i;
+
+	tmp_line = *line_ptr;
 	i = 0;
-	tmp = *line;
-	// Ajout d'une condition pour vérifier les caractères spéciaux pertinents
-	while (tmp[i] && !is_space(tmp[i]) && tmp[i] != '"' && tmp[i] != '\'' && tmp[i] != '|' && tmp[i] != '<' && tmp[i] != '>' && tmp[i] != '&' && tmp[i] != '(' && tmp[i] != ')')
-		i++;
-	value = malloc(sizeof(char) * (i + 1));
+	while (tmp_line[i] && !ft_is_separator(tmp_line + i))
+	{
+		if (ft_is_quote(tmp_line[i]))
+		{
+			if (!ft_skip_quotes(tmp_line, &i))
+				return (ft_print_quote_err(tmp_line[i]), 0);
+		}
+		else
+			i++;
+	}
+	value = ft_substr(tmp_line, 0, i);
 	if (!value)
-		return ;
-	ft_strlcpy(value, tmp, i + 1);
+		return (0);
 	token = create_new_token(value, TOKEN_ELSE);
 	if (!token)
-	{
-		free(value);
-		return ;
-	}
-	lst_token_add_back(t_list, token);
-	*line += i;
+		return (free(value), 0);
+	*line_ptr += i;
+	return (lst_token_add_back(token_list, token), 1);
 }
+
+// void	ft_add_token_else(char **line, t_token **t_list)
+// {
+// 	t_token	*token;
+// 	char	*value;
+// 	char	*tmp;
+// 	int		i;
+
+// 	i = 0;
+// 	tmp = *line;
+// 	// Ajout d'une condition pour vérifier les caractères spéciaux pertinents
+// 	while (tmp[i] && !is_space(tmp[i]) && tmp[i] != '"' && tmp[i] != '\'' && tmp[i] != '|' && tmp[i] != '<' && tmp[i] != '>' && tmp[i] != '&' && tmp[i] != '(' && tmp[i] != ')')
+// 		i++;
+// 	value = malloc(sizeof(char) * (i + 1));
+// 	if (!value)
+// 		return ;
+// 	ft_strlcpy(value, tmp, i + 1);
+// 	token = create_new_token(value, TOKEN_ELSE);
+// 	if (!token)
+// 	{
+// 		free(value);
+// 		return ;
+// 	}
+// 	lst_token_add_back(t_list, token);
+// 	*line += i;
+// }
 
 // void	ft_add_token_else(char **line, t_token **t_list)
 // {
@@ -296,7 +364,8 @@ int	ft_tokenization(t_mini_env *ms)
 			line++;
 		else
 		{
-			ft_add_token_else(&line, &token_list);
+			if (!ft_add_token_else(&line, &token_list))
+				return (free(trimmed), ft_clear_token(token_list), (0));
 		}
 	}
 	ms->tokens = token_list;
