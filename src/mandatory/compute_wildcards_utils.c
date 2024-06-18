@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   compute_wildcards_utils.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 12:26:04 by skapersk          #+#    #+#             */
-/*   Updated: 2024/06/17 17:45:36 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/18 14:35:53 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,45 @@ int	ft_visible(char *entry)
 	return (1);
 }
 
+int	tab_size(char **tab)
+{
+	int	i;
+
+	i = 0;
+	while (tab[i] && tab[i + 1])
+		i++;
+	return (i);
+}
+
+void	ft_swap(char **a, char **b)
+{
+	char	*stock;
+
+	stock = *a;
+	*a = *b;
+	*b = stock;
+}
+
+char	**ft_sort_tab(char **argv, int size)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	while (i <= size - 1)
+	{
+		j = i + 1;
+		while (j <= size - 1)
+		{
+			if (ft_strncmp(argv[i], argv[j], ft_strlen(argv[i] + 1)) > 0)
+				ft_swap (&argv[i], &argv[j]);
+		j++;
+		}
+	i++;
+	}
+	return (argv);
+}
+
 char	**there_asterisk(char *str, int i)
 {
 	DIR				*dir;
@@ -48,15 +87,22 @@ char	**there_asterisk(char *str, int i)
 	{
 		if (patern_match(str, entry->d_name) && ft_visible(entry->d_name))
 		{
-			ret[i] = ft_strdup(entry->d_name);
+			ret[i] = ft_strdup(entry->d_name);\
 			if (!ret[i])
+			{
+				while (i)
+				{
+					free(ret[i]);
+					ret[i--] = NULL;
+				}
 				return (NULL);
+			}
 			i++;
 		}
 		entry = readdir(dir);
 	}
 	do_closedir(dir);
-	return (ret);
+	return (ft_sort_tab(ret, tab_size(ret)));
 }
 
 void	free_wildcards(t_wildcard *wildcard)
