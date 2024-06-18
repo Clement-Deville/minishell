@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:09:05 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/18 09:26:28 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/18 10:05:34 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,7 +147,7 @@ char	*get_balise(void)
 	else
 		ft_strlcpy(color, "\e[0;32m", 9);
 	// ft_printf("%s\u2192  \e[1;36m%s \e[0m", color, current_dir_name);
-	balise = ft_strjoin(color, "\u2192  \001\033[1;36m");
+	balise = ft_strjoin(color, "\u2192  \e[1;36m");
 	if (balise)
 	{
 		tmp = balise;
@@ -325,20 +325,20 @@ int	init_minishell(void)
 			ft_handle_parse_err(ms);
 			continue ;
 		}
-		exec_parse(ms->nodes);
-		// exec_test(ms->nodes);
-		// start_exec(ms->nodes, &(ms->envlst));
-		// if (get_ms()->f_or_nf == 0)
-		// {
-		// 	ft_garbage(NULL, TRUE);
-		// 	ft_clear_token(get_ms()->tokens);
-		// 	ft_clear_parsing(get_ms()->nodes);
-		// }
-		// else
-		// {
-		// 	ft_garbage(NULL, TRUE);
-		// 	ft_clear_parsing(get_ms()->nodes);
-		// }
+		// exec_parse(ms->nodes);
+		exec_test(ms->nodes);
+		start_exec(ms->nodes, &(ms->envlst));
+		if (get_ms()->f_or_nf == 0)
+		{
+			ft_garbage(NULL, TRUE);
+			ft_clear_token(get_ms()->tokens);
+			ft_clear_parsing(get_ms()->nodes);
+		}
+		else
+		{
+			ft_garbage(NULL, TRUE);
+			ft_clear_parsing(get_ms()->nodes);
+		}
 	}
 	return (0);
 }
