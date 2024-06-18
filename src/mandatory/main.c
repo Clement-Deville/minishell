@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:09:05 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/18 10:05:34 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/18 13:43:10 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,7 +132,7 @@ char	*get_balise(void)
 	// ft_printf("\r");
 	// ft_printf("\033[K");
 	char	*current_dir_name;
-	char	color[8];
+	char	color[10];
 	char	*balise;
 	char	*tmp;
 
@@ -143,18 +143,18 @@ char	*get_balise(void)
 	}
 	current_dir_name = getcwd(NULL, 0);
 	if (get_ms()->exit)
-		ft_strlcpy(color, "\e[1;31m", 9);
+		ft_strlcpy(color, "\001\033[1;31m\002", 10);
 	else
-		ft_strlcpy(color, "\e[0;32m", 9);
+		ft_strlcpy(color, "\001\033[0;32m\002", 10);
 	// ft_printf("%s\u2192  \e[1;36m%s \e[0m", color, current_dir_name);
-	balise = ft_strjoin(color, "\u2192  \e[1;36m");
+	balise = ft_strjoin(color, "➜  \001\033[1;36m\002");
 	if (balise)
 	{
 		tmp = balise;
 		balise = ft_strjoin(balise, current_dir_name);
 		free(tmp);
 		tmp = balise;
-		balise = ft_strjoin(balise, " \e[0m");
+		balise = ft_strjoin(balise, " \001\033[0m\002");
 		free (tmp);
 	}
 	if (current_dir_name)
@@ -296,9 +296,9 @@ int	init_minishell(void)
 		if (get_ms()->balise)
 			get_ms()->line = readline(get_ms()->balise);
 		else if (get_ms()->exit)
-			get_ms()->line = readline("\e[1;31m\u2192 \e[0m");
+			get_ms()->line = readline("\001\033[1;31m\002➜ \001\033[0m\002");
 		else
-			get_ms()->line = readline("\e[1;32m\u2192 \e[0m");
+			get_ms()->line = readline("\001\033[1;32m\002➜ \001\033[0m\002");
 		// free(balise);
 		// if (line == NULL)
 		// {
