@@ -6,11 +6,9 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 17:15:30 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/17 23:24:15 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/18 09:25:20 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-#include <minishell.h>
 
 #include <minishell.h>
 
@@ -23,7 +21,8 @@ void	ft_add_token_else(char **line, t_token **t_list)
 
 	i = 0;
 	tmp = *line;
-	while (tmp[i] && !ft_is_char(tmp + i))
+	// Ajout d'une condition pour vérifier les caractères spéciaux pertinents
+	while (tmp[i] && !is_space(tmp[i]) && tmp[i] != '"' && tmp[i] != '\'' && tmp[i] != '|' && tmp[i] != '<' && tmp[i] != '>' && tmp[i] != '&' && tmp[i] != '(' && tmp[i] != ')')
 		i++;
 	value = malloc(sizeof(char) * (i + 1));
 	if (!value)
@@ -38,6 +37,31 @@ void	ft_add_token_else(char **line, t_token **t_list)
 	lst_token_add_back(t_list, token);
 	*line += i;
 }
+
+// void	ft_add_token_else(char **line, t_token **t_list)
+// {
+// 	t_token	*token;
+// 	char	*value;
+// 	char	*tmp;
+// 	int		i;
+
+// 	i = 0;
+// 	tmp = *line;
+// 	while (tmp[i] && !ft_is_char(tmp + i))
+// 		i++;
+// 	value = malloc(sizeof(char) * (i + 1));
+// 	if (!value)
+// 		return ;
+// 	ft_strlcpy(value, tmp, i + 1);
+// 	token = create_new_token(value, TOKEN_ELSE);
+// 	if (!token)
+// 	{
+// 		free(value);
+// 		return ;
+// 	}
+// 	lst_token_add_back(t_list, token);
+// 	*line += i;
+// }
 
 int	ft_add_token_sign(char **line, t_token **t_list,
 	t_token_type type, int i)
@@ -207,7 +231,6 @@ int	ft_token_else_by_quotes(char **line, t_token **t_list)
 			tmp = tmp2;
 			*line += i;
 		}
-		ft_printf("%s\n", tmp);
 		token = create_new_token(tmp, TOKEN_ELSE);
 		if (!token)
 		{
@@ -272,7 +295,9 @@ int	ft_tokenization(t_mini_env *ms)
 		else if (is_space(*line))
 			line++;
 		else
+		{
 			ft_add_token_else(&line, &token_list);
+		}
 	}
 	ms->tokens = token_list;
 	return (free(trimmed), 1);
