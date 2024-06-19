@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 17:49:40 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/18 10:47:16 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/19 14:12:09 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,8 @@ int	do_cd(t_node *node, t_dblist **env)
 	char 	*directory;
 	char	*pwd;
 	char	*complete_pwd;
+	char	*old_pwd;
+	char	*complete_old;
 
 	if (nbr_of_args(node->c_cmd->expand) > 1)
 	{
@@ -46,6 +48,32 @@ int	do_cd(t_node *node, t_dblist **env)
 			ft_putstr_fd("cd: too many arguments\n", 2);
 		return (1);
 	}
+	old_pwd = (char *)malloc(sizeof(char) * FILENAME_MAX);
+	if (old_pwd == NULL)
+	{
+		if (node->silent == FALSE)
+			perror("Malloc error");
+		return (-1);
+	}
+	if (getcwd(old_pwd, FILENAME_MAX) == NULL)
+	{
+		if (node->silent == FALSE)
+			if (node->silent == FALSE)
+				perror("getcwd");
+		return (free(old_pwd), -1);
+	}
+	complete_old = ft_strjoin("OLDPWD=", old_pwd);
+	free(old_pwd);
+	if (complete_old == NULL)
+	{
+		if (node->silent == FALSE)
+			perror("Malloc error");
+		return (-1);
+	}
+	// Need to add condition (if name exists)
+	if (export_one(complete_old, env, node->silent) == -1)
+		return (free(complete_old), -1);
+	free(complete_old);
 	directory = node->c_cmd->expand[1];
 	if (directory == NULL)
 	{
@@ -82,6 +110,7 @@ int	do_cd(t_node *node, t_dblist **env)
 			perror("Malloc error");
 		return (-1);
 	}
+	// NEED TO ALSO FREE OLDPWD
 	// Need to add condition (if name exists)
 	if (export_one(complete_pwd, env, node->silent) == -1)
 		return (free(complete_pwd), -1);
