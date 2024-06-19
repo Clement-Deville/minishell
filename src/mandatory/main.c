@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:09:05 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/18 15:07:30 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/19 12:25:40 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -307,7 +307,8 @@ int	init_minishell(void)
 		// }
 		if (get_ms()->line == NULL)
 		{
-			// ft_putendl_fd("exit", 2);
+			ft_putendl_fd("exit", 2);
+			ft_clear_envlst(get_ms());
 			exit (get_ms()->exit);
 		}
 		else if (get_ms()->line[0])
