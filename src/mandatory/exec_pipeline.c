@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 14:51:19 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/18 12:25:31 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/19 18:39:27 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,6 +129,9 @@ int	close_parent(int *pipefd, int size)
 
 int	do_fork(t_node **node, int i, int *pipefd, t_dblist **env)
 {
+	int	status;
+
+	status = 0;
 	(*node)->pid = fork();
 	if ((*node)->pid < 0)
 		return (free(pipefd), perror("Fork error"), 1);
@@ -143,7 +146,9 @@ int	do_fork(t_node **node, int i, int *pipefd, t_dblist **env)
 				return (1);
 		if (close_useless_fd(pipefd, i) == 1)
 			return (1);
-		exit (exec_single(node, env));
+		status = exec_single(node, env);
+		ft_clean_ms();
+		exit (status);
 	}
 	return (0);
 }
@@ -242,7 +247,7 @@ int	start_piping(t_node **node, t_dblist **env)
 	{
 		if (i)
 		{
-			if (!init_cmp(*node))
+			if (!init_cmp(*node) && (*node)->red_node == NULL)
 				return (free(pipefd), ENO_CRITICAL);
 		}
 		if (is_pipe_cmd((*node)->next) && pipe(&pipefd[2 * i]) == -1)

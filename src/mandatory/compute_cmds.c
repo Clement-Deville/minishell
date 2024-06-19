@@ -3,41 +3,49 @@
 /*                                                        :::      ::::::::   */
 /*   compute_cmds.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 14:44:53 by skapersk          #+#    #+#             */
-/*   Updated: 2024/06/18 13:56:51 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/19 17:43:34 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-char	*clean_node(char *str)
+char    *clean_node(char *str)
 {
 	int		i;
 	int		j;
-	int		dstsize;
 	char	*tmp;
 	char	*ret;
+	char	quote;
 
 	if ((str[0] == '\'' && str[1] == '\'' && !str[2])
 		|| (str[0] == '"' && str[1] == '"' && !str[2]))
 		return (str);
 	tmp = ft_calloc(ft_strlen(str) + 1, sizeof(char));
+	if (!tmp)
+		return (NULL);
 	i = 0;
 	j = 0;
 	while (str[i])
 	{
-		if ((str[i] == '\'' && str[i + 1] == '\'')
-			|| (str[i] == '"' && str[i + 1] == '"'))
-			i += 2;
+		if (str[i] == '\'' || str[i] == '"')
+		{
+			quote = str[i];
+			tmp[j++] = str[i++];
+			while (str[i] && str[i] != quote)
+				tmp[j++] = str[i++];
+			if (str[i] == quote)
+				tmp[j++] = str[i++];
+		}
 		else
 			tmp[j++] = str[i++];
 	}
 	free(str);
-	dstsize = ft_strlen(tmp) + 1;
-	ret = ft_calloc(dstsize, sizeof(char));
-	return (ft_strlcpy(ret, tmp, dstsize), free(tmp), ret);
+	ret = ft_strdup(tmp);
+	free(tmp);
+	return (ret);
 }
 
 char	**ft_expand(char *str, t_node *node)

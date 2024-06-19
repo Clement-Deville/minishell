@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenization.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 17:15:30 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/18 13:56:13 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/19 17:40:27 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -355,11 +355,6 @@ int	ft_tokenization(t_mini_env *ms)
 			|| !ft_strncmp(line, "|", 1) || !ft_strncmp(line, "&&", 2)
 			|| !ft_strncmp(line, "(", 1) || !ft_strncmp(line, ")", 1))
 			ft_token_identify(&line, &token_list);
-		else if (!ft_strncmp(line, "\"", 1) || ! ft_strncmp(line, "'", 1))
-		{
-			if (!ft_token_else_by_quotes(&line, &token_list))
-				return (free(trimmed), ft_clear_token(token_list), (0));
-		}
 		else if (is_space(*line))
 			line++;
 		else

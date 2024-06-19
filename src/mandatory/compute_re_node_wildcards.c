@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   compute_re_node_wildcards.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 14:20:53 by skapersk          #+#    #+#             */
-/*   Updated: 2024/06/18 16:32:09 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/19 18:48:48 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,9 +48,6 @@ char	*ft_red_handle_wildcard(char *glob)
 {
 	char		*new;
 
-	new = ft_calloc(1, sizeof(char));
-	if (!new)
-		return (free(glob), NULL);
 	new = ft_expand_red_wildcard(glob);
 	if (!new)
 		return (free(glob), NULL);
@@ -71,6 +68,7 @@ int	init_red_cmp(t_red_node *node)
 	expanded = ft_red_handle_wildcard(tmp);
 	if (!expanded)
 		return (0);
+	free(node->value);
 	node->value = ft_strip_quotes(expanded);
 	if (!node->value)
 		return (0);

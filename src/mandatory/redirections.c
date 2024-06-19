@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirections.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 19:29:26 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/18 16:31:38 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/19 18:54:03 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,6 @@ int	set_input(char *filename, t_node *node)
 {
 	int	fd;
 
-	node->red_node->value = cut_quotes(filename);
-	filename = node->red_node->value;
 	if (access(filename, R_OK) != 0)
 	{
 		node->pid = NO_FORK;
@@ -48,8 +46,6 @@ int	set_output(char *filename, t_node *node)
 {
 	int		fd;
 
-	node->red_node->value = cut_quotes(filename);
-	filename = node->red_node->value;
 	if (access(filename, W_OK) != 0 && errno != ENOENT)
 	{
 		node->pid = NO_FORK;
@@ -80,8 +76,6 @@ int	set_output_append(char *filename, t_node *node)
 {
 	int		fd;
 
-	node->red_node->value = cut_quotes(filename);
-	filename = node->red_node->value;
 	if (access(filename, W_OK) != 0 && errno != ENOENT)
 	{
 		node->pid = NO_FORK;
