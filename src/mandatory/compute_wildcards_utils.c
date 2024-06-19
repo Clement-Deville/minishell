@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 12:26:04 by skapersk          #+#    #+#             */
-/*   Updated: 2024/06/18 14:35:53 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/19 11:45:35 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,22 @@ void	ft_swap(char **a, char **b)
 	*b = stock;
 }
 
+int	name_cmp(char *file1, char *file2)
+{
+	int	i;
+
+	i = 0;
+	while (file1[i] && file2[i])
+	{
+		if (ft_toupper(file1[i]) != ft_toupper(file2[i]))
+			return (ft_toupper(file1[i]) - ft_toupper(file2[i]));
+		i++;
+	}
+	if (ft_toupper(file1[i]) == ft_toupper(file2[i]))
+		return (ft_strncmp(file2, file1, ft_strlen(file1) + 1));
+	return (ft_toupper(file1[i]) - ft_toupper(file2[i]));
+}
+
 char	**ft_sort_tab(char **argv, int size)
 {
 	int	i;
@@ -62,7 +78,7 @@ char	**ft_sort_tab(char **argv, int size)
 		j = i + 1;
 		while (j <= size - 1)
 		{
-			if (ft_strncmp(argv[i], argv[j], ft_strlen(argv[i] + 1)) > 0)
+			if (name_cmp(argv[i], argv[j]) > 0)
 				ft_swap (&argv[i], &argv[j]);
 		j++;
 		}
@@ -102,7 +118,7 @@ char	**there_asterisk(char *str, int i)
 		entry = readdir(dir);
 	}
 	do_closedir(dir);
-	return (ft_sort_tab(ret, tab_size(ret)));
+	return (ft_sort_tab(ret, tab_size(ret) + 1));
 }
 
 void	free_wildcards(t_wildcard *wildcard)
