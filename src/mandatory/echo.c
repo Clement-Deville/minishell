@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 11:33:00 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/11 13:37:59 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/19 19:26:57 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,8 @@ static int	ft_check_option(char *s)
 	if (s[0] != '-')
 		return (0);
 	i++;
+	if (!s[i])
+		return (0);
 	while (s[i])
 	{
 		if (s[i] != 'n')
