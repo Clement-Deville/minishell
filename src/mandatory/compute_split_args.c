@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   compute_split_args.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 12:17:33 by skapersk          #+#    #+#             */
-/*   Updated: 2024/06/15 11:58:46 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/19 19:14:52 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -237,7 +237,7 @@ char	**ft_expander_split(char const *s, t_node *node)
 	strs = ft_calloc(count + 1, sizeof(char *));
 	tofree = strs;
 	strs = ft_allocater(s, strs);
-	if (!strs || !count)
+	if (!strs)
 		return (ft_big_free(tofree), NULL);
 	return (ft_filler(s, strs));
 }
