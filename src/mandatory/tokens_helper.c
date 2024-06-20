@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 16:46:40 by skapersk          #+#    #+#             */
-/*   Updated: 2024/04/16 17:17:32 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/20 15:20:02 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,4 +40,27 @@ int	ft_is_char(char *str)
 		|| *str == '>' || *str == '|' || *str == '(' || *str == ')')
 		return (1);
 	return (0);
+}
+
+int	ft_is_quote(char c)
+{
+	if (c == '\'' || c == '"')
+		return (1);
+	return (0);
+}
+
+t_bool	ft_skip_quotes(char *line, size_t *i)
+{
+	char	quote;
+
+	quote = line[*i];
+	if (ft_strchr(line + *i + 1, quote))
+	{
+		(*i)++;
+		while (line[*i] != quote)
+			(*i)++;
+		(*i)++;
+		return (TRUE);
+	}
+	return (FALSE);
 }

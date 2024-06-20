@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   compute_wildcards_utils.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
+/*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 12:26:04 by skapersk          #+#    #+#             */
-/*   Updated: 2024/06/19 11:45:35 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/20 16:58:32 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ char	**there_asterisk(char *str, int i)
 	{
 		if (patern_match(str, entry->d_name) && ft_visible(entry->d_name))
 		{
-			ret[i] = ft_strdup(entry->d_name);\
+			ret[i] = ft_strdup(entry->d_name);
 			if (!ret[i])
 			{
 				while (i)

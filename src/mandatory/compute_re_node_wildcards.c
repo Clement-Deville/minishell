@@ -3,16 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   compute_re_node_wildcards.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
+/*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 14:20:53 by skapersk          #+#    #+#             */
-/*   Updated: 2024/06/19 18:48:48 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/20 16:42:42 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-int	is_in_quotes(char *str);
+void	ft_printf_error_ast(char *str)
+{
+	ft_putstr_fd("minishell: ", 2);
+	ft_putstr_fd(str, 2);
+	ft_putstr_fd(": ambiguous redirect\n", 2);
+}
 
 char	*ft_expand_red_wildcard(char *str)
 {
@@ -23,9 +28,7 @@ char	*ft_expand_red_wildcard(char *str)
 	i = do_asterisk(str);
 	if (i > 1)
 	{
-		ft_putstr_fd("minishell: ", 2);
-		ft_putstr_fd(str, 2);
-		ft_putstr_fd(": ambiguous redirect\n", 2);
+		ft_printf_error_ast(str);
 		return (NULL);
 	}
 	else if ((!ft_contains_asterisk(str) || !i) || is_in_quotes(str))
@@ -44,6 +47,7 @@ char	*ft_expand_red_wildcard(char *str)
 	}
 	return (ret);
 }
+
 char	*ft_red_handle_wildcard(char *glob)
 {
 	char		*new;

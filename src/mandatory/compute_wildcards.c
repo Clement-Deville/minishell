@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 12:23:10 by skapersk          #+#    #+#             */
-/*   Updated: 2024/06/17 23:06:54 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/20 16:40:59 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	is_in_quotes(char *str)
 {
-	int len;
+	int	len;
 
 	len = strlen(str);
 	if (len >= 2 && str[0] == '"' && str[len - 1] == '"')

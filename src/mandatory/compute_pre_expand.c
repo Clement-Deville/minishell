@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 12:16:27 by skapersk          #+#    #+#             */
-/*   Updated: 2024/06/05 12:16:48 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/20 16:25:24 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,6 @@ char	*ft_cmd_pre_expand(char *str)
 {
 	char	*tmp;
 
-	// if (check_quotes(str))
-	// 	return (NULL);
 	tmp = ft_strdup("");
 	if (!tmp)
 		return (NULL);

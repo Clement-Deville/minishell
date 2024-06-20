@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/14 22:37:44 by skapersk          #+#    #+#             */
-/*   Updated: 2024/06/14 23:05:49 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/20 16:23:35 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 static size_t	ft_unquoted_strlen(char *str)
 {
-	int	i;
-	int	len;
+	int		i;
+	int		len;
 	char	quotes;
 
 	i = 0;
@@ -51,8 +51,8 @@ static void	ft_unquote_filler(char *str, int *i, char *ret, int *j)
 char	*ft_strip_quotes(char *str)
 {
 	char	*ret;
-	int	i;
-	int	j;
+	int		i;
+	int		j;
 
 	i = 0;
 	j = 0;

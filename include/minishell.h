@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
+/*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:09:27 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/20 14:21:41 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/20 16:41:19 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -280,13 +280,15 @@ typedef struct s_command
 }	t_command;
 
 t_mini_env	*get_ms(void);
-int		ft_tokenization(t_mini_env *ms);
+int			ft_tokenization(t_mini_env *ms);
 void		ft_init_env(char **env);
 void		lst_token_add_back(t_token **token_list, t_token *new);
 
 //tokens_helper.c
 t_token		*create_new_token(char *value, t_token_type type);
+t_bool		ft_skip_quotes(char *line, size_t *i);
 int			ft_is_char(char *str);
+int			ft_is_quote(char c);
 int			is_space(char c);
 
 //wildcard.c
@@ -410,9 +412,10 @@ void		ft_set_parse_err(t_err_parse type);
 void		ft_handle_parse_err(t_mini_env *ms);
 
 //compute_wildcards.c
+char		**ft_handle_wildcard(char **glob, t_node *node);
 char		**ft_expand_wildcard(char *str, t_node *node);
 char		**ft_join_wildcard(t_node *node);
-char		**ft_handle_wildcard(char **glob, t_node *node);
+int			is_in_quotes(char *str);
 
 //compute_check_quotes.c
 int			count_single_quotes(char *str, int *i);

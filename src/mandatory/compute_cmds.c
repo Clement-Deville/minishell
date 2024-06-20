@@ -3,29 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   compute_cmds.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
+/*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 14:44:53 by skapersk          #+#    #+#             */
-/*   Updated: 2024/06/19 17:43:34 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/20 16:52:44 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-char    *clean_node(char *str)
+static char	*process_quotes(char *str, char *tmp)
 {
 	int		i;
 	int		j;
-	char	*tmp;
-	char	*ret;
 	char	quote;
 
-	if ((str[0] == '\'' && str[1] == '\'' && !str[2])
-		|| (str[0] == '"' && str[1] == '"' && !str[2]))
-		return (str);
-	tmp = ft_calloc(ft_strlen(str) + 1, sizeof(char));
-	if (!tmp)
-		return (NULL);
 	i = 0;
 	j = 0;
 	while (str[i])
@@ -42,9 +34,28 @@ char    *clean_node(char *str)
 		else
 			tmp[j++] = str[i++];
 	}
+	return (tmp);
+}
+
+char	*clean_node(char *str)
+{
+	char	*tmp;
+	char	*ret;
+
+	if ((str[0] == '\'' && str[1] == '\'' && !str[2])
+		|| (str[0] == '"' && str[1] == '"' && !str[2]))
+		return (str);
+	tmp = ft_calloc(ft_strlen(str) + 1, sizeof(char));
+	if (!tmp)
+		return (NULL);
+	tmp = process_quotes(str, tmp);
+	if (!tmp)
+		return (NULL);
 	free(str);
 	ret = ft_strdup(tmp);
 	free(tmp);
+	if (!ret)
+		return (NULL);
 	return (ret);
 }
 
@@ -52,7 +63,6 @@ char	**ft_expand(char *str, t_node *node)
 {
 	char	**global;
 	char	*expanded;
-	// int		i;
 
 	expanded = NULL;
 	expanded = ft_cmd_pre_expand(str);
@@ -65,12 +75,6 @@ char	**ft_expand(char *str, t_node *node)
 	free(expanded);
 	if (!global)
 		return (NULL);
-	// i = 0;
-	// while (global[i])
-	// {
-	// 	global[i] = ft_strip_quotes(global[i]);
-	// 	i++;
-	// }
 	return (global);
 }
 
@@ -98,37 +102,6 @@ char	*remove_quotes_from_str(char *str)
 	return (new);
 }
 
-char	*cut_quotes(char *str)
-{
-	size_t	i;
-	size_t	j;
-	char	*new;
-	char	quote;
-
-	new = malloc(strlen(str) + 1);
-	if (!new)
-		return (NULL);
-	i = 0;
-	j = 0;
-	while (i < strlen(str))
-	{
-		if (str[i] == '"' || str[i] == '\'')
-		{
-			quote = str[i];
-			i++;
-			while (i < strlen(str) && str[i] != quote)
-				new[j++] = str[i++];
-			if (i < strlen(str) && str[i] == quote)
-				i++;
-		}
-		else
-			new[j++] = str[i++];
-	}
-	new[j] = '\0';
-	// free(str);
-	return (new);
-}
-
 int	init_cmp(t_node *node)
 {
 	char	**tmp;
@@ -138,10 +111,7 @@ int	init_cmp(t_node *node)
 	if (node == NULL)
 		return (0);
 	if (!init_node(node))
-	{
-		free_node(node);
-		return (0);
-	}
+		return (free_node(node), 0);
 	if (is_subshell(node))
 		return (1);
 	if (node->cmd != NULL)
@@ -150,10 +120,7 @@ int	init_cmp(t_node *node)
 		return (ft_free_c_cmd_expand(tmp), 0);
 	node->c_cmd->expand = ft_handle_wildcard(tmp, node);
 	if (!node->c_cmd->expand)
-	{
-		free_node(node);
-		return (0);
-	}
+		return (free_node(node), 0);
 	i = 0;
 	while (node->c_cmd->expand[i])
 	{
@@ -162,23 +129,3 @@ int	init_cmp(t_node *node)
 	}
 	return (1);
 }
-
-// void	ft_compute_cmds(t_node *node)
-// {
-// 	if (node == NULL || (node->cmd == NULL && node->sub == NULL
-// 			&& node->red_node == NULL))
-// 		return ;
-// 	else if (node->sub != NULL)
-// 	{
-// 		ft_compute_cmds(node->sub);
-// 		ft_compute_cmds(node->next);
-// 		return ;
-// 	}
-// 	else if (node->red_node != NULL)
-// 	{
-// 		if (!ft_init_heredoc(node))
-// 			return ;
-// 	}
-// 	init_cmp(node);
-// 	ft_compute_cmds(node->next);
-// }
