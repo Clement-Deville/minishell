@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_here_doc.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
+/*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 15:44:49 by skapersk          #+#    #+#             */
-/*   Updated: 2024/06/18 10:29:22 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/20 11:41:02 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,24 +85,29 @@ int	limiter_quotes_check(t_red_node *node)
 
 int	ft_init_heredoc(t_node *node)
 {
-	int	p[2];
-	int	pid;
+	int			p[2];
+	int			pid;
+	t_red_node	*tmp;
 
-	if (node->red_node != NULL && node->red_node->value != NULL)
+	tmp = node->red_node;
+	while (tmp)
 	{
-		if (node->red_node->type == NODE_HERE_DOC)
+		if (tmp->value != NULL)
 		{
-			if (limiter_quotes_check(node->red_node))
-				return (0);
-			pipe(p);
-			pid = (fork());
-			if (!pid)
-				ft_heredoc(node->red_node, p);
-
-			if (ft_error_exe(p, &pid))
-				return (0);
-			node->red_node->here_doc = p[0];
+			if (tmp->type == NODE_HERE_DOC)
+			{
+				if (limiter_quotes_check(tmp))
+					return (0);
+				pipe(p);
+				pid = (fork());
+				if (!pid)
+					ft_heredoc(tmp, p);
+				if (ft_error_exe(p, &pid))
+					return (0);
+				tmp->here_doc = p[0];
+			}
 		}
+		tmp = tmp->next;
 	}
 	return (1);
 }

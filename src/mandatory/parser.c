@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:22:01 by skapersk          #+#    #+#             */
-/*   Updated: 2024/06/19 22:07:04 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/20 11:19:28 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ t_node	*ft_start(t_mini_env *ms, int min_prec)
 			get_ms()->tmp = ms->tokens, NULL);
 	else if (ms->tokens->type == TOKEN_SUBSHELL_OPEN)
 	{
-		ms->in_sub = 1;
+		ms->in_sub += 1;
 		ms->tokens = ms->tokens->next;
 		if (!ft_check_subs(ms->tokens, min_prec))
 			return (NULL);
@@ -99,9 +99,11 @@ t_node	*ft_handle_tokens(t_mini_env *ms, t_node *node, int min_prec)
 		|| (ms->tokens->type == TOKEN_SUBSHELL_CLOSE && min_prec > 0))
 	{
 		if (ms->tokens->type == TOKEN_SUBSHELL_CLOSE)
+		{
+			ms->in_sub -= 1;
 			ms->tokens = ms->tokens->next;
+		}
 		node->next = NULL;
-		ms->in_sub += 1;
 		return (node);
 	}
 	return (NULL);
@@ -114,10 +116,10 @@ t_node	*ft_recursive_parse(t_mini_env *ms, t_node *node, int min_prec)
 		return (NULL);
 	node->next->left = node->rigth;
 	node->next->prev = node;
-	if (ms->in_sub > 0)
-	{
-		ms->in_sub -= 1;
-		return (node);
-	}
-	return (NULL);
+	// if (ms->in_sub > 0)
+	// {
+	// 	// ms->in_sub -= 1;
+	// 	return (node);
+	// }
+	return (node);
 }
