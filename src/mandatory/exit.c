@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
+/*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 18:42:42 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/18 12:33:00 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/20 17:16:05 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,7 +141,9 @@ int	do_exit(t_node *node)
 	if (nbr_of_args(node->c_cmd->expand) > 1)
 	{
 		if (node->silent == FALSE)
-			ft_putendl_fd("exit: too many arguments", 2);
+		{
+			ft_putstr_fd("exit\nexit: too many arguments", 2);
+		}
 		// A print sur stderr
 		return (1);
 	}
@@ -153,6 +155,7 @@ int	do_exit(t_node *node)
 	exit (exit_value);
 	// DOIT EXIT MEME SI LES ARG SONT MAUVAIS
 }
+
 
 // Si le premier n'est pas numerique alors ca exit quand meme
 

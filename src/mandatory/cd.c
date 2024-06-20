@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
+/*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 17:49:40 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/20 14:55:51 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/20 17:12:35 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,9 +60,9 @@ int	set_old_pwd(t_node *node, t_dblist **env)
 			perror("Malloc error");
 		return (-1);
 	}
-	if (export_one(pwd, env, node->silent) == -1)
-		return (free(pwd), -1);
-	return (free(pwd), 0);
+	if (export_one(complete_pwd, env, node->silent) == -1)
+		return (free(complete_pwd), -1);
+	return (free(complete_pwd), 0);
 }
 
 int	set_pwd(t_node *node, t_dblist **env)
@@ -91,9 +91,9 @@ int	set_pwd(t_node *node, t_dblist **env)
 			perror("Malloc error");
 		return (-1);
 	}
-	if (export_one(pwd, env, node->silent) == -1)
-		return (free(pwd), -1);
-	return (free(pwd), 0);
+	if (export_one(complete_pwd, env, node->silent) == -1)
+		return (free(complete_pwd), -1);
+	return (free(complete_pwd), 0);
 }
 
 int	do_cd(t_node *node, t_dblist **env)

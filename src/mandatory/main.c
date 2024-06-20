@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:09:05 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/20 11:37:11 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/20 17:08:28 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -262,7 +262,7 @@ void	ft_heredoc_go_expand(t_node *node)
 	}
 }
 
-void	exec_test(t_node *nodes)
+void	exec_here_doc(t_node *nodes)
 {
 	t_node	*tmp;
 
@@ -274,7 +274,7 @@ void	exec_test(t_node *nodes)
 		if (tmp->red_node != NULL)
 			ft_init_heredoc(tmp);
 		else if (tmp->sub != NULL)
-			exec_test(tmp->sub);
+			exec_here_doc(tmp->sub);
 		dodge_cmd(&tmp);
 	}
 }
@@ -327,7 +327,7 @@ int	init_minishell(void)
 			continue ;
 		}
 		// exec_parse(ms->nodes);
-		exec_test(ms->nodes);
+		exec_here_doc(ms->nodes);
 		start_exec(ms->nodes, &(ms->envlst));
 		if (get_ms()->f_or_nf == 0)
 		{
