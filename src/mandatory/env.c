@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 13:23:24 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/20 11:14:50 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/20 15:05:44 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,5 +89,4 @@ int	do_env(t_node *node, t_dblist *my_env)
 
 	ft_dblst_iter(my_env, print_filled_variable);
 	return (0);
-	// Modifier pour afficher une erreur si argument
 }

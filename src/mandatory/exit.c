@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 18:42:42 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/20 17:16:05 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/21 09:11:19 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,79 +39,17 @@ t_bool	is_numeric(char *argument)
 	return (TRUE);
 }
 
-// int	do_exit(char *argument)
-// {
-// 	if (*argument == 0)
-// 		return (0);
-// 	if (is_numeric(argument) == FALSE)
-// 	{
-// 		ft_printf("exit: %s: numeric argument required\n", argument);
-// 		return (2);
-// 	}
-// 	return ((unsigned char)ft_atoi(argument));
-// }
-
-// static void	ft_skip_spaces_and_get_sign(char *s, int *i, int *sign)
-// {
-// 	while (s[*i] && s[*i] == ' ')
-// 		(*i)++;
-// 	if (s[*i] == '+' || s[*i] == '-')
-// 	{
-// 		if (s[*i] == '-')
-// 			*sign *= -1;
-// 		(*i)++;
-// 	}
-// }
-
-// static int	ft_exittoi(char *s)
-// {
-// 	int					i;
-// 	int					sign;
-// 	int					exit_s;
-// 	unsigned long long	result;
-
-// 	i = 0;
-// 	sign = 1;
-// 	ft_skip_spaces_and_get_sign(s, &i, &sign);
-// 	if (!is_digit(s + i))
-// 	{
-// 		exit_s = ft_err_msg((t_err){ENO_EXEC_255, ERRMSG_NUMERIC_REQUI, s});
-// 		(ft_clean_ms(), exit(exit_s));
-// 	}
-// 	result = 0;
-// 	while (s[i])
-// 	{
-// 		result = (result * 10) + (s[i] - '0');
-// 		if (result > LONG_MAX)
-// 		{
-// 			exit_s = ft_err_msg((t_err){ENO_EXEC_255, ERRMSG_NUMERIC_REQUI, s});
-// 			(ft_clean_ms(), exit(exit_s));
-// 		}
-// 		i++;
-// 	}
-// 	return ((result * sign) % 256);
-// }
-
-// void	do_exit(char **args)
-// {
-// 	int	exit_s;
-
-// 	exit_s = get_ms()->exit;
-// 	if (args[1])
-// 	{
-// 		if (args[2] && is_digit(args[1]))
-// 		{
-// 			exit_s = ft_err_msg(
-// 					(t_err){ENO_GENERAL, ERRMSG_TOO_MANY_ARGS, NULL});
-// 			ft_clean_ms();
-// 			exit(exit_s);
-// 		}
-// 		else
-// 			exit_s = ft_exittoi(args[1]);
-// 	}
-// 	ft_clean_ms();
-// 	exit(exit_s);
-//	}
+int	print_error_numeric(t_node *node, char *argument)
+{
+	if (node->silent == FALSE)
+	{
+		ft_putstr_fd("exit: ", 2);
+		ft_putstr_fd(argument, 2);
+		ft_putstr_fd(": numeric argument required\n", 2);
+	}
+	// A print sur stderr
+	return (2);
+}
 
 int	do_exit(t_node *node)
 {
@@ -123,27 +61,14 @@ int	do_exit(t_node *node)
 	{
 		if (get_ms()->parent == TRUE && node->silent == FALSE)
 			ft_putendl_fd("exit", 2);
-		ft_clean_ms();
-		exit (0);
+		exit(clean_and_exit (0));
 	}
 	if (is_numeric(argument) == FALSE)
-	{
-		if (node->silent == FALSE)
-		{
-			ft_putstr_fd("exit: ", 2);
-			ft_putstr_fd(argument, 2);
-			ft_putstr_fd(": numeric argument required\n", 2);
-		}
-		// A print sur stderr
-		ft_clean_ms();
-		exit (2);
-	}
+		print_error_numeric(node, argument);
 	if (nbr_of_args(node->c_cmd->expand) > 1)
 	{
 		if (node->silent == FALSE)
-		{
-			ft_putstr_fd("exit\nexit: too many arguments", 2);
-		}
+			ft_putendl_fd("exit\nexit: too many arguments", 2);
 		// A print sur stderr
 		return (1);
 	}
@@ -151,8 +76,7 @@ int	do_exit(t_node *node)
 	if (get_ms()->parent == TRUE && node->silent == FALSE)
 		ft_putendl_fd("exit", 2);
 	exit_value = (unsigned char)ft_atoi(argument);
-	ft_clean_ms();
-	exit (exit_value);
+	exit(clean_and_exit (exit_value));
 	// DOIT EXIT MEME SI LES ARG SONT MAUVAIS
 }
 

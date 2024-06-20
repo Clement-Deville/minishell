@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 14:15:44 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/17 16:36:24 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/20 17:20:59 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,25 +60,15 @@ int	add_new_variable(char *argument, t_dblist **env, t_bool silent)
 		return (1);
 	}
 	new = ft_dblstnew(variable);
-	// ft_printf("New argument value = %s\n", ((t_variable*)(new->content))->value);
 	if (new == NULL || new->content == NULL)
 		return (free(new), -1);
-	// ft_printf("Adding new value\n");
 	ft_dblstadd_back(env, new);
-	// t_dblist	*test;
-	// test = ft_dblstlast(*env);
-	// ft_printf("Last argument value = %s\n", ((t_variable*)(test->content))->value);
-	// print_variable(test->content);
-	// ft_printf("Last argument next : %p\n", test->next);
-	// ft_printf("Last argument prev:");
-	// print_variable(test->prev->content);
 	return (0);
 }
 
 int	export_one(char *argument, t_dblist **env, t_bool silent)
 {
 	char	*name;
-	int		status;
 
 	name = get_name(argument);
 	if (name == NULL)
@@ -97,12 +87,7 @@ int	export_one(char *argument, t_dblist **env, t_bool silent)
 	else
 	{
 		free(name);
-		status = add_new_variable(argument, env, silent);
-		if (status == -1)
-			return (-1);
-		else if (status)
-			return (1);
-		return (0);
+		return (add_new_variable(argument, env, silent));
 	}
 }
 

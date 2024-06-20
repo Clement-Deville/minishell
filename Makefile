@@ -59,6 +59,8 @@ SRCS_FILES =	main	\
 				parser_utils_tokens	\
 				parser_init	\
 				parser_utils_error	\
+				pipe_fd_utils	\
+				pipe_utils	\
 				ft_strip_quotes	\
 
 SRCS_FILES_BONUS =	main_bonus	\

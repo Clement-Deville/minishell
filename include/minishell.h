@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:09:27 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/20 16:41:19 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/21 09:10:43 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -198,6 +198,8 @@ typedef struct s_mini_env
 	t_bool			parent;
 }	t_mini_env;
 
+int		clean_and_exit(int exitno);
+
 // access_utils.c
 
 t_bool		is_path(char *path);
@@ -358,6 +360,20 @@ int			ft_join_args(char **args, t_token *token);
 void		ft_add_red_node(t_red_node **node, t_red_node *new);
 int			ft_get_red_node(t_red_node **node, t_mini_env *ms);
 void		ft_add_back_sub(t_subs_node **lst, t_subs_node *new);
+
+// pipe_fd_utils.c
+
+int			connect_read(int *pipefd);
+int			connect_write(int *pipefd);
+int			close_useless_fd(int *pipefd, int size);
+int			close_parent(int *pipefd, int size);
+
+// pipe_utils.c
+
+t_bool		are_in_child(int pid1);
+t_bool		is_cmd_executable(t_node *node);
+t_bool		is_pipe_cmd(t_node *node);
+int			nbr_of_cmds(t_node *node);;
 
 // redirection.c
 

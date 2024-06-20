@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirections.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 19:29:26 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/20 17:18:13 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/21 09:11:35 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,10 +35,8 @@ int	set_input(char *filename, t_node *node)
 			return (perror(filename), 1);
 		return (perror("Open"), -1);
 	}
-	if (dup2(fd, STDIN_FILENO) == -1)
-		return (perror("Dup2 error"), -1);
-	if (close(fd) == -1)
-		return (perror("Close error"), -1);
+	if (dup2(fd, STDIN_FILENO) == -1 || close(fd) == -1)
+		return (perror(""), -1);
 	return (0);
 }
 
@@ -65,10 +63,8 @@ int	set_output(char *filename, t_node *node)
 			return (perror(filename), 1);
 		return (perror("Open"), -1);
 	}
-	if (dup2(fd, STDOUT_FILENO) == -1)
-		return (perror("Dup2 error"), -1);
-	if (close(fd) == -1)
-		return (perror("Close error"), -1);
+	if (dup2(fd, STDOUT_FILENO) == -1 || close(fd) == -1)
+		return (perror(""), -1);
 	return (0);
 }
 
@@ -95,10 +91,8 @@ int	set_output_append(char *filename, t_node *node)
 			return (perror(filename), 1);
 		return (perror("Open"), -1);
 	}
-	if (do_dup2(fd, STDOUT_FILENO) == -1)
-		return (-1);
-	if (do_close(fd) == -1)
-		return (-1);
+	if (dup2(fd, STDOUT_FILENO) == -1 || close(fd) == -1)
+		return (perror(""), -1);
 	return (0);
 }
 
@@ -132,8 +126,6 @@ int	do_redirections(t_node *node)
 			status = set_output(tmp->value, node);
 		else if (tmp->type == NODE_APPEND)
 			status = set_output_append(tmp->value, node);
-		if (status == -1)
-			return (-1);
 		if (status)
 			return (status);
 		tmp = tmp->next;

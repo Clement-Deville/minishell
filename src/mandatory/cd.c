@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 17:49:40 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/20 17:12:35 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/21 09:10:49 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,24 +34,34 @@ int	change_to_home(t_node *node, t_dblist **env)
 	return (0);
 }
 
-int	set_old_pwd(t_node *node, t_dblist **env)
+char	*do_get_pwd(t_node *node)
 {
 	char	*pwd;
-	char	*complete_pwd;
 
 	pwd = (char *)malloc(sizeof(char) * FILENAME_MAX);
 	if (pwd == NULL)
 	{
 		if (node->silent == FALSE)
 			perror("Malloc error");
-		return (-1);
+		return (NULL);
 	}
 	if (getcwd(pwd, FILENAME_MAX) == NULL)
 	{
 		if (node->silent == FALSE)
 			perror("getcwd");
-		return (free(pwd), -1);
+		return (free(pwd), NULL);
 	}
+	return (pwd);
+}
+
+int	set_old_pwd(t_node *node, t_dblist **env)
+{
+	char	*pwd;
+	char	*complete_pwd;
+
+	pwd = do_get_pwd(node);
+	if (pwd == NULL)
+		return (-1);
 	complete_pwd = ft_strjoin("OLDPWD=", pwd);
 	free(pwd);
 	if (complete_pwd == NULL)
@@ -70,19 +80,9 @@ int	set_pwd(t_node *node, t_dblist **env)
 	char	*pwd;
 	char	*complete_pwd;
 
-	pwd = (char *)malloc(sizeof(char) * FILENAME_MAX);
+	pwd = do_get_pwd(node);
 	if (pwd == NULL)
-	{
-		if (node->silent == FALSE)
-			perror("Malloc error");
 		return (-1);
-	}
-	if (getcwd(pwd, FILENAME_MAX) == NULL)
-	{
-		if (node->silent == FALSE)
-			perror("getcwd");
-		return (free(pwd), -1);
-	}
 	complete_pwd = ft_strjoin("PWD=", pwd);
 	free(pwd);
 	if (complete_pwd == NULL)
@@ -108,7 +108,6 @@ int	do_cd(t_node *node, t_dblist **env)
 	}
 	if (set_old_pwd(node, env))
 		return (-1);
-	// Need to add condition (if name exists)
 	directory = node->c_cmd->expand[1];
 	if (directory == NULL)
 	{

@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 11:33:00 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/19 19:26:57 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/20 18:28:58 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,6 @@ int	do_echo(char **args)
 
 	i = 1;
 	opt = 0;
-	// PROBLEME POUR ECHO -N
 	while (args[i] != NULL && ft_check_option(args[i]) == 1)
 	{
 		opt = 1;
@@ -69,5 +68,4 @@ int	do_echo(char **args)
 	if (opt == 0)
 		ft_putstr_fd("\n", 1);
 	return (0);
-	// A VERIFIER
 }

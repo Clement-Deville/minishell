@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 11:47:07 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/19 18:30:24 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/20 18:36:15 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -287,6 +287,12 @@ int	exec_builtin(t_node *node, t_dblist **env)
 // 	return (status);
 // }
 
+int	clean_and_exit(int exitno)
+{
+	ft_clean_ms();
+	return (exitno);
+}
+
 int	exec_standard(t_node **node, t_dblist **env)
 {
 	int		access_status;
@@ -294,7 +300,6 @@ int	exec_standard(t_node **node, t_dblist **env)
 	char	**tab_env;
 	int		status;
 	int		red_status;
-	int		tmp; //CODE RAJOUTE (SIM) -> POUR FREE EN SORTANT DES CHILDS)
 
 	pid = fork();
 	if (pid < 0)
@@ -304,37 +309,19 @@ int	exec_standard(t_node **node, t_dblist **env)
 		set_child_signals();
 		red_status = do_redirections(*node);
 		if (red_status == -1)
-		{
-			ft_clean_ms();
-			exit (ENO_CRITICAL);
-			// NEED TO EXIT?
-		}
+			exit(clean_and_exit (ENO_CRITICAL));
 		if (red_status)
-		{
-			ft_clean_ms();
-			exit (1);
-		}
+			exit(clean_and_exit (1));
 		access_status = check_for_path_access(&((*node)->c_cmd->expand[0]), *env);
 		if (access_status == -1)
-		{
-			ft_clean_ms();;
-			exit (ENO_CRITICAL);
-		}
+			exit(clean_and_exit (ENO_CRITICAL));
 		if (access_status)
-		{
-			ft_clean_ms();
-			exit (access_status);
-		}
-		// NEED TO FREE EVERYTHING HERE
+			exit(clean_and_exit (access_status));
 		tab_env = list_to_tab(*env);
 		if (tab_env == NULL)
-		{
-			ft_clean_ms();
-			exit (1);
-		}
-		tmp = exec((*node)->c_cmd->expand, tab_env);
-		ft_clean_ms();
-		exit (tmp);
+			exit(clean_and_exit (1));
+		status = exec((*node)->c_cmd->expand, tab_env);
+		exit(clean_and_exit (status));
 	}
 	status = do_wait(pid);
 	return (status);
@@ -342,9 +329,8 @@ int	exec_standard(t_node **node, t_dblist **env)
 
 int	exec_sub(t_node *node, t_dblist **env)
 {
-	int	pid;
-	int	red_status;
-	int	tmp;
+	int		pid;
+	int		red_status;
 	t_node	*subnode;
 
 	subnode = node->sub;
@@ -353,32 +339,13 @@ int	exec_sub(t_node *node, t_dblist **env)
 		return (perror("Fork"), ENO_CRITICAL);
 	if (pid == 0)
 	{
-		// fprintf(stderr, "%s\n", subnode->cmd);
-		// if (do_redirections(subnode))
-		// 	exit (1);
-		// if ((node)->next->red_node !=NULL)
-        // {
-        //     if (do_redirections((node)->next))
-        //     {
-        //         exit (1);
-        //     }
-        // }
 		red_status = do_redirections(node);
 		if (red_status == -1)
-		{
-			ft_clean_ms();
-			return (ENO_CRITICAL);
-			// NEED TO EXIT?
-		}
+			exit(clean_and_exit (ENO_CRITICAL));
 		if (red_status)
-		{
-			ft_clean_ms();
-			exit (1);
-		}
+			exit(clean_and_exit (1));
 		get_ms()->parent = FALSE;
-		tmp = start_exec(subnode, env);
-		ft_clean_ms();
-		exit (tmp);
+		exit(clean_and_exit(start_exec(subnode, env)));
 	}
 	get_ms()->exit = do_wait(pid);
 	if (get_ms()->exit == -1)
@@ -555,40 +522,6 @@ int	exec_cmd(t_node **node, t_dblist **env)
 	// NEED TO CHECK IF CRITICAL ERROR
 }
 
-// int	start_exec(t_node *node, t_dblist **env)
-// {
-// 	int	exit_value;
-// 	int	status;
-
-// 	exit_value = 0;
-// 	status = 0;
-// 	// t_node	*temp;
-// 	// temp = node;
-// 	// while (temp)
-// 	// {
-// 	// 	ft_printf("Adr: %p\n", temp);
-// 	// 	temp = temp->next;
-// 	// }
-// 	if (node == NULL)
-// 		return (1);
-// 	while (node)
-// 	{
-// 		ft_printf("Node TyPE: %d\n", node->type);
-// 		if (node->next)
-// 			ft_printf("Node next TyPE: %d\n", node->next->type);
-// 		if (node->prev && ((node->prev->type == NODE_AND && status != 0)
-// 				|| (node->prev->type == NODE_OR && status == 0)))
-// 			dodge_cmd(&node);
-// 		else
-// 		{
-// 			status = exec_cmd(&node, env);
-// 			dodge_cmd(&node);
-// 		}
-// 		// NEED TO CHECK FOR CRITICAL ERROR (WHAT ABOUT SUBSHELLS?)
-// 	}
-// 	return (status);
-// }
-
 int	start_exec(t_node *node, t_dblist **env)
 {
 	if (node == NULL)
@@ -600,27 +533,20 @@ int	start_exec(t_node *node, t_dblist **env)
 		if (!init_cmp(node) && node->red_node == NULL)
 		{
 			get_ms()->f_or_nf = 1;
-			ft_handle_parse_err(get_ms());
-			return (1);
+			return (ft_handle_parse_err(get_ms()), 1);
 		}
-		if (node->left && ((node->left->type == TOKEN_AND && get_ms()->exit != 0)
-				|| (node->left->type == TOKEN_OR && get_ms()->exit == 0)))
-			dodge_cmd(&node);
-		else
+		if ((node->left && ((node->left->type == TOKEN_AND && get_ms()->exit != 0)
+				|| (node->left->type == TOKEN_OR && get_ms()->exit == 0))) == FALSE)
 		{
 			get_ms()->exit = exec_cmd(&node, env);
 			if (get_ms()->exit == ENO_CRITICAL && get_ms()->parent == TRUE)
 			{
 				if (get_ms()->parent == TRUE)
-				{
-					ft_clean_ms();
-					exit (1);
-				}
-				else
-					return (ENO_CRITICAL);
+					exit(clean_and_exit (1));
+				return (ENO_CRITICAL);
 			}
-			dodge_cmd(&node);
 		}
+		dodge_cmd(&node);
 		// NEED TO CHECK FOR CRITICAL ERROR (WHAT ABOUT SUBSHELLS?)
 	}
 	return (get_ms()->exit);

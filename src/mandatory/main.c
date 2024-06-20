@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:09:05 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/20 17:08:28 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/21 09:11:29 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,53 +84,8 @@ void	exec_parse(t_node *node)
 	}
 }
 
-int	main_subshell(int ac, char *av, char **env)
-{
-	// t_mini_env    *ms;
-	char	*line;
-	int		status;
-
-	line = malloc(sizeof(char) + ac + 2);
-	ft_strlcpy(line,av, ac + 1);
-	ft_init_env(env);
-	get_ms()->line = line;
-	ft_tokenization(get_ms());
-	init_parsing(get_ms());
-	status = start_exec(get_ms()->nodes, &(get_ms()->envlst));
-	free(line);
-	return (status);
-}
-
-// int	main_subshell(int ac, char **av, char **env)
-// {
-// 	t_mini_env	*ms;
-// 	char		*line;
-// 	t_token		*tmp_token;
-
-// 	ms = NULL;
-// 	line = malloc(sizeof(char) + ac + 2);
-// 	ft_strlcpy(line, *av, ac + 1);
-// 	ft_init_env(env);
-// 	 get_ms()->line = line;
-// 	// L'environement ne doit il pas etre herite du parent?
-// 	ft_tokenization(get_ms());
-// 	init_parsing(ms);
-// 	start_exec(ms->nodes, &(ms->envlst));
-// 	free(line);
-// 	while (ms->tokens != NULL)
-// 	{
-// 		tmp_token = ms->tokens;
-// 		ms->tokens = ms->tokens->next;
-// 		free(tmp_token->value);
-// 		free(tmp_token);
-// 	}
-// 	return (ms->exit);
-// }
-
 char	*get_balise(void)
 {
-	// ft_printf("\r");
-	// ft_printf("\033[K");
 	char	*current_dir_name;
 	char	color[10];
 	char	*balise;
@@ -146,7 +101,6 @@ char	*get_balise(void)
 		ft_strlcpy(color, "\001\033[1;31m\002", 10);
 	else
 		ft_strlcpy(color, "\001\033[0;32m\002", 10);
-	// ft_printf("%s\u2192  \e[1;36m%s \e[0m", color, current_dir_name);
 	balise = ft_strjoin(color, "➜  \001\033[1;36m\002");
 	if (balise)
 	{
@@ -155,11 +109,9 @@ char	*get_balise(void)
 		free(tmp);
 		tmp = balise;
 		balise = ft_strjoin(balise, " \001\033[0m\002");
-		free (tmp);
+		free(tmp);
 	}
-	if (current_dir_name)
-		free(current_dir_name);
-	return (balise);
+	return (free(current_dir_name), balise);
 }
 
 // void	ft_heredoc_go_expand(t_node *node)
