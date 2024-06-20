@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:09:27 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/18 16:25:43 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/20 14:21:41 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -197,6 +197,12 @@ typedef struct s_mini_env
 	t_bool			signal;
 	t_bool			parent;
 }	t_mini_env;
+
+// access_utils.c
+
+t_bool		is_path(char *path);
+void		print_not_found(char *cmd);
+t_bool		is_a_dir(const char *path);
 
 // BUILT-IN COMMANDS
 

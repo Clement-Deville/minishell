@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   asterisk.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 10:46:35 by cdeville          #+#    #+#             */
-/*   Updated: 2024/05/07 15:42:00 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/20 14:22:51 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,8 +80,6 @@ int	do_asterisk(char *argument)
 	{
 		if (patern_match(argument, entry->d_name) == TRUE)
 			i++;
-		// else
-		// 	ft_printf("Not matching: %s\n", entry->d_name);
 		entry = readdir(dir);
 	}
 	if (do_closedir(dir) != 0)

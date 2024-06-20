@@ -13,6 +13,7 @@ VAL_FLAGS := --leak-check=full --show-leak-kinds=all -s --track-fds=yes  --trace
 DEBUG = -g
 
 SRCS_FILES =	main	\
+				access_utils	\
 				echo	\
 				pwd	\
 				export	\
