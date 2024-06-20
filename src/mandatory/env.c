@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 13:23:24 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/18 11:54:07 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/20 11:14:50 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,15 @@ char	*catch_value(char *name, t_dblist *env)
 		env = env->next;
 	}
 	return ((((t_variable *)(env->content))->value));
+}
+
+void	print_filled_variable(void *content)
+{
+	if (((t_variable *)content)->value
+		&& ((t_variable *)content)->value[0])
+	{
+		print_variable(content);
+	}
 }
 
 void	print_variable(void *content)
@@ -78,7 +87,7 @@ int	do_env(t_node *node, t_dblist *my_env)
 		return (1);
 	}
 
-	ft_dblst_iter(my_env, print_variable);
+	ft_dblst_iter(my_env, print_filled_variable);
 	return (0);
 	// Modifier pour afficher une erreur si argument
 }
