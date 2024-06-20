@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 13:20:21 by skapersk          #+#    #+#             */
-/*   Updated: 2024/06/19 20:50:54 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/20 12:38:10 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,12 +80,14 @@ int	ft_get_red_node(t_red_node **node, t_mini_env *ms)
 	{
 		red_type = ms->tokens->type;
 		tmp = ms->tokens;
+		if (!ms->tokens->next)
+			tmp->type = TOKEN_VAR_ENV;
 		ms->tokens = ms->tokens->next;
-		if (!ms->tokens || ms->tokens->type != TOKEN_ELSE)
+		if (!ms->tokens)
 			return (ft_set_parse_err(E_SYNTAX), get_ms()->tmp = tmp, 0);
-		if ( ms->tokens->type != TOKEN_ELSE)
+		if (ms->tokens->type != TOKEN_ELSE)
 			return (ft_set_parse_err(E_SYNTAX),
-				get_ms()->tmp = ms->tokens->next, 0);
+				get_ms()->tmp = ms->tokens, 0);
 		tmp_red = ft_create_red_node(red_type, ms->tokens->value);
 		if (!tmp_red)
 			return (ft_set_parse_err(E_MEMORY), 0);
