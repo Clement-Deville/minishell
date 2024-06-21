@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_here_doc_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 15:41:16 by skapersk          #+#    #+#             */
-/*   Updated: 2024/06/20 15:29:59 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/21 16:08:24 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,16 +58,16 @@ int	ft_heredoc_handle_dollar(char *str, int i, int fd)
 	start = ++i;
 	if (str[i] == '?')
 		return (ft_putnbr_fd(get_ms()->exit, fd), 2);
-	while (str[i] && str[i] != '$' && str[i] != ' ')
+	while (str[i] && str[i] != '$' && str[i] != ' ' && str[i] != '\n')
 		i++;
 	if (i != start)
 	{
-		tmp = ft_garbage(ft_substr(str, start, i), FALSE);
+		tmp = ft_garbage(ft_substr(str, start, i - start), FALSE);
 		tmp = ft_str_find_env(tmp);
 		if (tmp)
 			ft_putstr_fd(tmp, fd);
 	}
-	return (i - 1);
+	return (i - start + 1);
 }
 
 void	ft_heredoc_expand(char *str, int fd)

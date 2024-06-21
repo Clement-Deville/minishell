@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:09:05 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/21 10:55:07 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/21 15:27:05 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -214,6 +214,8 @@ int	init_minishell(void)
 			free(get_ms()->line);
 			get_ms()->line = NULL;
 		}
+		if(get_ms()->exit == 130)
+			ft_printf("\n");
 		get_ms()->balise = get_balise();
 		if (get_ms()->balise)
 			get_ms()->line = readline(get_ms()->balise);
@@ -267,8 +269,8 @@ int	main(int ac, char **av, char **env)
 	returned_val = 0;
 	(void)ac;
 	(void)av;
-	ft_init_env(env);
 	setup_signals();
+	ft_init_env(env);
 	init_minishell();
 	returned_val = get_ms()->exit;
 	ft_clean_ms();

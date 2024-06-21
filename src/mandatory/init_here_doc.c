@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_here_doc.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 15:44:49 by skapersk          #+#    #+#             */
-/*   Updated: 2024/06/20 11:41:02 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/21 15:15:27 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ static void	ft_heredoc_sigint_handler(int signum)
 {
 	(void)signum;
 	ft_clean_ms();
-	exit(SIGINT);
+	exit(128 + SIGINT);
 }
 
 int	ft_error_exe(int p[2], int *pid)
@@ -110,4 +110,5 @@ int	ft_init_heredoc(t_node *node)
 		tmp = tmp->next;
 	}
 	return (1);
+	// IL FAUT CHECKER SI LE FORK ECHOUE
 }
