@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   compute_wildcards.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 12:23:10 by skapersk          #+#    #+#             */
-/*   Updated: 2024/06/20 16:40:59 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/21 12:30:33 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ char	**ft_expand_wildcard(char *str, t_node *node)
 	char			**ret;
 
 	i = do_asterisk(str);
+	if (i == -1)
+		return (NULL);
 	node->c_cmd->ac += i;
 	if ((!ft_contains_asterisk(str) || !i) || is_in_quotes(str))
 	{

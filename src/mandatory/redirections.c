@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 19:29:26 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/21 09:11:35 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/21 12:29:04 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,7 @@ int	do_redirections(t_node *node)
 	while (tmp)
 	{
 		if (!init_red_cmp(tmp))
-			return (1);
+			return (-1);
 		if (tmp->type == NODE_HERE_DOC)
 			status = set_input_here_doc(tmp->here_doc);
 		else if (tmp->type == NODE_RED_IN)

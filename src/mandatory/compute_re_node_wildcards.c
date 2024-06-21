@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 14:20:53 by skapersk          #+#    #+#             */
-/*   Updated: 2024/06/21 11:27:55 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/21 12:26:02 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@ char	*ft_expand_red_wildcard(char *str)
 	char			**ret2;
 
 	i = do_asterisk(str);
+	if (i == -1)
+		return (NULL);
 	// SOUCIS AVEC LA FONCTION DO_ASTERISK POUR LES RETURN VALUES SI ERREUR
 	if (i > 1)
 	{

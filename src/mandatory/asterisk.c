@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 10:46:35 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/20 14:22:51 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/21 12:24:48 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ int	do_asterisk(char *argument)
 
 	dir = do_opendir();
 	if (dir == NULL)
-		return (2);
+		return (-1);
 	entry = readdir(dir);
 	i = 0;
 	while (entry != NULL)
@@ -83,6 +83,6 @@ int	do_asterisk(char *argument)
 		entry = readdir(dir);
 	}
 	if (do_closedir(dir) != 0)
-		return (2);
+		return (-1);
 	return (i);
 }

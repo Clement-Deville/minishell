@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 11:47:07 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/21 11:44:42 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/21 12:28:17 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -460,7 +460,7 @@ int do_no_cmd(t_node *node)
 	while (tmp)
 	{
 		if (!init_red_cmp(tmp))
-			return (1);
+			return (ENO_CRITICAL);
 		if (tmp->type == NODE_RED_IN)
 			status = fake_set_input(tmp->value);
 		else if (tmp->type == NODE_RED_OUT)
