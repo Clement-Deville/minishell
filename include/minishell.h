@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:09:27 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/21 11:40:54 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/21 12:00:51 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -333,6 +333,11 @@ int			main_subshell(int ac, char *av, char **env);
 
 // access.c
 int			check_for_path_access(char **cmd, t_dblist *env);
+
+// path_utils.c
+
+int			len(char **split);
+char		*get_path(t_dblist *env);
 
 // path.c
 char		*get_path(t_dblist *env);

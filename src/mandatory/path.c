@@ -6,22 +6,11 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 18:18:34 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/12 18:52:47 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/21 11:59:57 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
-
-char	*get_path(t_dblist *env)
-{
-	while (env)
-	{
-		if (ft_strncmp("PATH", ((t_variable *)(env->content))->name, 5) == 0)
-			return (((t_variable *)(env->content))->value);
-		env = env->next;
-	}
-	return (NULL);
-}
 
 char	**add_dir(char **split_path)
 {
@@ -43,18 +32,6 @@ char	**add_dir(char **split_path)
 		i++;
 	}
 	return (split_path);
-}
-
-int	len(char **split)
-{
-	int	i;
-
-	i = 0;
-	if (split == NULL)
-		return (0);
-	while (split[i])
-		i++;
-	return (i);
 }
 
 char	**add_cmd_to_path(char **split_path, const char *cmd)

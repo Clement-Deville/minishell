@@ -55,6 +55,7 @@ SRCS_FILES =	main	\
 				exec_pipeline	\
 				access	\
 				path	\
+				path_utils	\
 				redirections	\
 				do	\
 				parser_utils_nodes	\

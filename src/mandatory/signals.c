@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 17:28:01 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/11 14:59:17 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/21 12:04:02 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@ void	do_parse_new(void)
 	get_ms()->signal = TRUE;
 	get_ms()->exit = 130;
 	new_prompt = get_balise();
-	// if NULL exit CRITICAL
+	if (new_prompt == NULL)
+		exit(clean_and_exit(1));
 	rl_set_prompt(new_prompt);
 	ft_printf("\n");
 	rl_on_new_line ();
@@ -36,28 +37,19 @@ void	do_nothing(void)
 }
 void	handle_signal(int signo)
 {
-	// ft_printf("I catch signal: %d\n", signo);
 	if (signo == SIGINT)
 		do_parse_new();
 	if (signo == SIGQUIT)
-	{
 		do_nothing();
-	}
 }
 
 void	handle_signal_child(int signo)
 {
 	// ft_printf("I catch signal: %d\n", signo);
 	if (signo == SIGINT)
-	{
-		//clear envi
-		exit (130);
-	}
+		exit (clean_and_exit(130));
 	if (signo == SIGQUIT)
-	{
-		//clear envi
-		exit (get_ms()->exit);
-	}
+		exit (clean_and_exit(get_ms()->exit));
 }
 
 int	setup_signals(void)
