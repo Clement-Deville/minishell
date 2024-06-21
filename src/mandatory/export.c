@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 14:15:44 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/20 17:20:59 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/21 11:44:57 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ int	add_new_variable(char *argument, t_dblist **env, t_bool silent)
 	t_dblist	*new;
 	t_variable	*variable;
 
-	// Pas besoin de double pointeur, a verfier
 	variable = create_variable(argument);
 	if (is_valid_name(variable->name) == FALSE)
 	{

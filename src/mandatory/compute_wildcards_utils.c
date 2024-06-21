@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   compute_wildcards_utils.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 12:26:04 by skapersk          #+#    #+#             */
-/*   Updated: 2024/06/20 16:58:32 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/21 11:29:49 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ char	**there_asterisk(char *str, int i)
 	dir = do_opendir();
 	ret = (char **)ft_calloc(i + 1, sizeof(char *));
 	if (!ret)
-		return (NULL);
+		return (perror("calloc"), NULL);
 	i = 0;
 	entry = readdir(dir);
 	while (entry)
@@ -106,6 +106,7 @@ char	**there_asterisk(char *str, int i)
 			ret[i] = ft_strdup(entry->d_name);
 			if (!ret[i])
 			{
+				perror("malloc");
 				while (i)
 				{
 					free(ret[i]);

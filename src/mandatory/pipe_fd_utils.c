@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/20 15:06:39 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/20 16:31:37 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/21 11:37:16 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,5 +66,13 @@ int	close_parent(int *pipefd, int size)
 		i++;
 	}
 	free(pipefd);
+	return (0);
+}
+
+int	allocate(int **pipefd, int nbr_of_cmds)
+{
+	*pipefd = (int *)malloc(sizeof(int) * (2 * nbr_of_cmds));
+	if (pipefd == NULL)
+		return (perror("Error de malloc"), -1);
 	return (0);
 }

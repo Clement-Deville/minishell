@@ -6,31 +6,11 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 14:51:19 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/20 17:09:46 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/21 11:41:07 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
-
-// int	exec_cmd_pipe(const char *path, char *const args[], char *envp[])
-// {
-// 	if (execve(path, args, envp) == -1)
-// 	{
-// 		perror("Probleme a l'execution de la commande");
-// 		return (1);
-// 	}
-// 	return (0);
-// }
-
-void	init(t_node *node)
-{
-	while (is_pipe_cmd(node))
-	{
-		node->pid = 0;
-		node->status = 0;
-		node = node->next;
-	}
-}
 
 int	do_fork(t_node **node, int i, int *pipefd, t_dblist **env)
 {
@@ -55,14 +35,6 @@ int	do_fork(t_node **node, int i, int *pipefd, t_dblist **env)
 		ft_clean_ms();
 		exit (status);
 	}
-	return (0);
-}
-
-static int	allocate(int **pipefd, int nbr_of_cmds)
-{
-	*pipefd = (int *)malloc(sizeof(int) * (2 * nbr_of_cmds));
-	if (pipefd == NULL)
-		return (perror("Error de malloc"), -1);
 	return (0);
 }
 
@@ -114,7 +86,7 @@ int	init_piping(t_node **node, int i, int **pipefd)
 	return (0);
 }
 
-int	start_piping(t_node **node, t_dblist **env)
+int	exec_pipeline(t_node **node, t_dblist **env)
 {
 	int		i;
 	int		*pipefd;
@@ -122,6 +94,7 @@ int	start_piping(t_node **node, t_dblist **env)
 
 	i = 0;
 	head = *node;
+	init(*node);
 	if (allocate(&pipefd, nbr_of_cmds(*node)) != 0)
 		return (ENO_CRITICAL);
 	while (is_pipe_cmd(*node))
@@ -140,10 +113,4 @@ int	start_piping(t_node **node, t_dblist **env)
 	}
 	(*node) = head;
 	return (close_and_wait(node, i, pipefd));
-}
-
-int	exec_pipeline(t_node **node, t_dblist **env)
-{
-	init(*node);
-	return (start_piping(node, env));
 }

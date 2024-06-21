@@ -14,6 +14,7 @@ DEBUG = -g
 
 SRCS_FILES =	main	\
 				access_utils	\
+				balise	\
 				echo	\
 				pwd	\
 				export	\
@@ -26,6 +27,7 @@ SRCS_FILES =	main	\
 				asterisk	\
 				signals	\
 				env	\
+				env_utils	\
 				utils	\
 				tokenization	\
 				init_minishell	\

@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:09:27 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/21 09:10:43 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/21 11:40:54 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -266,6 +266,12 @@ void		print_variable(void *content);
 void		print_variable_export(void *content);
 int			nbr_of_args(char **args);
 
+// env_utils.c
+
+void		print_variable(void *content);
+void		print_filled_variable(void *content);
+t_bool		is_valid_name(char *name);
+
 // exec_pipeline
 
 int			exec_pipeline(t_node **node, t_dblist **env);
@@ -367,9 +373,11 @@ int			connect_read(int *pipefd);
 int			connect_write(int *pipefd);
 int			close_useless_fd(int *pipefd, int size);
 int			close_parent(int *pipefd, int size);
+int			allocate(int **pipefd, int nbr_of_cmds);
 
 // pipe_utils.c
 
+void		init(t_node *node);
 t_bool		are_in_child(int pid1);
 t_bool		is_cmd_executable(t_node *node);
 t_bool		is_pipe_cmd(t_node *node);
@@ -408,6 +416,12 @@ char		*convert(t_node_type type);
 void		ft_clear_token(t_token *token);
 
 void		free_node(t_node *node);
+
+// balise.c
+
+char		*get_balise(void);
+char		*set_color(void);
+void		clean_balise(void);
 
 //clean_env.c
 void		free_variable(void *content);

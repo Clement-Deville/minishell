@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/20 15:07:48 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/20 15:08:22 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/21 11:40:42 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,4 +48,14 @@ int	nbr_of_cmds(t_node *node)
 		i++;
 	}
 	return (i);
+}
+
+void	init(t_node *node)
+{
+	while (is_pipe_cmd(node))
+	{
+		node->pid = 0;
+		node->status = 0;
+		node = node->next;
+	}
 }
