@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 19:29:26 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/21 12:29:04 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/22 12:21:32 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,8 +99,6 @@ int	set_output_append(char *filename, t_node *node)
 int	set_input_here_doc(int fd)
 {
 	if (dup2(fd, 0) == -1)
-		return (perror("Here doc"), -1);
-	if (close(fd) == -1)
 		return (perror("Here doc"), -1);
 	return (0);
 }
