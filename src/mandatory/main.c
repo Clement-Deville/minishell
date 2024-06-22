@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:09:05 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/22 11:52:46 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/22 12:40:08 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -229,6 +229,7 @@ int	init_minishell(void)
 			ft_printf("\n");
 		if (get_ms()->exit == 131)
 			ft_printf("Quit (core dumped)\n");
+		// Need 
 		get_ms()->balise = get_balise();
 		if (get_ms()->balise)
 			get_ms()->line = readline(get_ms()->balise);
