@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 15:44:49 by skapersk          #+#    #+#             */
-/*   Updated: 2024/06/22 12:24:32 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/22 12:59:19 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int	ft_error_exe(int p[2], int pid)
 	if (close(p[1]) == -1)
 		return (perror("close"), ENO_CRITICAL);
 	setup_signals();
-	if (WEXITSTATUS(status))
+	if (WIFEXITED(status))
 		return (WEXITSTATUS(status));
 	return (1);
 }
