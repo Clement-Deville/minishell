@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_here_doc.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
+/*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 15:44:49 by skapersk          #+#    #+#             */
-/*   Updated: 2024/06/21 15:15:27 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/22 11:07:46 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,20 +19,21 @@ static void	ft_heredoc_sigint_handler(int signum)
 	exit(128 + SIGINT);
 }
 
-int	ft_error_exe(int p[2], int *pid)
+int	ft_error_exe(int p[2], int pid)
 {
-	// int status;
-	//SETOFF
-	// NEED TO HANDLE SIGNAL  ERPROPERLY
-	// set_ignore_signals();
-	if (waitpid(*pid, pid, 0) == -1)
-	{
-		perror("waitpid");
-		return (1);
-	}
-	close(p[1]);
-	// setup_signals();
-	if (WIFEXITED(*pid) && WEXITSTATUS(*pid) == 0)
+	int status;
+
+	status = 0;
+	if (waitpid(pid, &status, 0) == -1)
+		return (setup_signals(), close(p[1]), 130);
+	if (close(p[1]) == -1)
+		return (perror("close"), ENO_CRITICAL);
+	setup_signals();
+	if (WEXITSTATUS(status) == 2)
+		return (WEXITSTATUS(status));
+	if (WIFEXITED(status))
+		return (WEXITSTATUS(status));
+	if (WIFEXITED(status) && WEXITSTATUS(status) == 0)
 		return (0);
 	return (1);
 }
@@ -63,7 +64,6 @@ void	ft_heredoc(t_red_node *node, int p[2])
 	{
 		perror("close");
 		exit (1);
-		//EXIT CRITICAL ERROR
 	}
 	exit(0);
 }
@@ -88,6 +88,7 @@ int	ft_init_heredoc(t_node *node)
 	int			p[2];
 	int			pid;
 	t_red_node	*tmp;
+	int			returned;
 
 	tmp = node->red_node;
 	while (tmp)
@@ -99,16 +100,18 @@ int	ft_init_heredoc(t_node *node)
 				if (limiter_quotes_check(tmp))
 					return (0);
 				pipe(p);
-				pid = (fork());
+				pid = fork();
+				if (pid < 0)
+					return (perror("Fork error"), ENO_CRITICAL);
 				if (!pid)
 					ft_heredoc(tmp, p);
-				if (ft_error_exe(p, &pid))
-					return (0);
+				returned = ft_error_exe(p, pid);
+				if (returned)
+					return (close(p[0]), returned);
 				tmp->here_doc = p[0];
 			}
 		}
 		tmp = tmp->next;
 	}
-	return (1);
-	// IL FAUT CHECKER SI LE FORK ECHOUE
+	return (0);
 }

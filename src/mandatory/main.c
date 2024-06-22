@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
+/*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:09:05 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/21 15:27:05 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/22 11:07:25 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -184,21 +184,32 @@ void	ft_heredoc_go_expand(t_node *node)
 	}
 }
 
-void	exec_here_doc(t_node *nodes)
+int	exec_here_doc(t_node *nodes)
 {
 	t_node	*tmp;
+	int		returned;
 
+	returned = 0;
 	tmp = nodes;
 	if (tmp == NULL)
-		return ;
+		return (0);
 	while (tmp)
 	{
 		if (tmp->red_node != NULL)
-			ft_init_heredoc(tmp);
+		{
+			returned = ft_init_heredoc(tmp);
+			if (returned)
+				return (get_ms()->exit = returned, returned);
+		}
 		else if (tmp->sub != NULL)
-			exec_here_doc(tmp->sub);
+		{
+			returned = exec_here_doc(tmp->sub);
+			if (returned)
+				return (get_ms()->exit = returned, returned);
+		}
 		dodge_cmd(&tmp);
 	}
+	return (0);
 }
 
 int	init_minishell(void)
@@ -245,7 +256,11 @@ int	init_minishell(void)
 			continue ;
 		}
 		// exec_parse(ms->nodes);
-		exec_here_doc(ms->nodes);
+		if (exec_here_doc(ms->nodes))
+		{
+			get_ms()->f_or_nf = 0;
+			continue ;
+		}
 		start_exec(ms->nodes, &(ms->envlst));
 		if (get_ms()->f_or_nf == 0)
 		{
