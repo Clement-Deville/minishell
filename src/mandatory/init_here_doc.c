@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 15:44:49 by skapersk          #+#    #+#             */
-/*   Updated: 2024/06/22 11:44:50 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/22 12:10:54 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ int	ft_error_exe(int p[2], int pid)
 	set_ignore_signals();
 	if (waitpid(pid, &status, 0) == -1)
 		return (perror("wait"), setup_signals(), close(p[1]), 130);
+		//ne doit pas retourner 130
 	if (close(p[1]) == -1)
 		return (perror("close"), ENO_CRITICAL);
 	setup_signals();
