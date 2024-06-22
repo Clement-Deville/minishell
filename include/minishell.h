@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
+/*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:09:27 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/21 12:00:51 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/22 14:26:19 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -519,6 +519,6 @@ int			init_red_cmp(t_red_node *node);
 //exec.c
 t_bool		is_subshell(t_node *node);
 void		dodge_cmd(t_node **node);
-void		ft_heredoc_go_expand(t_node *node);
+int		ft_heredoc_go_expand(t_node *node);
 
 #endif
