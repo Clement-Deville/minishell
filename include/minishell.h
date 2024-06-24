@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:09:27 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/24 12:46:15 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/24 16:01:00 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -291,6 +291,12 @@ t_mini_env	*get_ms(void);
 int			ft_tokenization(t_mini_env *ms);
 void		ft_init_env(char **env);
 void		lst_token_add_back(t_token **token_list, t_token *new);
+int			ft_add_token_sign(char **line, t_token **t_list,
+			t_token_type type, int i);
+
+//token_finder.c
+void		ft_token_identify(char **line, t_token **t_list);
+int			ft_compare_line_token(char *line);
 
 //tokens_helper.c
 t_token		*create_new_token(char *value, t_token_type type);

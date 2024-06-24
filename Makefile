@@ -67,6 +67,7 @@ PARSING_FILES =	clean_parsing	\
 				parser_utils_tokens	\
 				parser_init	\
 				parser_utils_error	\
+				token_finder	\
 				tokenization	\
 				ft_strip_quotes	\
 

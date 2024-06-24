@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 17:15:30 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/24 14:42:00 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/24 15:57:51 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,38 +70,14 @@ int	ft_add_token_sign(char **line, t_token **t_list,
 	return (i);
 }
 
-void	ft_token_identify(char **line, t_token **t_list)
-{
-	int	i;
-
-	i = 0;
-	if (!ft_strncmp(*line, ">>", 2))
-		i = ft_add_token_sign(line, t_list, TOKEN_APPEND, 2);
-	else if (!ft_strncmp(*line, "<<", 2))
-		i = ft_add_token_sign(line, t_list, TOKEN_HERE_DOC, 2);
-	else if (!ft_strncmp(*line, "<", 1))
-		i = ft_add_token_sign(line, t_list, TOKEN_RED_IN, 1);
-	else if (!ft_strncmp(*line, ">", 1))
-		i = ft_add_token_sign(line, t_list, TOKEN_RED_OUT, 1);
-	else if (!ft_strncmp(*line, "&&", 2))
-		i = ft_add_token_sign(line, t_list, TOKEN_AND, 2);
-	else if (!ft_strncmp(*line, "||", 2))
-		i = ft_add_token_sign(line, t_list, TOKEN_OR, 2);
-	else if (!ft_strncmp(*line, "(", 1))
-		i = ft_add_token_sign(line, t_list, TOKEN_SUBSHELL_OPEN, 1);
-	else if (!ft_strncmp(*line, ")", 1))
-		i = ft_add_token_sign(line, t_list, TOKEN_SUBSHELL_CLOSE, 1);
-	else
-		i = ft_add_token_sign(line, t_list, TOKEN_PIPE, 1);
-	*line += i;
-}
-
 int	ft_tokenization(t_mini_env *ms)
 {
 	t_token	*token_list;
 	char	*line;
 	char	*trimmed;
 
+	if (ft_strncmp(ms->line, "\n", 1))
+		return (1);
 	line = ft_strtrim(ms->line, " \f\n\r\t\v");
 	if (!line)
 		return (1);
@@ -109,9 +85,7 @@ int	ft_tokenization(t_mini_env *ms)
 	trimmed = line;
 	while (*line)
 	{
-		if (!ft_strncmp(line, "<", 1) || !ft_strncmp(line, ">", 1)
-			|| !ft_strncmp(line, "|", 1) || !ft_strncmp(line, "&&", 2)
-			|| !ft_strncmp(line, "(", 1) || !ft_strncmp(line, ")", 1))
+		if (!ft_compare_line_token(line))
 			ft_token_identify(&line, &token_list);
 		else if (is_space(*line))
 			line++;
