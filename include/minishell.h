@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
+/*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:09:27 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/24 17:32:27 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/24 18:17:36 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -413,7 +413,10 @@ int			ft_is_redir(t_token_type type);
 int			ft_get_node_type(t_token_type type);
 t_red_type	ft_get_red_type(t_token_type type);
 char		*ft_add_args(t_token_type node);
+
+// parser_check_sub.c
 int			ft_check_subs(t_token *token, int min_prec);
+int			sub_in_sub_error(t_token *token);
 
 // parser_utils_nodes.c
 t_node		*ft_new_node(t_node_type type);
@@ -571,15 +574,33 @@ char		**there_asterisk(char *str, int i);
 char	**ft_sort_tab(char **argv, int size);
 
 //init_here_doc_utils.c
-
 int			ft_is_delimiter(char *str, char *line);
 void		*ft_garbage(void *str, t_bool clean);
 int			ft_heredoc_handle_dollar(char *str, int i, int fd);
 void		ft_heredoc_expand(char *str, int fd);
 int			ft_check_here_quotes(char *str);
 
+//init_here_doc.c
+void		ft_heredoc_sigint_handler(int signum);
+int			ft_error_exe(int p[2], int pid);
+void		ft_exit_mess(t_red_node *node);
+int			limiter_quotes_check(t_red_node *node);
+
+//process_here_doc.c
+void		ft_heredoc(t_red_node *node, int p[2]);
+int			process_here_doc(t_red_node *tmp);
+
 char		*ft_strip_quotes(char *str);
 int			init_red_cmp(t_red_node *node);
+
+//exec_here_doc_expand.c
+int			ft_heredoc_go_expand(t_node *node);
+
+//exec_here_doc.c
+int			open_tmp_file(int *tmp_fd);
+int			process_heredoc(t_node *node, int tmp_fd);
+int			copy_to_final_heredoc(int tmp_fd);
+int			finalize_heredoc(t_node *node);
 
 //exec.c
 t_bool		is_subshell(t_node *node);

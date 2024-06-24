@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   init_here_doc.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
+/*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 15:44:49 by skapersk          #+#    #+#             */
-/*   Updated: 2024/06/24 17:25:34 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/24 18:10:15 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-static void	ft_heredoc_sigint_handler(int signum)
+void	ft_heredoc_sigint_handler(int signum)
 {
 	(void)signum;
 	ft_clean_ms();
@@ -26,8 +26,7 @@ int	ft_error_exe(int p[2], int pid)
 	status = 0;
 	set_ignore_signals();
 	if (waitpid(pid, &status, 0) == -1)
-		return (perror("wait"), setup_signals(), close(p[1]), 130);
-		//ne doit pas retourner 130
+		return (perror("wait"), setup_signals(), close(p[1]), 1);
 	if (close(p[1]) == -1)
 		return (perror("close"), ENO_CRITICAL);
 	setup_signals();
@@ -36,34 +35,12 @@ int	ft_error_exe(int p[2], int pid)
 	return (1);
 }
 
-void	ft_heredoc(t_red_node *node, int p[2])
+void	ft_exit_mess(t_red_node *node)
 {
-	char	*line;
-	char	*quotes;
-
-	signal(SIGINT, ft_heredoc_sigint_handler);
-	quotes = node->value;
-	while (*quotes && *quotes != '"' && *quotes != '\'')
-		quotes++;
-	while (1)
-	{
-		line = readline("> ");
-		if (!line || ft_is_delimiter(node->value, line))
-			break ;
-		else
-		{
-			ft_putstr_fd(line, p[1]);
-			ft_putstr_fd("\n", p[1]);
-		}
-		free(line);
-	}
-	ft_clean_ms();
-	if (close(p[0]) == -1 || close(p[1]) == -1)
-	{
-		perror("close");
-		exit (1);
-	}
-	exit(0);
+	ft_putstr_fd("minishell: warning: here-document", 2);
+	ft_putstr_fd(" delimited by end-of-file (wanted `", 2);
+	ft_putstr_fd(node->value, 2);
+	ft_putstr_fd("')\n", 2);
 }
 
 int	limiter_quotes_check(t_red_node *node)
@@ -83,11 +60,10 @@ int	limiter_quotes_check(t_red_node *node)
 
 int	ft_init_heredoc(t_node *node)
 {
-	int			p[2];
-	int			pid;
 	t_red_node	*tmp;
 	int			returned;
 
+	returned = 0;
 	tmp = node->red_node;
 	while (tmp)
 	{
@@ -95,18 +71,9 @@ int	ft_init_heredoc(t_node *node)
 		{
 			if (tmp->type == NODE_HERE_DOC)
 			{
-				if (limiter_quotes_check(tmp))
-					return (0);
-				pipe(p);
-				pid = fork();
-				if (pid < 0)
-					return (perror("Fork error"), ENO_CRITICAL);
-				if (!pid)
-					ft_heredoc(tmp, p);
-				returned = ft_error_exe(p, pid);
+				returned = process_here_doc(tmp);
 				if (returned)
-					return (close(p[0]), returned);
-				tmp->here_doc = p[0];
+					return (returned);
 			}
 		}
 		tmp = tmp->next;

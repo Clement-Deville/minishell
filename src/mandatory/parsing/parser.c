@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:22:01 by skapersk          #+#    #+#             */
-/*   Updated: 2024/06/24 12:59:08 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/24 17:41:42 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ t_node	*ft_start_subshell(t_mini_env *ms, int min_prec)
 
 	ms->in_sub += 1;
 	ms->tokens = ms->tokens->next;
-	if (!ft_check_subs(ms->tokens, min_prec))
+	if (!ft_check_subs(ms->tokens, min_prec) || !sub_in_sub_error(ms->tokens))
 		return (NULL);
 	node = ft_new_node(NODE_CMD);
 	if (!node)

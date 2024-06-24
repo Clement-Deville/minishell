@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 13:13:57 by skapersk          #+#    #+#             */
-/*   Updated: 2024/06/24 15:30:46 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/24 17:39:19 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,32 +56,4 @@ char	*ft_add_args(t_token_type node)
 		return (">>");
 	else
 		return (NULL);
-}
-
-int	ft_check_subs(t_token *token, int min_prec)
-{
-	int		count;
-	t_token	*tmp;
-	t_token	*tmp2;
-
-	if (min_prec > 0)
-		return (1);
-	count = 1;
-	tmp2 = token->prev;
-	tmp = token;
-	while (tmp)
-	{
-		if (tmp->type == TOKEN_SUBSHELL_OPEN)
-			count++;
-		else if (tmp->type == TOKEN_SUBSHELL_CLOSE)
-		{
-			count--;
-			if (count < 0)
-				return (ft_set_parse_err(E_SYNTAX), get_ms()->tmp = tmp, 0);
-		}
-		tmp = tmp->next;
-	}
-	if (count != 0)
-		return (ft_set_parse_err(E_SYNTAX), get_ms()->tmp = tmp2, 0);
-	return (1);
 }

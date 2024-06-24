@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 17:15:30 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/24 15:57:51 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/24 17:38:47 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ int	ft_tokenization(t_mini_env *ms)
 	char	*line;
 	char	*trimmed;
 
-	if (ft_strncmp(ms->line, "\n", 1))
+	if (!ft_strncmp(ms->line, "\n", 1))
 		return (1);
 	line = ft_strtrim(ms->line, " \f\n\r\t\v");
 	if (!line)

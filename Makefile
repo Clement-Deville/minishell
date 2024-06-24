@@ -48,6 +48,7 @@ EXEC_FILES = 	exec	\
 				echo	\
 				pwd	\
 				export	\
+				exec_here_doc_expand	\
 				exec_here_doc	\
 				exec_sub	\
 				exec_standard	\
@@ -63,6 +64,7 @@ PARSING_FILES =	clean_parsing	\
 				lst_token_add_back	\
 				tokens_helper	\
 				parser	\
+				parser_check_sub	\
 				parser_utils_nodes	\
 				parser_utils_tokens	\
 				parser_init	\
@@ -76,6 +78,7 @@ REDIRECTIONS_FILES =	access_utils	\
 						access	\
 						path	\
 						path_utils	\
+						process_here_doc	\
 						redirections	\
 						dir	\
 						init_here_doc	\
