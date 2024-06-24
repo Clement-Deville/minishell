@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 08:35:48 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/24 16:06:59 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/24 16:35:02 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,5 +36,4 @@ int	exec_sub(t_node *node, t_dblist **env)
 	if (get_ms()->exit == -1)
 		return (ENO_CRITICAL);
 	return (get_ms()->exit);
-	// Need to leave program properly
 }

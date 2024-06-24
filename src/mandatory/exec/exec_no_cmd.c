@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 08:42:56 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/24 08:43:35 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/24 16:39:56 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ int	fake_set_output_append(char *filename)
 	return (0);
 }
 
-int do_no_cmd(t_node *node)
+int	do_no_cmd(t_node *node)
 {
 	t_red_node	*tmp;
 	int			status;

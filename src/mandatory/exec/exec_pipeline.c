@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 14:51:19 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/24 16:08:37 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/24 17:23:52 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,19 +46,15 @@ int	wait_for_all(t_node **node, int size)
 	t_node	*head;
 
 	i = 0;
-	set_ignore_signals();
 	exit_value = 0;
 	head = (*node);
 	while (i <= size)
 	{
-		// if ((*node)->pid != NO_FORK
-		// 	&& waitpid((*node)->pid, &((*node)->status), 0) == -1)
-		// 	return (setup_signals(), perror("Wait error"), ENO_CRITICAL);
 		if ((*node)->pid != NO_FORK)
 		{
 			(*node)->status = do_wait((*node)->pid);
 			if ((*node)->status == -1)
-				return (setup_signals(), perror("Wait error"), ENO_CRITICAL);
+				return (perror("Wait error"), ENO_CRITICAL);
 		}
 		if ((*node)->pid != NO_FORK && WIFEXITED((*node)->status))
 			exit_value = WEXITSTATUS((*node)->status);
@@ -69,9 +65,7 @@ int	wait_for_all(t_node **node, int size)
 		(*node) = (*node)->next;
 		i++;
 	}
-	// si un process retourne ENO CRITICAL FAUT IL ATTENDRE TOUS LES PROCESSES?
 	(*node) = head;
-	setup_signals();
 	return (exit_value);
 }
 

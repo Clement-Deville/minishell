@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 18:42:42 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/21 09:23:04 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/24 16:39:28 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,6 @@ int	do_exit(t_node *node)
 	exit_value = (unsigned char)ft_atoi(argument);
 	exit(clean_and_exit (exit_value));
 }
-
 
 // Si le premier n'est pas numerique alors ca exit quand meme
 

@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:09:27 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/24 16:26:10 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/24 17:32:27 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -256,6 +256,12 @@ int			setup_signals(void);
 int			set_ignore_signals(void);
 int			set_child_signals(void);
 int			set_wait_signals(void);
+
+// signal_handlers.c
+
+void		wait_handler(int signo);
+void		handle_signal(int signo);
+void		handle_signal_child(int signo);
 
 // UNSET
 

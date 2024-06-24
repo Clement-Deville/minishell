@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 08:38:02 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/24 08:49:18 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/24 16:35:19 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ t_bool	is_builtin(t_node *node)
 t_bool	is_empty(t_node *node)
 {
 	if (!node || !node->c_cmd || !node->c_cmd->expand
-		|| !node->c_cmd->expand[0] )
+		|| !node->c_cmd->expand[0])
 		return (TRUE);
 	return (FALSE);
 }

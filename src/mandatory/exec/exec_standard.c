@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 08:48:07 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/24 14:41:10 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/24 17:24:44 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 int	exec(char **cmd, char *env[])
 {
-	// IL FAUT TRANSFORMER LA LIST EN UN TAB POUR L'EXEC
 	if (execve(cmd[0], cmd, env) == -1)
 	{
 		perror("Probleme a l'execution de la commande");

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_here_doc_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 15:41:16 by skapersk          #+#    #+#             */
-/*   Updated: 2024/06/22 00:45:53 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/24 16:39:05 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	ft_is_delimiter(char *str, char *line)
 	tmp = ft_strip_quotes(tmp);
 	if (!tmp)
 		return (-1);
-	if(!ft_strncmp(line, tmp, ft_strlen(tmp) + 1))
+	if (!ft_strncmp(line, tmp, ft_strlen(tmp) + 1))
 		return (free(tmp), 1);
 	return (free(tmp), 0);
 }

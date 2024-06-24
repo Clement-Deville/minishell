@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 17:15:57 by cdeville          #+#    #+#             */
-/*   Updated: 2024/04/15 17:16:24 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/24 16:34:36 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,4 +33,3 @@ DIR	*do_opendir(void)
 	free(current_dir_name);
 	return (dir);
 }
-

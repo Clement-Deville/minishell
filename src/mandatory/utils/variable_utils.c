@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 08:45:53 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/24 08:49:06 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/24 16:38:24 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ char	**list_to_tab(t_dblist *env)
 	i = 0;
 	while (env)
 	{
-		tab[i] = get_variable((t_variable*)(env->content));
+		tab[i] = get_variable((t_variable *)(env->content));
 		if (tab[i] == NULL)
 		{
 			while (i >= 0)

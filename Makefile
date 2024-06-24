@@ -86,6 +86,7 @@ UTILS_FILES =	balise	\
 				variable_utils	\
 				print_export	\
 				signals	\
+				signal_handlers	\
 				utils	\
 				init_minishell	\
 				error_msg	\

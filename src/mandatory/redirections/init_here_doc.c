@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 15:44:49 by skapersk          #+#    #+#             */
-/*   Updated: 2024/06/22 12:59:19 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/24 17:25:34 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static void	ft_heredoc_sigint_handler(int signum)
 
 int	ft_error_exe(int p[2], int pid)
 {
-	int status;
+	int	status;
 
 	status = 0;
 	set_ignore_signals();
