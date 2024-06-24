@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:09:27 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/22 14:26:19 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/24 09:53:30 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -317,6 +317,41 @@ int			start_exec(t_node *node, t_dblist **env);
 int			ft_get_exit_status(int status);
 int			exec_simple_cmd(t_node *node, t_mini_env *ms, t_bool piped);
 
+// exec_here_doc.c
+
+int			ft_heredoc_go_expand(t_node *node);
+int			exec_here_doc(t_node *nodes);
+
+// exec_builtin.c
+
+int			exec_builtin(t_node *node, t_dblist **env);
+
+// exec_no_cmd.c
+
+int			fake_set_input(char *filename);
+int			fake_set_output(char *filename);
+int			fake_set_output_append(char *filename);
+int			do_no_cmd(t_node *node);
+
+// exec_sub.c
+
+int			exec_sub(t_node *node, t_dblist **env);
+
+// exec_standard.c
+
+int			exec(char **cmd, char *env[]);
+int			do_wait(int pid);
+int			clean_and_exit(int exitno);
+int			exec_standard(t_node **node, t_dblist **env);
+
+// exec_utils.c
+
+t_bool		is_builtin(t_node *node);
+t_bool		is_pipeline(t_node *node);
+t_bool		is_not_a_cmd(t_node *node);
+t_bool		is_subshell(t_node *node);
+t_bool		is_empty(t_node *node);
+
 //exec_red.c
 int			do_out(t_red_node *node, int *status);
 int			do_in(t_red_node *node, int *status);
@@ -396,6 +431,12 @@ int			set_input_here_doc(int fd);
 int			set_output_append(char *filename, t_node *node);
 int			do_redirections(t_node *node);
 
+// variable_utils.c
+
+char		*get_variable(t_variable *variable);
+char		**list_to_tab(t_dblist *env);
+int			dlst_size(t_dblist *lst);
+
 //	do.c
 
 int			do_dup2(int oldfd, int newfd);
@@ -405,7 +446,12 @@ int			do_pipe(int pipfd[2]);
 // main.c
 
 char		*get_balise(void);
+
+// init_minishell.c
+
 int			init_minishell(void);
+t_mini_env	*get_ms(void);
+
 
 # define NO_FORK -2
 # define WRITE 1
@@ -507,6 +553,7 @@ char		**there_asterisk(char *str, int i);
 void		free_wildcards(t_wildcard *wildcard);
 
 //init_here_doc_utils.c
+
 int			ft_is_delimiter(char *str, char *line);
 void		*ft_garbage(void *str, t_bool clean);
 int			ft_heredoc_handle_dollar(char *str, int i, int fd);

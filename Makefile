@@ -12,29 +12,18 @@ VAL_FLAGS := --leak-check=full --show-leak-kinds=all -s --track-fds=yes  --trace
 
 DEBUG = -g
 
+SRC = main $(COMPUTE_FILES) $(ENV_FILES) $(EXEC_FILES) $(PARSING_FILES) $(REDIRECTIONS_FILES) $(UTILS_FILES) $(WILDCARDS_FILES)
+
 SRCS_FILES =	main	\
-				access_utils	\
-				balise	\
-				echo	\
-				pwd	\
-				export	\
-				unset	\
-				exit	\
-				cd	\
-				dir	\
-				variable	\
-				print_export	\
-				asterisk	\
-				signals	\
-				env	\
-				env_utils	\
-				utils	\
-				tokenization	\
-				init_minishell	\
-				lst_token_add_back	\
-				tokens_helper	\
-				parser	\
-				compute_cmds	\
+				$(addprefix compute/, $(COMPUTE_FILES))	\
+				$(addprefix env/, $(ENV_FILES))	\
+				$(addprefix exec/, $(EXEC_FILES))	\
+				$(addprefix parsing/, $(PARSING_FILES))	\
+				$(addprefix redirections/, $(REDIRECTIONS_FILES))	\
+				$(addprefix utils/, $(UTILS_FILES))	\
+				$(addprefix wildcards/, $(WILDCARDS_FILES))	\
+
+COMPUTE_FILES =	compute_cmds	\
 				compute_check_quotes	\
 				compute_handle_arg	\
 				compute_pre_expand	\
@@ -44,33 +33,66 @@ SRCS_FILES =	main	\
 				compute_re_node_wildcards	\
 				compute_wildcards_utils	\
 				compute_wildcards	\
-				wildcard	\
-				init_here_doc	\
-				init_here_doc_utils	\
-				clean_parsing	\
-				clean_env	\
-				exec	\
-				error_msg	\
-				get_path	\
-				exec_pipeline	\
-				access	\
-				path	\
-				path_utils	\
-				redirections	\
+
+ENV_FILES =		clean_env	\
+				env	\
+				env_utils	\
+
+EXEC_FILES = 	exec	\
 				do	\
+				exec_pipeline	\
+				pipe_fd_utils	\
+				pipe_utils	\
+				echo	\
+				pwd	\
+				export	\
+				exec_here_doc	\
+				exec_sub	\
+				exec_standard	\
+				exec_utils	\
+				exec_no_cmd	\
+				exec_builtin	\
+				unset	\
+				exit	\
+				cd	\
+
+PARSING_FILES =	clean_parsing	\
+				lst_token_add_back	\
+				tokens_helper	\
+				parser	\
 				parser_utils_nodes	\
 				parser_utils_tokens	\
 				parser_init	\
 				parser_utils_error	\
-				pipe_fd_utils	\
-				pipe_utils	\
+				tokenization	\
 				ft_strip_quotes	\
+
+REDIRECTIONS_FILES =	access_utils	\
+						get_path	\
+						access	\
+						path	\
+						path_utils	\
+						redirections	\
+						dir	\
+						init_here_doc	\
+						init_here_doc_utils	\
+
+UTILS_FILES =	balise	\
+				variable	\
+				variable_utils	\
+				print_export	\
+				signals	\
+				utils	\
+				init_minishell	\
+				error_msg	\
+
+WILDCARDS_FILES =	asterisk	\
+					wildcard	\
 
 SRCS_FILES_BONUS =	main_bonus	\
 
-
-
 INCLUDES_FILES = minishell
+
 
 SOURCE_DIR =	./src/mandatory/
 SOURCE_BONUS_DIR = ./src/bonus/
@@ -101,6 +123,7 @@ bonus: $(NAME_B)
 $(OBJS_DIR)%.o : $(SOURCE_DIR)%.c
 	@mkdir -p $(BIN_DIR)
 	@mkdir -p $(OBJS_DIR)
+	@mkdir -p $(@D)
 	$(CC) $(FLAGS) $(DEBUG) -I./lib/libft/INCLUDES -I$(INCLUDES_DIR) -c $< -o $@
 
 $(OBJS_BONUS_DIR)%.o : $(SOURCE_BONUS_DIR)%.c
