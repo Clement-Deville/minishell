@@ -3,85 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
+/*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:09:05 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/24 11:58:38 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/24 15:33:50 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
-
-char	*convert2(t_red_type type)
-{
-	if (type == NODE_RED_IN)
-		return ("NODE_RED_IN");
-	else if (type == NODE_RED_OUT)
-		return ("NODE_RED_OUT");
-	else if (type == NODE_APPEND)
-		return ("NODE_APPEND");
-	else if (type == NODE_HERE_DOC)
-		return ("NODE_HERE_DOC");
-	else
-		return (NULL);
-}
-
-char	*convert(t_node_type type)
-{
-	if (type == NODE_AND)
-		return ("NODE AND");
-	else if (type == NODE_OR)
-		return ("NODE OR");
-	else if (type == NODE_PIPE)
-		return ("NODE PIPE");
-	else if (type == NODE_CMD)
-		return ("NODE_CMD");
-	else
-		return (NULL);
-}
-
-void	exec_parse(t_node *node);
-
-void	do_node(t_node *node)
-{
-	if (convert(node->type) != NULL && node->sub == NULL )
-		ft_printf("TYPE NODE : %s --> ", convert(node->type));
-	if (node->red_node != NULL && node->red_node->value != NULL)
-	{
-		while (node->red_node)
-		{
-			ft_printf("------ %p ------\n", node);
-			ft_printf("%s with ", convert2(node->red_node->type));
-			ft_printf("%s \n", node->red_node->value);
-			node->red_node = node->red_node->next;
-		}
-	}
-	if (node->cmd != NULL)
-		ft_printf("Command: %s\n", node->cmd);
-	else if (node->sub != NULL)
-	{
-		ft_printf("----- %p -----\n", node);
-		ft_printf("Subshell: ");
-		ft_printf("----- sub : %p -----\n", node->sub);
-
-		exec_parse(node->sub);
-	}
-	if (node->left != NULL)
-		ft_printf("LEFT : %s\n", node->left->value);
-	if (node->rigth != NULL)
-		ft_printf("RIGHT : %s\n", node->rigth->value);
-}
-
-void	exec_parse(t_node *node)
-{
-	if (!node)
-		return ;
-	else
-	{
-		do_node(node);
-		exec_parse(node->next);
-	}
-}
 
 void	do_readline(void)
 {
@@ -130,7 +59,6 @@ int	init_minishell(void)
 		if (!ft_tokenization(ms))
 		{
 			ft_handle_parse_err(ms);
-			ft_clear_token(ms->tokens);
 			continue ;
 		}
 		init_parsing(ms);
@@ -140,7 +68,6 @@ int	init_minishell(void)
 			ft_handle_parse_err(ms);
 			continue ;
 		}
-		// exec_parse(ms->nodes);
 		if (exec_here_doc(ms->nodes))
 		{
 			get_ms()->f_or_nf = 0;

@@ -59,6 +59,7 @@ EXEC_FILES = 	exec	\
 				cd	\
 
 PARSING_FILES =	clean_parsing	\
+				convert_token	\
 				lst_token_add_back	\
 				tokens_helper	\
 				parser	\

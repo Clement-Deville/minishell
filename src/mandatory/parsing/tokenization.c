@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 17:15:30 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/20 16:18:09 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/24 14:42:00 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	ft_print_quote_err(char c)
 	ft_putstr_fd("minishell: unexpected EOF while looking for matching `", 2);
 	ft_putchar_fd(c, 2);
 	ft_putstr_fd("'\n", 2);
-	get_ms()->f_or_nf = 1;
+	get_ms()->f_or_nf = 0;
 	get_ms()->exit = 258;
 }
 
@@ -118,7 +118,7 @@ int	ft_tokenization(t_mini_env *ms)
 		else
 		{
 			if (!ft_add_token_else(&line, &token_list))
-				return (free(trimmed), ft_clear_token(token_list), (0));
+				return (free(trimmed), (0));
 		}
 	}
 	ms->tokens = token_list;
