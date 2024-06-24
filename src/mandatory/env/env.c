@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 13:23:24 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/21 11:31:17 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/24 16:21:09 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,6 @@ int	do_env(t_node *node, t_dblist *my_env)
 		ft_putendl_fd("env: too many arguments", 2);
 		return (1);
 	}
-
 	ft_dblst_iter(my_env, print_filled_variable);
 	return (0);
 }

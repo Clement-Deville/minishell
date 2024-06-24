@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:09:05 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/24 15:33:50 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/24 16:26:20 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,14 +19,16 @@ void	do_readline(void)
 		free(get_ms()->line);
 		get_ms()->line = NULL;
 	}
-	if (get_ms()->exit == 130 && get_ms()->signal)
+	if (get_ms()->signal_int)
 	{
-		get_ms()->signal = FALSE;
+		get_ms()->signal_int = FALSE;
+		get_ms()->wait_interrupted = FALSE;
 		ft_printf("\n");
 	}
-	if (get_ms()->exit == 131 && get_ms()->signal)
+	if (get_ms()->signal_quit)
 	{
-		get_ms()->signal = FALSE;
+		get_ms()->signal_quit = FALSE;
+		get_ms()->wait_interrupted = FALSE;
 		ft_printf("Quit (core dumped)\n");
 	}
 	// Need

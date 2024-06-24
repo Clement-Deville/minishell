@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 11:47:07 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/24 08:49:15 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/24 16:23:00 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,10 @@ int	start_exec(t_node *node, t_dblist **env)
 		return (1);
 	while (node)
 	{
+		if (get_ms()->signal_int)
+			exit(clean_and_exit (130));
+		if (get_ms()->signal_quit)
+			exit(clean_and_exit (131));
 		if (node->red_node != NULL && node->red_node->here_doc != 0)
 		{
 			get_ms()->exit = ft_heredoc_go_expand(node);

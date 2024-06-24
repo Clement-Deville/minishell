@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:09:27 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/24 16:01:00 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/24 16:26:10 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -194,8 +194,10 @@ typedef struct s_mini_env
 	t_token			*tokens;
 	t_token			*tmp;
 	t_node			*nodes;
-	t_bool			signal;
+	t_bool			signal_int;
+	t_bool			signal_quit;
 	t_bool			parent;
+	t_bool			wait_interrupted;
 }	t_mini_env;
 
 int		clean_and_exit(int exitno);
@@ -253,6 +255,7 @@ DIR			*do_opendir(void);
 int			setup_signals(void);
 int			set_ignore_signals(void);
 int			set_child_signals(void);
+int			set_wait_signals(void);
 
 // UNSET
 

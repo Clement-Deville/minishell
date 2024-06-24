@@ -6,23 +6,11 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 09:00:11 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/24 09:00:50 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/24 12:22:28 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
-
-static int	check_here_doc_quotes(t_node *node)
-{
-	char	*quotes;
-
-	quotes = node->red_node->value;
-	while (*quotes && *quotes != '"' && *quotes != '\'')
-		quotes++;
-	if (*quotes)
-		return (ENO_CRITICAL);
-	return (0);
-}
 
 static int	open_tmp_file(int *tmp_fd)
 {
@@ -79,7 +67,7 @@ int	ft_heredoc_go_expand(t_node *node)
 {
 	int	tmp_fd;
 
-	if (check_here_doc_quotes(node) != 0 || node->red_node->here_doc < 0)
+	if (node->red_node->here_doc < 0)
 		return (ENO_CRITICAL);
 	if (open_tmp_file(&tmp_fd) != 0)
 		return (close(node->red_node->here_doc), ENO_CRITICAL);

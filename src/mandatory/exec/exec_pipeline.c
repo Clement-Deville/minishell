@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 14:51:19 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/21 11:41:07 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/24 16:08:37 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,18 +19,19 @@ int	do_fork(t_node **node, int i, int *pipefd, t_dblist **env)
 	status = 0;
 	(*node)->pid = fork();
 	if ((*node)->pid < 0)
-		return (free(pipefd), perror("Fork error"), 1);
+		return (perror("Fork error"), 1);
 	if (are_in_child((*node)->pid))
 	{
 		get_ms()->parent = FALSE;
 		if (i > 0)
 			if (connect_read(&pipefd[2 * i]) == 1)
-				return (1);
+				return (free(pipefd), 1);
 		if (is_pipe_cmd((*node)->next))
 			if (connect_write(&pipefd[2 * i]) == 1)
-				return (1);
+				return (free(pipefd), 1);
 		if (close_useless_fd(pipefd, i) == 1)
-			return (1);
+			return (free(pipefd), 1);
+		free(pipefd);
 		status = exec_single(node, env);
 		ft_clean_ms();
 		exit (status);
@@ -50,9 +51,15 @@ int	wait_for_all(t_node **node, int size)
 	head = (*node);
 	while (i <= size)
 	{
-		if ((*node)->pid != NO_FORK
-			&& waitpid((*node)->pid, &((*node)->status), 0) == -1)
-			return (setup_signals(), perror("Wait error"), ENO_CRITICAL);
+		// if ((*node)->pid != NO_FORK
+		// 	&& waitpid((*node)->pid, &((*node)->status), 0) == -1)
+		// 	return (setup_signals(), perror("Wait error"), ENO_CRITICAL);
+		if ((*node)->pid != NO_FORK)
+		{
+			(*node)->status = do_wait((*node)->pid);
+			if ((*node)->status == -1)
+				return (setup_signals(), perror("Wait error"), ENO_CRITICAL);
+		}
 		if ((*node)->pid != NO_FORK && WIFEXITED((*node)->status))
 			exit_value = WEXITSTATUS((*node)->status);
 		if ((*node)->pid != NO_FORK && WIFSIGNALED((*node)->status))
@@ -100,7 +107,7 @@ int	exec_pipeline(t_node **node, t_dblist **env)
 	while (is_pipe_cmd(*node))
 	{
 		if (init_piping(node, i, &pipefd) == ENO_CRITICAL)
-			return (ENO_CRITICAL);
+			return (free(pipefd), ENO_CRITICAL);
 		if (is_cmd_executable((*node)))
 		{
 			if (do_fork(node, i, pipefd, env) == 1)

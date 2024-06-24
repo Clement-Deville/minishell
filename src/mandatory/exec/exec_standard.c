@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 08:48:07 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/24 08:48:34 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/24 14:41:10 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,16 +27,28 @@ int	do_wait(int pid)
 {
 	int	status;
 
-	//SETOFF
-	set_ignore_signals();
+	set_wait_signals();
 	status = 0;
 	if (waitpid(pid, &status, 0) == -1)
+	{
+		if (get_ms()->wait_interrupted == TRUE)
+		{
+			get_ms()->wait_interrupted = FALSE;
+			return (do_wait(pid));
+		}
 		return (setup_signals(), perror("Wait error"), ENO_CRITICAL);
+	}
 	setup_signals();
 	if (WIFEXITED(status))
 		return (WEXITSTATUS(status));
 	if (WIFSIGNALED(status))
+	{
+		if (WTERMSIG(status) == SIGINT)
+			get_ms()->signal_int = TRUE;
+		if (WTERMSIG(status) == SIGQUIT)
+			get_ms()->signal_quit = TRUE;
 		return (128 + WTERMSIG(status));
+	}
 	return (1);
 }
 
