@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   compute_re_node_wildcards.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
+/*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 14:20:53 by skapersk          #+#    #+#             */
-/*   Updated: 2024/06/21 12:26:02 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/24 12:47:42 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,7 @@ char	*ft_expand_red_wildcard(char *str)
 		return (NULL);
 	// SOUCIS AVEC LA FONCTION DO_ASTERISK POUR LES RETURN VALUES SI ERREUR
 	if (i > 1)
-	{
-		ft_printf_error_ast(str);
-		return (NULL);
-	}
+		return (ft_printf_error_ast(str), NULL);
 	else if ((!ft_contains_asterisk(str) || !i) || is_in_quotes(str))
 	{
 		ret = ft_strdup(str);

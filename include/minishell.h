@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
+/*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:09:27 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/24 09:53:30 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/24 12:46:15 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -524,6 +524,10 @@ char		*ft_handle_quotes(char *str, int *i);
 char		*ft_expand_loop(char *str, char *tmp, int i);
 char		*ft_cmd_pre_expand(char *str);
 
+//compute_alloc.c
+void	ft_skip_word(char const *s, size_t	*i);
+char	**ft_allocater(char const *s, char **str);
+
 //compute_split_args_utils.c
 int			find_quotes(char c);
 int			is_quotes(char c, char x);
@@ -531,13 +535,6 @@ char		assign_quote(char c);
 char		*process_word(char *str, int *i, int *count);
 char		**free_split_args(char **tmp, int j);
 char		**ft_expander_split(char const *s, t_node *node);
-
-//compute_split_args.c
-char		*skip_words(char *str, int *i, int *count, char *tmp);
-char		*skip_quotes(char *str, int *i, int *count, char *tmp);
-int			countwords(const char *s, char c);
-char		**allocate_split_args(char *str, t_node *node);
-char		**ft_split_args(char *str, t_node *node);
 
 //compute_utils.c
 int			init_node(t_node *node);
@@ -549,8 +546,14 @@ void		free_node(t_node *node);
 //compute_wildcards_utils.c
 char		**no_asterisk(char *str);
 int			ft_visible(char *entry);
-char		**there_asterisk(char *str, int i);
+int			tab_size(char **tab);
+void		ft_swap(char **a, char **b);
+int			name_cmp(char *file1, char *file2);
+
+//compute_wildcards_thereisasterix.c
 void		free_wildcards(t_wildcard *wildcard);
+char		**there_asterisk(char *str, int i);
+char	**ft_sort_tab(char **argv, int size);
 
 //init_here_doc_utils.c
 

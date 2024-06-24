@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 12:17:33 by skapersk          #+#    #+#             */
-/*   Updated: 2024/06/20 17:01:24 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/24 12:40:29 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,49 +28,6 @@ int	countwords(const char *s, char c)
 		i++;
 	}
 	return (words);
-}
-
-static	void	ft_skip_word(char const *s, size_t	*i)
-{
-	char	quotes;
-
-	while (s[*i] && s[*i] != ' ')
-	{
-		if (s[*i] != '\'' && s[*i] != '"')
-			(*i)++;
-		else
-		{
-			quotes = s[(*i)++];
-			while (s[(*i)] != quotes)
-				(*i)++;
-			(*i)++;
-		}
-	}
-}
-
-static char	**ft_allocater(char const *s, char **str)
-{
-	size_t	start;
-	size_t	i;
-	size_t	j;
-
-	i = 0;
-	j = 0;
-	while (s[i])
-	{
-		if (s[i] != ' ')
-		{
-			start = i;
-			ft_skip_word(s, &i);
-			str[j] = ft_calloc(i - start + 1, sizeof(char));
-			if (!str[j])
-				return (NULL);
-			j++;
-		}
-		while (s[i] && s[i] == ' ')
-			i++;
-	}
-	return (str);
 }
 
 static void	ft_words_filler(const char *s, char **str, size_t *i, size_t j)

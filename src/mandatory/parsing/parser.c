@@ -6,11 +6,29 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:22:01 by skapersk          #+#    #+#             */
-/*   Updated: 2024/06/20 15:29:12 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/24 12:59:08 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
+
+void	check_token(t_mini_env *ms)
+{
+	t_token	*tmp;
+
+	tmp = ms->tokens;
+	if (!ms->tokens->next)
+	{
+		ft_set_parse_err(E_SYNTAX);
+		get_ms()->tmp = tmp;
+		return ;
+	}
+	else if (ms->tokens->next)
+	{
+		ft_set_parse_err(E_SYNTAX);
+		get_ms()->tmp = ms->tokens->next;
+	}
+}
 
 t_red_node	*ft_create_red_node(t_token_type type, char *value)
 {
@@ -46,6 +64,8 @@ t_node	*ft_simple_cmd(t_mini_env *ms)
 			if (!ft_join_args(&(node->cmd), ms->tokens))
 				return (ft_set_parse_err(E_MEMORY), NULL);
 			ms->tokens = ms->tokens->next;
+			if (ms->tokens && ms->tokens->type == TOKEN_SUBSHELL_OPEN)
+				check_token(ms);
 		}
 	}
 	return (node);

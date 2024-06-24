@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 10:28:12 by skapersk          #+#    #+#             */
-/*   Updated: 2024/06/17 17:23:53 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/24 13:09:55 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,7 @@ void	ft_handle_parse_err(t_mini_env *ms)
 {
 	t_err_parse			type;
 	t_token_type		token_type;
-	char				**types;
 
-	types = (char *[]){"TOKEN_ELSE",
-		"<", ">", "|", "&&", "||", "newline", "<<", ">>", "(", ")"};
 	type = get_ms()->err.type;
 	if (type)
 	{
@@ -45,7 +42,10 @@ void	ft_handle_parse_err(t_mini_env *ms)
 			else
 				token_type = get_ms()->tmp->type;
 			ft_putstr_fd("minishell: syntax error near unexpected token `", 2);
-			ft_putstr_fd(types[token_type], 2);
+			if (token_type == TOKEN_VAR_ENV)
+				ft_putstr_fd("newline", 2);
+			else
+				ft_putstr_fd(get_ms()->tmp->value, 2);
 			ft_putstr_fd("'\n", 2);
 			get_ms()->exit = 2;
 		}

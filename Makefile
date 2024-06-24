@@ -24,12 +24,14 @@ SRCS_FILES =	main	\
 				$(addprefix wildcards/, $(WILDCARDS_FILES))	\
 
 COMPUTE_FILES =	compute_cmds	\
+				compute_alloc	\
 				compute_check_quotes	\
 				compute_handle_arg	\
 				compute_pre_expand	\
 				compute_split_args_utils	\
 				compute_split_args	\
 				compute_utils	\
+				compute_wildcards_thereisasterix	\
 				compute_re_node_wildcards	\
 				compute_wildcards_utils	\
 				compute_wildcards	\
