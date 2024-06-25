@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_path.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 15:52:08 by skapersk          #+#    #+#             */
-/*   Updated: 2024/05/15 14:44:48 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/25 10:32:38 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,17 +37,16 @@ static t_path	get_env_path(char *path, char *cmd)
 
 	split_path = ft_split(path, ':');
 	if (!split_path)
-		return ((t_path){(t_err){ENO_NOT_FOUND, ERRMSG_MALLOC_FAIL, cmd}, NULL});
+		return ((t_path){(t_err){ENO_NOT_FOUND, ERRMSG_MALLOC_FAIL, cmd}
+			, NULL});
 	i = 0;
 	new = ft_strjoin("/", cmd);
 	while (split_path[i])
 	{
 		cmd_path = ft_strjoin(split_path[i], new);
 		if (!cmd_path)
-			return ((t_path){(t_err){ENO_NOT_FOUND, ERRMSG_MALLOC_FAIL, cmd}, NULL});
-		// cmd_path = ft_strjoin(cmd_path, "/");
-		// if (!cmd_path)
-		// 	return ((t_path){(t_err){ENO_NOT_FOUND, ERRMSG_MALLOC_FAIL, cmd}, NULL});
+			return ((t_path){(t_err){ENO_NOT_FOUND, ERRMSG_MALLOC_FAIL, cmd}
+				, NULL});
 		err = ft_check_exec(cmd_path, TRUE);
 		if (err.no == ENO_SUCCESS)
 			return ((t_path){(t_err){ENO_SUCCESS, 42, cmd_path}, cmd_path});

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_here_doc_expand.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 18:13:23 by skapersk          #+#    #+#             */
-/*   Updated: 2024/06/24 18:15:26 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/25 10:31:43 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,4 +32,3 @@ int	ft_heredoc_go_expand(t_node *node)
 	close(tmp_fd);
 	return (finalize_heredoc(node));
 }
-

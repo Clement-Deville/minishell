@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 08:48:07 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/24 17:24:44 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/25 10:30:57 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,12 +57,25 @@ int	clean_and_exit(int exitno)
 	return (exitno);
 }
 
+static int	do_child(t_node **node, t_dblist **env)
+{
+	char	**tab_env;
+	int		access_status;
+
+	access_status = check_for_path_access(&((*node)->c_cmd->expand[0]), *env);
+	if (access_status == -1)
+		exit(clean_and_exit (ENO_CRITICAL));
+	if (access_status)
+		exit(clean_and_exit (access_status));
+	tab_env = list_to_tab(*env);
+	if (tab_env == NULL)
+		exit(clean_and_exit (1));
+	exit(clean_and_exit (exec((*node)->c_cmd->expand, tab_env)));
+}
+
 int	exec_standard(t_node **node, t_dblist **env)
 {
-	int		access_status;
 	int		pid;
-	char	**tab_env;
-	int		status;
 	int		red_status;
 
 	pid = fork();
@@ -76,17 +89,7 @@ int	exec_standard(t_node **node, t_dblist **env)
 			exit(clean_and_exit (ENO_CRITICAL));
 		if (red_status)
 			exit(clean_and_exit (1));
-		access_status = check_for_path_access(&((*node)->c_cmd->expand[0]), *env);
-		if (access_status == -1)
-			exit(clean_and_exit (ENO_CRITICAL));
-		if (access_status)
-			exit(clean_and_exit (access_status));
-		tab_env = list_to_tab(*env);
-		if (tab_env == NULL)
-			exit(clean_and_exit (1));
-		status = exec((*node)->c_cmd->expand, tab_env);
-		exit(clean_and_exit (status));
+		do_child(node, env);
 	}
-	status = do_wait(pid);
-	return (status);
+	return (do_wait(pid));
 }

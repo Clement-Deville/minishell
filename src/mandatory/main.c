@@ -6,87 +6,61 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:09:05 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/24 16:26:20 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/25 10:45:44 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-void	do_readline(void)
+void	cleaning_routine(void)
 {
-	if (get_ms()->line)
+	if (get_ms()->f_or_nf == 0)
 	{
-		free(get_ms()->line);
-		get_ms()->line = NULL;
+		ft_garbage(NULL, TRUE);
+		ft_clear_token(get_ms()->tokens);
+		ft_clear_parsing(get_ms()->nodes);
 	}
-	if (get_ms()->signal_int)
-	{
-		get_ms()->signal_int = FALSE;
-		get_ms()->wait_interrupted = FALSE;
-		ft_printf("\n");
-	}
-	if (get_ms()->signal_quit)
-	{
-		get_ms()->signal_quit = FALSE;
-		get_ms()->wait_interrupted = FALSE;
-		ft_printf("Quit (core dumped)\n");
-	}
-	// Need
-	get_ms()->balise = get_balise();
-	if (get_ms()->balise)
-		get_ms()->line = readline(get_ms()->balise);
-	else if (get_ms()->exit)
-		get_ms()->line = readline("\001\033[1;31m\002➜ \001\033[0m\002");
 	else
-		get_ms()->line = readline("\001\033[1;32m\002➜ \001\033[0m\002");
-	if (get_ms()->line == NULL)
 	{
-		ft_putendl_fd("exit", 2);
-		ft_clear_envlst(get_ms());
-		exit (get_ms()->exit);
+		ft_garbage(NULL, TRUE);
+		ft_clear_parsing(get_ms()->nodes);
 	}
+}
+
+t_bool	check_and_handle_error(void)
+{
+	if (get_ms()->err.str)
+	{
+		get_ms()->f_or_nf = 1;
+		ft_handle_parse_err(get_ms());
+		return (TRUE);
+	}
+	return (FALSE);
 }
 
 int	init_minishell(void)
 {
-	t_mini_env	*ms;
-
-	ms = get_ms();
-	ms->parent = TRUE;
+	get_ms()->parent = TRUE;
 	while (1)
 	{
 		do_readline();
 		if (get_ms()->line[0])
 			add_history(get_ms()->line);
-		if (!ft_tokenization(ms))
+		if (!ft_tokenization(get_ms()))
 		{
-			ft_handle_parse_err(ms);
+			ft_handle_parse_err(get_ms());
 			continue ;
 		}
-		init_parsing(ms);
-		if (get_ms()->err.str)
-		{
-			get_ms()->f_or_nf = 1;
-			ft_handle_parse_err(ms);
+		init_parsing(get_ms());
+		if (check_and_handle_error())
 			continue ;
-		}
-		if (exec_here_doc(ms->nodes))
+		if (exec_here_doc(get_ms()->nodes))
 		{
 			get_ms()->f_or_nf = 0;
 			continue ;
 		}
-		start_exec(ms->nodes, &(ms->envlst));
-		if (get_ms()->f_or_nf == 0)
-		{
-			ft_garbage(NULL, TRUE);
-			ft_clear_token(get_ms()->tokens);
-			ft_clear_parsing(get_ms()->nodes);
-		}
-		else
-		{
-			ft_garbage(NULL, TRUE);
-			ft_clear_parsing(get_ms()->nodes);
-		}
+		start_exec(get_ms()->nodes, &(get_ms()->envlst));
+		cleaning_routine();
 	}
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 11:47:07 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/24 16:23:00 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/25 10:50:09 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ int	start_exec(t_node *node, t_dblist **env)
 			return (ft_handle_parse_err(get_ms()), 1);
 		}
 		if ((node->left && ((node->left->type == TOKEN_AND && get_ms()->exit != 0)
-				|| (node->left->type == TOKEN_OR && get_ms()->exit == 0))) == FALSE)
+			|| (node->left->type == TOKEN_OR && get_ms()->exit == 0))) == FALSE)
 		{
 			get_ms()->exit = exec_cmd(&node, env);
 			if (get_ms()->exit == ENO_CRITICAL)

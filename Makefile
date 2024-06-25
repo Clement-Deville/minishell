@@ -93,6 +93,7 @@ UTILS_FILES =	balise	\
 				utils	\
 				init_minishell	\
 				error_msg	\
+				readline	\
 
 WILDCARDS_FILES =	asterisk	\
 					wildcard	\

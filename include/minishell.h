@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:09:27 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/24 18:17:36 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/25 10:46:16 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -198,6 +198,7 @@ typedef struct s_mini_env
 	t_bool			signal_quit;
 	t_bool			parent;
 	t_bool			wait_interrupted;
+	int				line_count;
 }	t_mini_env;
 
 int		clean_and_exit(int exitno);
@@ -605,6 +606,10 @@ int			finalize_heredoc(t_node *node);
 //exec.c
 t_bool		is_subshell(t_node *node);
 void		dodge_cmd(t_node **node);
-int		ft_heredoc_go_expand(t_node *node);
+int			ft_heredoc_go_expand(t_node *node);
+
+// readline.c
+
+void		do_readline(void);
 
 #endif

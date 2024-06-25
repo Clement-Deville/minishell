@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 08:42:56 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/24 16:39:56 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/25 10:33:34 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,6 @@ int	do_no_cmd(t_node *node)
 			return (ENO_CRITICAL);
 		if (status)
 			return (status);
-		// NEED TO EXIT ?
 		tmp = tmp->next;
 	}
 	return (0);
