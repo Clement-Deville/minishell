@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:09:27 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/25 16:38:51 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/25 16:43:54 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -237,12 +237,6 @@ t_dblist	*generate_env(char **envp);
 char		*catch_value(char *name, t_dblist *env);
 t_bool		is_valid_name(char *name);
 
-// VARIABLES
-
-char		*get_name(char *argument);
-t_variable	*create_variable(char *argument);
-void		destroy_variable(void *content);
-
 // ASTERISK
 
 int			do_asterisk(char *argument);
@@ -252,31 +246,9 @@ t_bool		patern_match(char *argument, char *d_name);
 
 int			do_cd(t_node *node, t_dblist	**env);
 
-// SIGNALS
-
-void		check_signals(void);
-int			setup_signals(void);
-int			set_ignore_signals(void);
-int			set_child_signals(void);
-int			set_wait_signals(void);
-
-// signal_handlers.c
-
-void		wait_handler(int signo);
-void		handle_signal(int signo);
-void		handle_signal_child(int signo);
-
 // UNSET
 
 int			do_unset(char **arguments, t_dblist **env);
-
-// UTILS
-
-t_bool		no_value(char *argument);
-t_bool		name_exists(char *argument, t_dblist *env);
-void		print_variable(void *content);
-void		print_variable_export(void *content);
-int			nbr_of_args(char **args);
 
 // env_utils.c
 void		print_variable(void *content);
@@ -390,6 +362,33 @@ t_mini_env	*get_ms(void);
 
 // print_export.c
 void		print_export(t_dblist *env);
+
+// readline.c
+void		do_readline(void);
+
+// signal_handlers.c
+void		wait_handler(int signo);
+void		handle_signal(int signo);
+void		handle_signal_child(int signo);
+
+// signal.c
+void		check_signals(void);
+int			setup_signals(void);
+int			set_ignore_signals(void);
+int			set_child_signals(void);
+int			set_wait_signals(void);
+
+// utils.c
+t_bool		no_value(char *argument);
+t_bool		name_exists(char *argument, t_dblist *env);
+void		print_variable(void *content);
+void		print_variable_export(void *content);
+int			nbr_of_args(char **args);
+
+// variable.c
+char		*get_name(char *argument);
+t_variable	*create_variable(char *argument);
+void		destroy_variable(void *content);
 
 // exec_here_doc.c
 int			ft_heredoc_go_expand(t_node *node);
@@ -599,8 +598,5 @@ int			finalize_heredoc(t_node *node);
 t_bool		is_subshell(t_node *node);
 void		dodge_cmd(t_node **node);
 int			ft_heredoc_go_expand(t_node *node);
-
-// readline.c
-void		do_readline(void);
 
 #endif
