@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:09:27 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/25 16:43:54 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/25 17:27:52 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -216,85 +216,238 @@ typedef struct s_mini_env
 	int				line_count;
 }	t_mini_env;
 
-int			clean_and_exit(int exitno);
+// COMPUTE
+//compute_check_quotes.c
+int			count_single_quotes(char *str, int *i);
+int			count_double_quotes(char *str, int *i);
+void		set_error(int count, int count2);
+int			check_quotes(char *str);
 
-// BUILT-IN COMMANDS
+//comupte_cmds.c
+char		*clean_node(char *str);
+char		**ft_expand(char *str, t_node *node);
+char		*remove_quotes_from_str(char *str);
+int			init_cmp(t_node *node);
 
-int			do_echo(char **args);
-int			do_pwd(t_node *node);
-int			do_env(t_node *node, t_dblist *env);
-int			do_export(t_node *node, t_dblist **env);
-int			do_exit(t_node *node);
+//compute_handle_arg.c
+char		*ft_handle_arg(char *str, int *i);
+char		*ft_handle_dq_arg(char *str, int *i);
+char		*ft_handle_dollar(char *str, int *i);
+char		*ft_handle_simple_quotes(char *str, int *i);
+char		*ft_handle_double_quotes(char *str, int *i);
 
-// EXPORT
+//compute_pre_expand.c
+char		*ft_handle_quotes(char *str, int *i);
+char		*ft_expand_loop(char *str, char *tmp, int i);
+char		*ft_cmd_pre_expand(char *str);
 
-int			export_one(char *argument, t_dblist **env, t_bool silent);
+//compute_re_node_wildcards.c
+int			init_red_cmp(t_red_node *node);
 
+//compute_split_args_utils.c
+int			find_quotes(char c);
+int			is_quotes(char c, char x);
+char		assign_quote(char c);
+char		**free_split_args(char **tmp, int j);
+
+//compute_split_arg.c
+char		**ft_expander_split(char const *s, t_node *node);
+
+//compute_wildcards_thereisasterix.c
+void		free_wildcards(t_wildcard *wildcard);
+char		**there_asterisk(char *str, int i);
+char		**ft_sort_tab(char **argv, int size);
+
+//compute_wildcards.c
+char		**ft_handle_wildcard(char **glob, t_node *node);
+char		**ft_expand_wildcard(char *str, t_node *node);
+char		**ft_join_wildcard(t_node *node);
+int			is_in_quotes(char *str);
+
+//compute_wildcards_utils.c
+char		**no_asterisk(char *str);
+int			ft_visible(char *entry);
+int			tab_size(char **tab);
+void		ft_swap(char **a, char **b);
+int			name_cmp(char *file1, char *file2);
+
+//compute_alloc.c
+void		ft_skip_word(char const *s, size_t *i);
+char		**ft_allocater(char const *s, char **str);
+
+//compute_utils.c
+int			init_node(t_node *node);
+int			ft_is_valid_arg(char c);
+char		*ft_str_find_env(char *arg);
+void		ft_big_free(char **str);
+void		free_node(t_node *node);
 
 // ENV
-
-t_dblist	*generate_env(char **envp);
-char		*catch_value(char *name, t_dblist *env);
-t_bool		is_valid_name(char *name);
-
-// ASTERISK
-
-int			do_asterisk(char *argument);
-t_bool		patern_match(char *argument, char *d_name);
-
-// CD
-
-int			do_cd(t_node *node, t_dblist	**env);
-
-// UNSET
-
-int			do_unset(char **arguments, t_dblist **env);
+// clean_env.c
+void		free_variable(void *content);
+void		ft_clear_envlst(t_mini_env *mini_s);
+void		ft_clean_ms(void);
+void		ft_del(void *ptr);
 
 // env_utils.c
 void		print_variable(void *content);
 void		print_filled_variable(void *content);
 t_bool		is_valid_name(char *name);
 
+//env.c
+int			do_env(t_node *node, t_dblist *env);
+t_dblist	*generate_env(char **envp);
+char		*catch_value(char *name, t_dblist *env);
+
+// EXEC
+// cd.c
+int			do_cd(t_node *node, t_dblist	**env);
+
+// do.c
+int			do_dup2(int oldfd, int newfd);
+int			do_close(int fd);
+int			do_pipe(int pipfd[2]);
+
+// echo.c
+int			do_echo(char **args);
+
+// exec_builtin.c
+int			exec_builtin(t_node *node, t_dblist **env);
+
+// exec_here_doc_expand.c
+int			ft_heredoc_go_expand(t_node *node);
+int			exec_here_doc(t_node *nodes);
+
+// exec_here_doc.c
+int			open_tmp_file(int *tmp_fd);
+int			process_heredoc(t_node *node, int tmp_fd);
+int			copy_to_final_heredoc(int tmp_fd);
+int			finalize_heredoc(t_node *node);
+
+// exec_no_cmd.c
+int			fake_set_input(char *filename);
+int			fake_set_output(char *filename);
+int			fake_set_output_append(char *filename);
+int			do_no_cmd(t_node *node);
+
 // exec_pipeline
 int			exec_pipeline(t_node **node, t_dblist **env);
 int			exec_single(t_node **node, t_dblist **env);
 t_bool		is_pipe_cmd(t_node *node);
 
-t_mini_env	*get_ms(void);
-int			ft_tokenization(t_mini_env *ms);
-void		ft_init_env(char **env);
-void		lst_token_add_back(t_token **token_list, t_token *new);
-int			ft_add_token_sign(char **line, t_token **t_list,
-				t_token_type type, int i);
+// exec_standard.c
+int			exec(char **cmd, char *env[]);
+int			do_wait(int pid);
+int			clean_and_exit(int exitno);
+int			exec_standard(t_node **node, t_dblist **env);
 
-//token_finder.c
+// exec_sub.c
+int			exec_sub(t_node *node, t_dblist **env);
+
+// exec_utils.c
+t_bool		is_builtin(t_node *node);
+t_bool		is_pipeline(t_node *node);
+t_bool		is_not_a_cmd(t_node *node);
+t_bool		is_subshell(t_node *node);
+t_bool		is_empty(t_node *node);
+void		dodge_cmd(t_node **node);
+
+// exec.c
+int			start_exec(t_node *node, t_dblist **env);
+
+// exit.c
+int			do_exit(t_node *node);
+
+// export.c
+int			export_one(char *argument, t_dblist **env, t_bool silent);
+int			do_export(t_node *node, t_dblist **env);
+
+// pipe_fd_utils.c
+int			connect_read(int *pipefd);
+int			connect_write(int *pipefd);
+int			close_useless_fd(int *pipefd, int size);
+int			close_parent(int *pipefd, int size);
+int			allocate(int **pipefd, int nbr_of_cmds);
+
+// pipe_utils.c
+void		init(t_node *node);
+t_bool		are_in_child(int pid1);
+t_bool		is_cmd_executable(t_node *node);
+t_bool		is_pipe_cmd(t_node *node);
+int			nbr_of_cmds(t_node *node);
+
+// pwd.c
+int			do_pwd(t_node *node);
+
+// unset.c
+int			do_unset(char **arguments, t_dblist **env);
+
+// PARSING
+// clear_parsing.c
+void		ft_clear_token(t_token *token);
+void		ft_free_red_nodes(t_red_node *red_node);
+void		ft_free_c_cmd_expand(char **expand);
+void		ft_clear_parsing(t_node *nodes);
+void		ft_clean_nodes(t_node *node);
+
+// convert_token.c
+char		*convert(t_node_type type);
+
+// ft_strip_quotes.c
+char		*ft_strip_quotes(char *str);
+
+// lst_token_add_back.c
+void		lst_token_add_back(t_token **token_list, t_token *new);
+
+// parser_init.c
+t_node		*ft_parser(t_mini_env *ms, int min_prec);
+void		init_parsing(t_mini_env *ms);
+
+// parser.c
+t_red_node	*ft_create_red_node(t_token_type type, char *value);
+t_node		*ft_simple_cmd(t_mini_env *ms);
+t_node		*ft_start(t_mini_env *ms, int min_prec);
+t_node		*ft_handle_tokens(t_mini_env *ms, t_node *node, int min_prec);
+t_node		*ft_recursive_parse(t_mini_env *ms, t_node *node, int min_prec);
+
+// parser_utils_tokens.c
+int			ft_is_redir(t_token_type type);
+int			ft_get_node_type(t_token_type type);
+t_red_type	ft_get_red_type(t_token_type type);
+char		*ft_add_args(t_token_type node);
+
+// parser_check_sub.c
+int			ft_check_subs(t_token *token, int min_prec);
+int			sub_in_sub_error(t_token *token);
+
+// parser_utils_nodes.c
+t_node		*ft_new_node(t_node_type type);
+int			ft_join_args(char **args, t_token *token);
+void		ft_add_red_node(t_red_node **node, t_red_node *new);
+int			ft_get_red_node(t_red_node **node, t_mini_env *ms);
+void		ft_add_back_sub(t_subs_node **lst, t_subs_node *new);
+
+// parser_utils_error.c
+void		ft_set_parse_err(t_err_parse type);
+void		ft_handle_parse_err(t_mini_env *ms);
+
+// token_finder.c
 void		ft_token_identify(char **line, t_token **t_list);
 int			ft_compare_line_token(char *line);
 
-//tokens_helper.c
+// tokenization.c
+int			ft_tokenization(t_mini_env *ms);
+int			ft_add_token_sign(char **line, t_token **t_list,
+				t_token_type type, int i);
+
+// tokens_helper.c
 t_token		*create_new_token(char *value, t_token_type type);
 t_bool		ft_skip_quotes(char *line, size_t *i);
 int			ft_is_char(char *str);
 int			ft_is_quote(char c);
 int			is_space(char c);
 
-//wildcard.c
-int			ft_contains_asterisk(char *str);
-
-//clean_ms.c
-void		ft_clean_ms(void);
-
-//exec_builtin.c
-int			ft_is_builtin(char *arg);
-
-//exec.c
-int			start_exec(t_node *node, t_dblist **env);
-
-int			ft_get_exit_status(int status);
-int			exec_simple_cmd(t_node *node, t_mini_env *ms, t_bool piped);
-
 // REDIRECTIONS
-
 // access_utils.c
 t_bool		is_path(char *path);
 void		print_not_found(char *cmd);
@@ -350,7 +503,6 @@ int			set_output_append(char *filename, t_node *node);
 int			do_redirections(t_node *node);
 
 // UTILS
-
 // balise.c
 char		*get_balise(void);
 char		*set_color(void);
@@ -358,6 +510,7 @@ void		clean_balise(void);
 
 // init_minishell.c
 int			init_minishell(void);
+void		ft_init_env(char **env);
 t_mini_env	*get_ms(void);
 
 // print_export.c
@@ -385,218 +538,22 @@ void		print_variable(void *content);
 void		print_variable_export(void *content);
 int			nbr_of_args(char **args);
 
+// variable_utils.c
+char		*get_variable(t_variable *variable);
+char		**list_to_tab(t_dblist *env);
+int			dlst_size(t_dblist *lst);
+
 // variable.c
 char		*get_name(char *argument);
 t_variable	*create_variable(char *argument);
 void		destroy_variable(void *content);
 
-// exec_here_doc.c
-int			ft_heredoc_go_expand(t_node *node);
-int			exec_here_doc(t_node *nodes);
+// WILDCARDS
+// asterix.c
+int			do_asterisk(char *argument);
+t_bool		patern_match(char *argument, char *d_name);
 
-// exec_builtin.c
-int			exec_builtin(t_node *node, t_dblist **env);
-
-// exec_no_cmd.c
-int			fake_set_input(char *filename);
-int			fake_set_output(char *filename);
-int			fake_set_output_append(char *filename);
-int			do_no_cmd(t_node *node);
-
-// exec_sub.c
-int			exec_sub(t_node *node, t_dblist **env);
-
-// exec_standard.c
-int			exec(char **cmd, char *env[]);
-int			do_wait(int pid);
-int			clean_and_exit(int exitno);
-int			exec_standard(t_node **node, t_dblist **env);
-
-// exec_utils.c
-
-t_bool		is_builtin(t_node *node);
-t_bool		is_pipeline(t_node *node);
-t_bool		is_not_a_cmd(t_node *node);
-t_bool		is_subshell(t_node *node);
-t_bool		is_empty(t_node *node);
-
-//exec_red.c
-int			do_out(t_red_node *node, int *status);
-int			do_in(t_red_node *node, int *status);
-int			do_append(t_red_node *node, int *status);
-
-void		ft_big_free(char **str);
-
-
-
-int			main_subshell(int ac, char *av, char **env);
-
-
-
-//parser_init.c
-t_node		*ft_parser(t_mini_env *ms, int min_prec);
-void		init_parsing(t_mini_env *ms);
-
-//parser.c
-t_red_node	*ft_create_red_node(t_token_type type, char *value);
-t_node		*ft_simple_cmd(t_mini_env *ms);
-t_node		*ft_start(t_mini_env *ms, int min_prec);
-t_node		*ft_handle_tokens(t_mini_env *ms, t_node *node, int min_prec);
-t_node		*ft_recursive_parse(t_mini_env *ms, t_node *node, int min_prec);
-
-// parser_utils_tokens.c
-int			ft_is_redir(t_token_type type);
-int			ft_get_node_type(t_token_type type);
-t_red_type	ft_get_red_type(t_token_type type);
-char		*ft_add_args(t_token_type node);
-
-// parser_check_sub.c
-int			ft_check_subs(t_token *token, int min_prec);
-int			sub_in_sub_error(t_token *token);
-
-// parser_utils_nodes.c
-t_node		*ft_new_node(t_node_type type);
-int			ft_join_args(char **args, t_token *token);
-void		ft_add_red_node(t_red_node **node, t_red_node *new);
-int			ft_get_red_node(t_red_node **node, t_mini_env *ms);
-void		ft_add_back_sub(t_subs_node **lst, t_subs_node *new);
-
-// pipe_fd_utils.c
-
-int			connect_read(int *pipefd);
-int			connect_write(int *pipefd);
-int			close_useless_fd(int *pipefd, int size);
-int			close_parent(int *pipefd, int size);
-int			allocate(int **pipefd, int nbr_of_cmds);
-
-// pipe_utils.c
-
-void		init(t_node *node);
-t_bool		are_in_child(int pid1);
-t_bool		is_cmd_executable(t_node *node);
-t_bool		is_pipe_cmd(t_node *node);
-int			nbr_of_cmds(t_node *node);;
-
-
-// variable_utils.c
-
-char		*get_variable(t_variable *variable);
-char		**list_to_tab(t_dblist *env);
-int			dlst_size(t_dblist *lst);
-
-//	do.c
-
-int			do_dup2(int oldfd, int newfd);
-int			do_close(int fd);
-int			do_pipe(int pipfd[2]);
-
-
-void		*ft_garbage(void *str, t_bool clean);
-
-char		*convert(t_node_type type);
-
-void		ft_clear_token(t_token *token);
-
-void		free_node(t_node *node);
-
-
-//clean_env.c
-void		free_variable(void *content);
-void		ft_clear_envlst(t_mini_env *mini_s);
-void		ft_clean_ms(void);
-void		ft_del(void *ptr);
-
-//clear_parsing.c
-void		ft_clear_token(t_token *token);
-void		ft_free_red_nodes(t_red_node *red_node);
-void		ft_free_c_cmd_expand(char **expand);
-void		ft_clear_parsing(t_node *nodes);
-void		ft_clean_nodes(t_node *node);
-
-//parser_utils_error.c
-void		ft_set_parse_err(t_err_parse type);
-void		ft_handle_parse_err(t_mini_env *ms);
-
-//compute_wildcards.c
-char		**ft_handle_wildcard(char **glob, t_node *node);
-char		**ft_expand_wildcard(char *str, t_node *node);
-char		**ft_join_wildcard(t_node *node);
-int			is_in_quotes(char *str);
-
-//compute_check_quotes.c
-int			count_single_quotes(char *str, int *i);
-int			count_double_quotes(char *str, int *i);
-void		set_error(int count, int count2);
-int			check_quotes(char *str);
-
-//comupte_cmds.c
-char		*clean_node(char *str);
-char		**ft_expand(char *str, t_node *node);
-char		*remove_quotes_from_str(char *str);
-char		*cut_quotes(char *str);
-int			init_cmp(t_node *node);
-void		ft_compute_cmds(t_node *node);
-
-//compute_handle_arg.c
-char		*ft_handle_arg(char *str, int *i);
-char		*ft_handle_dq_arg(char *str, int *i);
-char		*ft_handle_dollar(char *str, int *i);
-char		*ft_handle_simple_quotes(char *str, int *i);
-char		*ft_handle_double_quotes(char *str, int *i);
-
-//compute_pre_expand.c
-char		*ft_handle_quotes(char *str, int *i);
-char		*ft_expand_loop(char *str, char *tmp, int i);
-char		*ft_cmd_pre_expand(char *str);
-
-//compute_alloc.c
-void		ft_skip_word(char const *s, size_t	*i);
-char		**ft_allocater(char const *s, char **str);
-
-//compute_split_args_utils.c
-int			find_quotes(char c);
-int			is_quotes(char c, char x);
-char		assign_quote(char c);
-char		*process_word(char *str, int *i, int *count);
-char		**free_split_args(char **tmp, int j);
-char		**ft_expander_split(char const *s, t_node *node);
-
-//compute_utils.c
-int			init_node(t_node *node);
-int			ft_is_valid_arg(char c);
-char		*ft_str_find_env(char *arg);
-void		ft_big_free(char **str);
-void		free_node(t_node *node);
-
-//compute_wildcards_utils.c
-char		**no_asterisk(char *str);
-int			ft_visible(char *entry);
-int			tab_size(char **tab);
-void		ft_swap(char **a, char **b);
-int			name_cmp(char *file1, char *file2);
-
-//compute_wildcards_thereisasterix.c
-void		free_wildcards(t_wildcard *wildcard);
-char		**there_asterisk(char *str, int i);
-char		**ft_sort_tab(char **argv, int size);
-
-
-
-char		*ft_strip_quotes(char *str);
-int			init_red_cmp(t_red_node *node);
-
-//exec_here_doc_expand.c
-int			ft_heredoc_go_expand(t_node *node);
-
-//exec_here_doc.c
-int			open_tmp_file(int *tmp_fd);
-int			process_heredoc(t_node *node, int tmp_fd);
-int			copy_to_final_heredoc(int tmp_fd);
-int			finalize_heredoc(t_node *node);
-
-//exec.c
-t_bool		is_subshell(t_node *node);
-void		dodge_cmd(t_node **node);
-int			ft_heredoc_go_expand(t_node *node);
+//wildcard.c
+int			ft_contains_asterisk(char *str);
 
 #endif
