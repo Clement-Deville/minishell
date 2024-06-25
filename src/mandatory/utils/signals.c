@@ -6,11 +6,19 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 17:28:01 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/24 17:29:39 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/25 11:47:26 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
+
+void	check_signals(void)
+{
+	if (get_ms()->signal_int)
+		exit(clean_and_exit (130));
+	if (get_ms()->signal_quit)
+		exit(clean_and_exit (131));
+}
 
 int	setup_signals(void)
 {

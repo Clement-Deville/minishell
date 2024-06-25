@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:09:27 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/25 10:46:16 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/25 11:50:09 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -201,7 +201,7 @@ typedef struct s_mini_env
 	int				line_count;
 }	t_mini_env;
 
-int		clean_and_exit(int exitno);
+int			clean_and_exit(int exitno);
 
 // access_utils.c
 
@@ -253,6 +253,7 @@ DIR			*do_opendir(void);
 
 // SIGNALS
 
+void		check_signals(void);
 int			setup_signals(void);
 int			set_ignore_signals(void);
 int			set_child_signals(void);
@@ -302,7 +303,7 @@ int			ft_tokenization(t_mini_env *ms);
 void		ft_init_env(char **env);
 void		lst_token_add_back(t_token **token_list, t_token *new);
 int			ft_add_token_sign(char **line, t_token **t_list,
-			t_token_type type, int i);
+				t_token_type type, int i);
 
 //token_finder.c
 void		ft_token_identify(char **line, t_token **t_list);
@@ -441,7 +442,6 @@ t_bool		are_in_child(int pid1);
 t_bool		is_cmd_executable(t_node *node);
 t_bool		is_pipe_cmd(t_node *node);
 int			nbr_of_cmds(t_node *node);;
-
 // redirection.c
 
 int			set_input(char *filename, t_node *node);
@@ -471,7 +471,6 @@ char		*get_balise(void);
 int			init_minishell(void);
 t_mini_env	*get_ms(void);
 
-
 # define NO_FORK -2
 # define WRITE 1
 # define READ 0
@@ -498,7 +497,6 @@ void		free_variable(void *content);
 void		ft_clear_envlst(t_mini_env *mini_s);
 void		ft_clean_ms(void);
 void		ft_del(void *ptr);
-
 
 //clear_parsing.c
 void		ft_clear_token(t_token *token);
@@ -544,8 +542,8 @@ char		*ft_expand_loop(char *str, char *tmp, int i);
 char		*ft_cmd_pre_expand(char *str);
 
 //compute_alloc.c
-void	ft_skip_word(char const *s, size_t	*i);
-char	**ft_allocater(char const *s, char **str);
+void		ft_skip_word(char const *s, size_t	*i);
+char		**ft_allocater(char const *s, char **str);
 
 //compute_split_args_utils.c
 int			find_quotes(char c);
@@ -572,7 +570,7 @@ int			name_cmp(char *file1, char *file2);
 //compute_wildcards_thereisasterix.c
 void		free_wildcards(t_wildcard *wildcard);
 char		**there_asterisk(char *str, int i);
-char	**ft_sort_tab(char **argv, int size);
+char		**ft_sort_tab(char **argv, int size);
 
 //init_here_doc_utils.c
 int			ft_is_delimiter(char *str, char *line);
