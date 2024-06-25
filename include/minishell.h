@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:09:27 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/25 14:13:03 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/25 16:38:51 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,12 @@
 
 # define CANT_EXEC 126
 # define DONOT_EXIST 127
+# define NO_FORK -2
+# define WRITE 1
+# define READ 0
+# define COMMAND 0
+# define SUBSHELL 1
+# define FLAG_END 5
 
 typedef struct s_variable
 {
@@ -178,6 +184,15 @@ typedef struct s_node
 	t_bool					silent;
 }	t_node;
 
+typedef struct s_command
+{
+	int		type;
+	char	*sub_node;
+	char	**args;
+	int		status;
+	int		pid;
+}	t_command;
+
 typedef struct s_mini_env
 {
 	char			*line;
@@ -203,12 +218,6 @@ typedef struct s_mini_env
 
 int			clean_and_exit(int exitno);
 
-// access_utils.c
-
-t_bool		is_path(char *path);
-void		print_not_found(char *cmd);
-t_bool		is_a_dir(const char *path);
-
 // BUILT-IN COMMANDS
 
 int			do_echo(char **args);
@@ -221,9 +230,6 @@ int			do_exit(t_node *node);
 
 int			export_one(char *argument, t_dblist **env, t_bool silent);
 
-// PRINT_EXPORT
-
-void		print_export(t_dblist *env);
 
 // ENV
 
@@ -245,11 +251,6 @@ t_bool		patern_match(char *argument, char *d_name);
 // CD
 
 int			do_cd(t_node *node, t_dblist	**env);
-
-// DIR
-
-int			do_closedir(DIR *dir);
-DIR			*do_opendir(void);
 
 // SIGNALS
 
@@ -278,25 +279,14 @@ void		print_variable_export(void *content);
 int			nbr_of_args(char **args);
 
 // env_utils.c
-
 void		print_variable(void *content);
 void		print_filled_variable(void *content);
 t_bool		is_valid_name(char *name);
 
 // exec_pipeline
-
 int			exec_pipeline(t_node **node, t_dblist **env);
 int			exec_single(t_node **node, t_dblist **env);
 t_bool		is_pipe_cmd(t_node *node);
-
-typedef struct s_command
-{
-	int		type;
-	char	*sub_node;
-	char	**args;
-	int		status;
-	int		pid;
-}	t_command;
 
 t_mini_env	*get_ms(void);
 int			ft_tokenization(t_mini_env *ms);
@@ -319,9 +309,6 @@ int			is_space(char c);
 //wildcard.c
 int			ft_contains_asterisk(char *str);
 
-//init_here_doc.c
-int			ft_init_heredoc(t_node *node);
-
 //clean_ms.c
 void		ft_clean_ms(void);
 
@@ -334,28 +321,93 @@ int			start_exec(t_node *node, t_dblist **env);
 int			ft_get_exit_status(int status);
 int			exec_simple_cmd(t_node *node, t_mini_env *ms, t_bool piped);
 
-// exec_here_doc.c
+// REDIRECTIONS
 
+// access_utils.c
+t_bool		is_path(char *path);
+void		print_not_found(char *cmd);
+t_bool		is_a_dir(const char *path);
+
+// access.c
+int			check_for_path_access(char **cmd, t_dblist *env);
+
+// dir.c
+int			do_closedir(DIR *dir);
+DIR			*do_opendir(void);
+
+// get_path.c
+t_path		ft_get_path(char *cmd);
+
+// init_here_doc.c
+int			ft_init_heredoc(t_node *node);
+
+// init_here_doc_utils.c
+int			ft_is_delimiter(char *str, char *line);
+void		*ft_garbage(void *str, t_bool clean);
+int			ft_heredoc_handle_dollar(char *str, int i, int fd);
+void		ft_heredoc_expand(char *str, int fd);
+int			ft_check_here_quotes(char *str);
+
+// init_here_doc.c
+void		ft_heredoc_sigint_handler(int signum);
+int			ft_error_exe(int p[2], int pid);
+void		ft_exit_mess(t_red_node *node);
+int			limiter_quotes_check(t_red_node *node);
+
+// path_utils.c
+int			len(char **split);
+char		*get_path(t_dblist *env);
+
+// path.c
+char		*get_path(t_dblist *env);
+char		**parse_path(t_dblist *env);
+int			change_path(char **cmd, char *new_path);
+char		**add_dir(char **split_path);
+char		**add_cmd_to_path(char **split_path, const char *cmd);
+char		**list_to_tab(t_dblist *env);
+
+// process_here_doc.c
+void		ft_heredoc(t_red_node *node, int p[2]);
+int			process_here_doc(t_red_node *tmp);
+
+// redirection.c
+int			set_input(char *filename, t_node *node);
+int			set_output(char *filename, t_node *node);
+int			set_input_here_doc(int fd);
+int			set_output_append(char *filename, t_node *node);
+int			do_redirections(t_node *node);
+
+// UTILS
+
+// balise.c
+char		*get_balise(void);
+char		*set_color(void);
+void		clean_balise(void);
+
+// init_minishell.c
+int			init_minishell(void);
+t_mini_env	*get_ms(void);
+
+// print_export.c
+void		print_export(t_dblist *env);
+
+// exec_here_doc.c
 int			ft_heredoc_go_expand(t_node *node);
 int			exec_here_doc(t_node *nodes);
 
 // exec_builtin.c
-
 int			exec_builtin(t_node *node, t_dblist **env);
 
 // exec_no_cmd.c
-
 int			fake_set_input(char *filename);
 int			fake_set_output(char *filename);
 int			fake_set_output_append(char *filename);
 int			do_no_cmd(t_node *node);
 
 // exec_sub.c
-
 int			exec_sub(t_node *node, t_dblist **env);
 
 // exec_standard.c
-
 int			exec(char **cmd, char *env[]);
 int			do_wait(int pid);
 int			clean_and_exit(int exitno);
@@ -376,25 +428,11 @@ int			do_append(t_red_node *node, int *status);
 
 void		ft_big_free(char **str);
 
-t_path		ft_get_path(char *cmd);
+
 
 int			main_subshell(int ac, char *av, char **env);
 
-// access.c
-int			check_for_path_access(char **cmd, t_dblist *env);
 
-// path_utils.c
-
-int			len(char **split);
-char		*get_path(t_dblist *env);
-
-// path.c
-char		*get_path(t_dblist *env);
-char		**parse_path(t_dblist *env);
-int			change_path(char **cmd, char *new_path);
-char		**add_dir(char **split_path);
-char		**add_cmd_to_path(char **split_path, const char *cmd);
-char		**list_to_tab(t_dblist *env);
 
 //parser_init.c
 t_node		*ft_parser(t_mini_env *ms, int min_prec);
@@ -439,13 +477,7 @@ t_bool		are_in_child(int pid1);
 t_bool		is_cmd_executable(t_node *node);
 t_bool		is_pipe_cmd(t_node *node);
 int			nbr_of_cmds(t_node *node);;
-// redirection.c
 
-int			set_input(char *filename, t_node *node);
-int			set_output(char *filename, t_node *node);
-int			set_input_here_doc(int fd);
-int			set_output_append(char *filename, t_node *node);
-int			do_redirections(t_node *node);
 
 // variable_utils.c
 
@@ -459,21 +491,6 @@ int			do_dup2(int oldfd, int newfd);
 int			do_close(int fd);
 int			do_pipe(int pipfd[2]);
 
-// main.c
-
-char		*get_balise(void);
-
-// init_minishell.c
-
-int			init_minishell(void);
-t_mini_env	*get_ms(void);
-
-# define NO_FORK -2
-# define WRITE 1
-# define READ 0
-# define COMMAND 0
-# define SUBSHELL 1
-# define FLAG_END 5
 
 void		*ft_garbage(void *str, t_bool clean);
 
@@ -483,11 +500,6 @@ void		ft_clear_token(t_token *token);
 
 void		free_node(t_node *node);
 
-// balise.c
-
-char		*get_balise(void);
-char		*set_color(void);
-void		clean_balise(void);
 
 //clean_env.c
 void		free_variable(void *content);
@@ -569,22 +581,7 @@ void		free_wildcards(t_wildcard *wildcard);
 char		**there_asterisk(char *str, int i);
 char		**ft_sort_tab(char **argv, int size);
 
-//init_here_doc_utils.c
-int			ft_is_delimiter(char *str, char *line);
-void		*ft_garbage(void *str, t_bool clean);
-int			ft_heredoc_handle_dollar(char *str, int i, int fd);
-void		ft_heredoc_expand(char *str, int fd);
-int			ft_check_here_quotes(char *str);
 
-//init_here_doc.c
-void		ft_heredoc_sigint_handler(int signum);
-int			ft_error_exe(int p[2], int pid);
-void		ft_exit_mess(t_red_node *node);
-int			limiter_quotes_check(t_red_node *node);
-
-//process_here_doc.c
-void		ft_heredoc(t_red_node *node, int p[2]);
-int			process_here_doc(t_red_node *tmp);
 
 char		*ft_strip_quotes(char *str);
 int			init_red_cmp(t_red_node *node);
@@ -604,7 +601,6 @@ void		dodge_cmd(t_node **node);
 int			ft_heredoc_go_expand(t_node *node);
 
 // readline.c
-
 void		do_readline(void);
 
 #endif
