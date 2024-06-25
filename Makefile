@@ -92,7 +92,6 @@ UTILS_FILES =	balise	\
 				signal_handlers	\
 				utils	\
 				init_minishell	\
-				error_msg	\
 				readline	\
 
 WILDCARDS_FILES =	asterisk	\

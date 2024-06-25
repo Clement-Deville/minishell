@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   compute_re_node_wildcards.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
+/*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 14:20:53 by skapersk          #+#    #+#             */
-/*   Updated: 2024/06/24 16:37:37 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/25 14:11:25 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,8 @@ int	init_red_cmp(t_red_node *node)
 	char	*expanded;
 
 	tmp = NULL;
+	if (node->here_doc)
+		return (1);
 	if (node == NULL)
 		return (0);
 	tmp = ft_cmd_pre_expand(node->value);

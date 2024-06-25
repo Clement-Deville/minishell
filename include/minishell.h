@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
+/*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:09:27 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/25 11:50:09 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/25 14:13:03 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -373,9 +373,6 @@ t_bool		is_empty(t_node *node);
 int			do_out(t_red_node *node, int *status);
 int			do_in(t_red_node *node, int *status);
 int			do_append(t_red_node *node, int *status);
-
-//error_msg.c
-int			ft_err_msg(t_err err);
 
 void		ft_big_free(char **str);
 

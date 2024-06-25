@@ -6,11 +6,17 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 18:06:50 by skapersk          #+#    #+#             */
-/*   Updated: 2024/06/24 18:07:31 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/25 14:17:21 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
+
+void	print_in_fd(char *line, int p[2])
+{
+	ft_putstr_fd(line, p[1]);
+	ft_putstr_fd("\n", p[1]);
+}
 
 void	ft_heredoc(t_red_node *node, int p[2])
 {
@@ -20,15 +26,14 @@ void	ft_heredoc(t_red_node *node, int p[2])
 	while (1)
 	{
 		line = readline("> ");
-		if (!line)
-			ft_exit_mess(node);
-		if (ft_is_delimiter(node->value, line))
-			break ;
-		else
+		if (!line || ft_is_delimiter(node->value, line))
 		{
-			ft_putstr_fd(line, p[1]);
-			ft_putstr_fd("\n", p[1]);
+			if (!line)
+				ft_exit_mess(node);
+			break ;
 		}
+		else
+			print_in_fd(line, p);
 		free(line);
 	}
 	ft_clean_ms();
