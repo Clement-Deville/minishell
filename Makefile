@@ -115,9 +115,10 @@ MANDATORY_DIR =	mandatory/
 LIBFT_DIR = $(LIB_DIR)/libft
 
 SOURCES =	$(addprefix $(SOURCE_DIR), $(addsuffix .c, $(SRCS_FILES)))
+SOURCES_BONUS =	$(addprefix $(SOURCE_BONUS_DIR), $(addsuffix _bonus.c, $(SRCS_FILES_BONUS)))
 INCLUDES =	$(addprefix $(INCLUDES_DIR), $(addsuffix .h, $(INCLUDES_FILES)))
 OBJS =		$(addprefix $(OBJS_DIR), $(addsuffix .o, $(SRCS_FILES)))
-OBJS_B =	$(addprefix $(OBJS_DIR), $(addsuffix .o, $(SRCS_FILES_BONUS)))
+OBJS_B =	$(addprefix $(OBJS_DIR), $(addsuffix _bonus.o, $(SRCS_FILES)))
 
 .PHONY: all clean fclean re bonus norminette
 
@@ -136,7 +137,8 @@ $(OBJS_DIR)%.o : $(SOURCE_DIR)%.c
 
 $(OBJS_BONUS_DIR)%.o : $(SOURCE_BONUS_DIR)%.c
 	@mkdir -p $(BIN_DIR)
-	@mkdir -p $(OBJS_DIR)
+	@mkdir -p $(OBJS_BONUS_DIR)
+	@mkdir -p $(@D)
 	$(CC) $(FLAGS) $(DEBUG) -I./lib/libft/INCLUDES -I$(INCLUDES_DIR) -c $< -o $@
 
 $(NAME): $(OBJS)
@@ -150,7 +152,7 @@ $(NAME_B): $(OBJS_B)
 	@echo "\e[0;32m\nGenerating libft...\n\e[0m"
 	make -C $(LIBFT_DIR)
 	@echo "\e[0;32m\nLinking executable:\n\e[0m"
-	$(CC) $(FLAGS) $(OBJS_B) $(DEBUG) -lft -L$(LIBFT_DIR) -o $(NAME_B)
+	$(CC) $(FLAGS) $(OBJS_B) $(DEBUG) -lft -L$(LIBFT_DIR) -lreadline -o $(NAME_B)
 	@echo "\e[0;32m\nBonus Compiled !\e[0m"
 
 clean:

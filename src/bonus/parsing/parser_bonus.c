@@ -1,0 +1,110 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parser.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/19 10:22:01 by skapersk          #+#    #+#             */
+/*   Updated: 2024/06/24 17:41:42 by skapersk         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include <minishell.h>
+
+void	check_token(t_mini_env *ms)
+{
+	t_token	*tmp;
+
+	tmp = ms->tokens;
+	if (!ms->tokens->next)
+	{
+		ft_set_parse_err(E_SYNTAX);
+		get_ms()->tmp = tmp;
+		return ;
+	}
+	else if (ms->tokens->next)
+	{
+		ft_set_parse_err(E_SYNTAX);
+		get_ms()->tmp = ms->tokens->next;
+	}
+}
+
+t_red_node	*ft_create_red_node(t_token_type type, char *value)
+{
+	t_red_node	*new;
+
+	new = ft_calloc(1, sizeof(t_red_node));
+	if (!new)
+		return (NULL);
+	new->type = ft_get_red_type(type);
+	new->value = ft_strdup(value);
+	if (!new->value)
+		return (ft_set_parse_err(E_MEMORY), NULL);
+	return (new);
+}
+
+t_node	*ft_simple_cmd(t_mini_env *ms)
+{
+	t_node	*node;
+
+	node = ft_new_node(NODE_CMD);
+	if (!node)
+		return (ft_set_parse_err(E_MEMORY), NULL);
+	while (ms->tokens && (ms->tokens->type == TOKEN_ELSE
+			|| ft_is_redir(ms->tokens->type)))
+	{
+		if (ft_is_redir(ms->tokens->type))
+		{
+			if (!ft_get_red_node(&(node->red_node), ms))
+				return (NULL);
+		}
+		else if (ms->tokens && ms->tokens->type == TOKEN_ELSE)
+		{
+			if (!ft_join_args(&(node->cmd), ms->tokens))
+				return (ft_set_parse_err(E_MEMORY), NULL);
+			ms->tokens = ms->tokens->next;
+			if (ms->tokens && ms->tokens->type == TOKEN_SUBSHELL_OPEN)
+				check_token(ms);
+		}
+	}
+	return (node);
+}
+
+t_node	*ft_start_subshell(t_mini_env *ms, int min_prec)
+{
+	t_node	*node;
+
+	ms->in_sub += 1;
+	ms->tokens = ms->tokens->next;
+	if (!ft_check_subs(ms->tokens, min_prec) || !sub_in_sub_error(ms->tokens))
+		return (NULL);
+	node = ft_new_node(NODE_CMD);
+	if (!node)
+		return (ft_set_parse_err(E_MEMORY), NULL);
+	node->sub = ft_parser(ms, min_prec + 1);
+	if (!node->sub)
+		return (ft_set_parse_err(E_MEMORY), NULL);
+	if (ms->tokens && ms->tokens->type == TOKEN_SUBSHELL_CLOSE)
+		ms->tokens = ms->tokens->next;
+	if (ms->tokens && ft_is_redir(ms->tokens->type))
+	{
+		if (!ft_get_red_node(&(node->red_node), ms))
+			return (NULL);
+	}
+	return (node);
+}
+
+t_node	*ft_start(t_mini_env *ms, int min_prec)
+{
+	if (!ms->tokens || get_ms()->err.type)
+		return (NULL);
+	if (ft_get_node_type(ms->tokens->type)
+		|| (ms->tokens->type == TOKEN_SUBSHELL_CLOSE))
+		return (ft_set_parse_err(E_SYNTAX),
+			get_ms()->tmp = ms->tokens, NULL);
+	else if (ms->tokens->type == TOKEN_SUBSHELL_OPEN)
+		return (ft_start_subshell(ms, min_prec));
+	else
+		return (ft_simple_cmd(ms));
+}

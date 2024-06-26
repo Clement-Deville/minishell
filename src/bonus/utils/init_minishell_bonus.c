@@ -1,0 +1,32 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   init_minishell.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/08 14:37:01 by skapersk          #+#    #+#             */
+/*   Updated: 2024/05/31 18:36:17 by cdeville         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include <minishell.h>
+
+t_mini_env	*get_ms(void)
+{
+	static t_mini_env	minishell;
+
+	return (&minishell);
+}
+
+void	ft_init_env(char **env)
+{
+	ft_memset(get_ms(), 0, sizeof(t_mini_env));
+	if (env == NULL)
+	{
+		ft_printf("Erreur : pointeur de variable d'environnement nul\n");
+		return ;
+	}
+	get_ms()->env = env;
+	get_ms()->envlst = generate_env(env);
+}

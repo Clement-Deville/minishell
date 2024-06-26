@@ -1,0 +1,94 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   access.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/23 11:16:12 by cdeville          #+#    #+#             */
+/*   Updated: 2024/06/20 14:19:57 by cdeville         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include  <minishell.h>
+
+int	check_command_access(const char *path)
+{
+	if (is_a_dir(path) == TRUE)
+		return (ft_putstr_fd((char *)path, 2),
+			ft_putstr_fd(": Is a directory\n", 2), 100);
+	if (access(path, R_OK) == 0)
+		if (access(path, X_OK) == 0)
+			return (0);
+	if (errno == EACCES)
+		return (CANT_EXEC);
+	if (errno == ENOENT)
+		return (DONOT_EXIST);
+	else
+		return (128);
+}
+
+int	choose_return(int access_status, char *access_denied_path, char **cmd)
+{
+	if (access_denied_path)
+	{
+		access_status = check_command_access(access_denied_path);
+		return (perror(access_denied_path), access_status);
+	}
+	if (access_status != 0 && access_status != 100)
+		print_not_found(*cmd);
+	if (access_status == 100)
+		return (126);
+	return (access_status);
+}
+
+int	check_for_all(char **paths, char **cmd)
+{
+	int		i;
+	int		access_status;
+	char	*access_denied_path;
+
+	i = 0;
+	access_denied_path = NULL;
+	if (cmd && *cmd[0] == 0)
+		return (print_not_found(""), -1);
+	while (paths[i])
+	{
+		access_status = check_command_access(paths[i]);
+		if (access_status == 0)
+			return (change_path(cmd, paths[i]));
+		if (access_status == CANT_EXEC)
+			access_denied_path = paths[i];
+		i++;
+	}
+	return (choose_return(access_status, access_denied_path, cmd));
+}
+
+int	check_for_path_access(char **cmd, t_dblist *env)
+{
+	char	**paths;
+	char	**complete_paths;
+	int		access_status;
+
+	if (is_path(*cmd) == TRUE)
+	{
+		access_status = check_command_access(*cmd);
+		if (access_status != 0 && access_status != 100)
+			perror(*cmd);
+		if (access_status == 100)
+			return (126);
+		return (access_status);
+	}
+	else
+	{
+		paths = parse_path(env);
+		if (paths == NULL)
+			return (-1);
+		complete_paths = add_cmd_to_path(paths, *cmd);
+		if (complete_paths == NULL)
+			return (ft_free("%s", paths), -1);
+		access_status = check_for_all(complete_paths, cmd);
+		ft_free("%s", complete_paths);
+		return (ft_free("%s", paths), access_status);
+	}
+}
