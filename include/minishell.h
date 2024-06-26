@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:09:27 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/26 12:02:22 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/26 16:17:22 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -416,7 +416,7 @@ char		*ft_add_args(t_token_type node);
 
 // parser_check_sub.c
 int			ft_check_subs(t_token *token, int min_prec);
-int			sub_in_sub_error(t_token *token);
+int			sub_in_sub_error(t_token *token, int min_prec);
 
 // parser_utils_nodes.c
 t_node		*ft_new_node(t_node_type type);
