@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 09:00:11 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/24 18:17:54 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/26 10:04:58 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	open_tmp_file(int *tmp_fd)
 {
-	*tmp_fd = open("/tmp/tmp_heredoc", O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	*tmp_fd = open("/tmp/tmp_heredoc", O_WRONLY | O_CREAT | O_TRUNC, 0777);
 	if (*tmp_fd < 0)
 		return (perror("open"), ENO_CRITICAL);
 	return (0);
@@ -40,7 +40,7 @@ int	copy_to_final_heredoc(int tmp_fd)
 	ssize_t	bytes_read;
 	int		new_fd;
 
-	new_fd = open("/tmp/final_heredoc", O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	new_fd = open("/tmp/final_heredoc", O_WRONLY | O_CREAT | O_TRUNC, 0777);
 	if (new_fd < 0)
 		return (perror("open"), close(tmp_fd), ENO_CRITICAL);
 	bytes_read = read(tmp_fd, buffer, sizeof(buffer));

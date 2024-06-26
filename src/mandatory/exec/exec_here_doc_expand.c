@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_here_doc_expand.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
+/*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 18:13:23 by skapersk          #+#    #+#             */
-/*   Updated: 2024/06/25 10:31:43 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/26 10:11:43 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	ft_heredoc_go_expand(t_node *node)
 		return (close(tmp_fd), close(node->red_node->here_doc), ENO_CRITICAL);
 	close(node->red_node->here_doc);
 	close(tmp_fd);
-	tmp_fd = open("/tmp/tmp_heredoc", O_RDONLY);
+	tmp_fd = open("/tmp/tmp_heredoc", O_RDONLY | O_CREAT | O_TRUNC, 0777);
 	if (tmp_fd < 0)
 		return (perror("open"), ENO_CRITICAL);
 	if (copy_to_final_heredoc(tmp_fd) != 0)
