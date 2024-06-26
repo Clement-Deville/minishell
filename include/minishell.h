@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:09:27 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/25 17:27:52 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/26 11:33:30 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -316,13 +316,10 @@ int			exec_builtin(t_node *node, t_dblist **env);
 
 // exec_here_doc_expand.c
 int			ft_heredoc_go_expand(t_node *node);
-int			exec_here_doc(t_node *nodes);
 
 // exec_here_doc.c
-int			open_tmp_file(int *tmp_fd);
 int			process_heredoc(t_node *node, int tmp_fd);
-int			copy_to_final_heredoc(int tmp_fd);
-int			finalize_heredoc(t_node *node);
+int			exec_here_doc(t_node *nodes);
 
 // exec_no_cmd.c
 int			fake_set_input(char *filename);
