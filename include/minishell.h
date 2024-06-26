@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:09:27 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/26 16:17:22 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/26 19:25:42 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -413,6 +413,10 @@ int			ft_is_redir(t_token_type type);
 int			ft_get_node_type(t_token_type type);
 t_red_type	ft_get_red_type(t_token_type type);
 char		*ft_add_args(t_token_type node);
+
+//parser_check_sub_utils.c
+t_token		*find_next_head(t_token *token);
+t_token		*find_next_close(t_token **token);
 
 // parser_check_sub.c
 int			ft_check_subs(t_token *token, int min_prec);

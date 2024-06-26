@@ -64,6 +64,7 @@ PARSING_FILES =	clean_parsing	\
 				lst_token_add_back	\
 				tokens_helper	\
 				parser	\
+				parser_check_sub_utils	\
 				parser_check_sub	\
 				parser_utils_nodes	\
 				parser_utils_tokens	\
