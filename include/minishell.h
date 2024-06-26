@@ -6,7 +6,7 @@
 /*   By: skapersk <skapersk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 15:09:27 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/26 11:33:30 by skapersk         ###   ########.fr       */
+/*   Updated: 2024/06/26 12:02:22 by skapersk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -263,6 +263,7 @@ char		**ft_handle_wildcard(char **glob, t_node *node);
 char		**ft_expand_wildcard(char *str, t_node *node);
 char		**ft_join_wildcard(t_node *node);
 int			is_in_quotes(char *str);
+int			is_s(char *str);
 
 //compute_wildcards_utils.c
 char		**no_asterisk(char *str);
