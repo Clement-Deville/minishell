@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser_check_sub_utils.c                           :+:      :+:    :+:   */
+/*   parser_check_sub_utils_bonus.c                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 19:19:32 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/26 19:27:00 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/06/27 09:53:16 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 t_token	*find_next_head(t_token *token)
 {
+	token = token->next;
 	while (token)
 	{
 		if (token->type == TOKEN_SUBSHELL_OPEN)
