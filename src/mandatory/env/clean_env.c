@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 17:41:03 by skapersk          #+#    #+#             */
-/*   Updated: 2024/06/13 10:05:00 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/10/09 16:52:29 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,4 +41,5 @@ void	ft_clean_ms(void)
 	ft_clear_parsing(get_ms()->nodes);
 	ft_clear_envlst(get_ms());
 	get_ms()->nodes = NULL;
+	clean_balise();
 }

@@ -6,7 +6,7 @@
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 19:29:26 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/24 16:34:20 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/10/09 17:34:26 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,8 @@ int	set_output(char *filename, t_node *node)
 {
 	int		fd;
 
-	if (access(filename, W_OK) != 0 && errno != ENOENT)
+	if ((access(filename, W_OK) != 0 && errno != ENOENT)
+		|| !ft_strncmp(filename, "", 1))
 	{
 		node->pid = NO_FORK;
 		node->status = 1;
@@ -72,7 +73,8 @@ int	set_output_append(char *filename, t_node *node)
 {
 	int		fd;
 
-	if (access(filename, W_OK) != 0 && errno != ENOENT)
+	if ((access(filename, W_OK) != 0 && errno != ENOENT)
+		|| !ft_strncmp(filename, "", 1))
 	{
 		node->pid = NO_FORK;
 		node->status = 1;

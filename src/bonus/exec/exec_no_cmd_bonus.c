@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exec_no_cmd.c                                      :+:      :+:    :+:   */
+/*   exec_no_cmd_bonus.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 08:42:56 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/25 10:33:34 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/10/09 17:33:05 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,14 +34,15 @@ int	fake_set_output(char *filename)
 {
 	int	fd;
 
-	if (access(filename, W_OK) != 0 && errno != ENOENT)
+	if ((access(filename, W_OK) != 0 && errno != ENOENT)
+		|| !ft_strncmp(filename, "", 1))
 		return (perror(filename), 1);
 	fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0777);
 	if (fd == -1)
 	{
 		if (errno == EACCES)
 			return (perror(filename), 1);
-		return (perror("Open"), -1);
+		return (perror("Open yo"), -1);
 	}
 	if (close(fd) == -1)
 		return (perror("Close error"), -1);
@@ -52,7 +53,8 @@ int	fake_set_output_append(char *filename)
 {
 	int	fd;
 
-	if (access(filename, W_OK) != 0 && errno != ENOENT)
+	if ((access(filename, W_OK) != 0 && errno != ENOENT)
+		|| !ft_strncmp(filename, "", 1))
 		return (perror(filename), 1);
 	fd = open(filename, O_WRONLY | O_CREAT | O_APPEND, 0777);
 	if (fd == -1)

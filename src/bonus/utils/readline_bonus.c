@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   readline.c                                         :+:      :+:    :+:   */
+/*   readline_bonus.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 10:45:24 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/25 10:45:47 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/10/09 16:59:41 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,10 @@ void	do_readline(void)
 	start_new_line();
 	get_ms()->balise = get_balise();
 	if (get_ms()->balise)
+	{
 		get_ms()->line = readline(get_ms()->balise);
+		clean_balise();
+	}
 	else if (get_ms()->exit)
 		get_ms()->line = readline("\001\033[1;31m\002➜ \001\033[0m\002");
 	else

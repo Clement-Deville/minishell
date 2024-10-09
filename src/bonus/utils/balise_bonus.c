@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   balise.c                                           :+:      :+:    :+:   */
+/*   balise_bonus.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cdeville <cdeville@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 10:52:20 by cdeville          #+#    #+#             */
-/*   Updated: 2024/06/21 10:52:44 by cdeville         ###   ########.fr       */
+/*   Updated: 2024/10/09 17:08:38 by cdeville         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,5 +56,10 @@ char	*get_balise(void)
 	balise = ft_strjoin(balise, " \001\033[0m\002");
 	if (balise == NULL)
 		return (perror("Malloc"), free(current_dir_name), free(tmp), NULL);
-	return (free(current_dir_name), balise);
+	return (free(current_dir_name), free(tmp), balise);
 }
+
+// char *get_balise(void)
+// {
+// 	return (ft_strdup("Yo"));
+// }
